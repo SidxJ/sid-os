@@ -507,6 +507,7 @@ select.inp option{background:var(--card);color:var(--text)}
       <button class="icon-btn" onclick="toggleDark()" id="dm-btn">
         <svg id="dm-svg" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
       </button>
+      <button class="icon-btn" onclick="syncNow()" id="sync-now-btn" title="Sync now" style="font-size:15px;font-weight:700;color:var(--accent)">↑↓</button>
     </div>
   </div>
 
@@ -991,7 +992,7 @@ var DEF={
   focusTasks:[{id:1,text:"Review today's class notes",done:false,tab:'Education'},{id:2,text:'Log expenses',done:false,tab:'Finance'},{id:3,text:'30 min walk',done:false,tab:'Health'}],
   daily:{items:[{id:1,name:'10k Steps/Sport',sub:'movement',icon:'🏃',streak:0},{id:2,name:'10 Pages',sub:'reading',icon:'📖',streak:0},{id:3,name:'<4h Screen Time',sub:'phone',icon:'📵',streak:0},{id:4,name:'8h Sleep',sub:'recovery',icon:'😴',streak:0},{id:5,name:'No Junk Food',sub:'diet',icon:'🥗',streak:0}],checked:{},lastDate:''},
   education:{results:[],subjects:[],examTT:[],classTT:[]},
-  finance:{activeMonth:'Mar 2026',months:{'Mar 2026':{budget:15000,categories:[{name:'Food',budget:4000,spent:0,color:'#7c3aed'},{name:'Transport',budget:2000,spent:0,color:'#2563eb'},{name:'Shopping',budget:3000,spent:0,color:'#1a8a5a'},{name:'Entertainment',budget:2000,spent:0,color:'#c05e0a'},{name:'Other',budget:4000,spent:0,color:'#c0392b'}],expenses:[]}}},
+  finance:{activeMonth:'Mar 2026',months:{'Mar 2026':{budget:15000,categories:[{id:1,name:'Food & Eating Out',budget:6000,spent:0,color:'#d97706'},{id:2,name:'Quick Commerce',budget:2000,spent:0,color:'#dc2626'},{id:3,name:'Transport',budget:1500,spent:0,color:'#2563eb'},{id:4,name:'Misc / Social',budget:2000,spent:0,color:'#7c3aed'},{id:5,name:'Savings',budget:3500,spent:0,color:'#059669'}],expenses:[]}}},
   journal:{entries:[]},personal:{sections:[]},professional:{sections:[]},health:{sections:[]},upskilling:{sections:[]},notes:{},fields:{}
 };
 
@@ -1037,7 +1038,7 @@ function navBack(){
 function _activatePage(pgId, name, showBack){
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
   document.getElementById(pgId).classList.add('active');
-  document.querySelectorAll('.tab-item').forEach(function(t){t.classList.toggle('active',t.dataset.tab===_tab&&!showBack);});
+  document.querySelectorAll('.tab-item').forEach(function(t){t.classList.toggle('active',t.dataset.tab===name&&!showBack);});
   var title=_tabTitles[name]||name;
   if(name==='home'){document.getElementById('nav-title').innerHTML='sid<span class="dot">.</span>os';}
   else{document.getElementById('nav-title').textContent=title;}
@@ -1915,6 +1916,22 @@ renderHome();
     window.addEventListener('online', function(){ _online = true; syncStatus('synced', 'Back online'); });
     window.addEventListener('offline', function(){ _online = false; syncStatus('offline'); });
   }
+
+
+  // ── SYNC NOW (exposed globally) ───────────────────────────
+  window.syncNow = function() {
+    var btn = document.getElementById('sync-now-btn');
+    if (btn) { btn.style.opacity = '0.4'; btn.style.pointerEvents = 'none'; }
+    syncStatus('syncing', 'Pushing all data…');
+    pushAll().then(function(){
+      _lastPushTime = Date.now();
+      syncStatus('synced', 'All data saved ✓');
+      if (btn) { btn.style.opacity = '1'; btn.style.pointerEvents = ''; }
+    }).catch(function(e){
+      syncStatus('error', 'Push failed');
+      if (btn) { btn.style.opacity = '1'; btn.style.pointerEvents = ''; }
+    });
+  };
 
   // Run after DOM is ready
   if (document.readyState === 'loading') {
