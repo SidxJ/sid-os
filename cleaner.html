@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>sid.os — Data Cleaner</title>
+<style>
+  body{font-family:monospace;background:#141210;color:#f0ece6;padding:30px;max-width:700px;margin:0 auto}
+  h1{font-size:20px;color:#6361f5;margin-bottom:4px}
+  .sub{color:#6e6660;font-size:13px;margin-bottom:24px}
+  .card{background:#1e1c19;border:1px solid #302c28;border-radius:12px;padding:16px;margin-bottom:12px}
+  .exp{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #302c28;font-size:13px}
+  .exp:last-child{border:none}
+  .amt{color:#f87171;font-weight:700;min-width:80px}
+  .amt.ok{color:#2dd4a0}
+  .cat{color:#6361f5;min-width:140px}
+  .date{color:#6e6660;min-width:90px}
+  .note{color:#b8b0a6;flex:1}
+  .badge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:700;text-transform:uppercase}
+  .badge.del{background:rgba(248,113,113,0.15);color:#f87171}
+  .badge.keep{background:rgba(45,212,160,0.1);color:#2dd4a0}
+  button{background:#6361f5;color:#fff;border:none;border-radius:10px;padding:12px 24px;font-size:15px;font-weight:700;cursor:pointer;margin-right:10px;font-family:monospace}
+  button.sec{background:#272420;color:#b8b0a6}
+  button:disabled{opacity:0.4;cursor:not-allowed}
+  .status{margin-top:16px;padding:12px 16px;border-radius:10px;font-size:13px;font-weight:600}
+  .status.ok{background:rgba(45,212,160,0.1);color:#2dd4a0;border:1px solid rgba(45,212,160,0.2)}
+  .status.err{background:rgba(248,113,113,0.1);color:#f87171;border:1px solid rgba(248,113,113,0.2)}
+  .status.info{background:rgba(99,97,245,0.1);color:#6361f5;border:1px solid rgba(99,97,245,0.2)}
+  #log{margin-top:8px;font-size:12px;color:#6e6660;line-height:1.8}
+</style>
+</head>
+<body>
+<h1>sid.os — Data Cleaner</h1>
+<div class="sub">Finds and removes phantom/duplicate expenses from your finance data</div>
+
+<div class="card" id="expense-list">
+  <div style="color:#6e6660;font-size:13px">Loading expenses from localStorage…</div>
+</div>
+
+<button onclick="cleanAndSave()" id="clean-btn" disabled>Remove Flagged Expenses</button>
+<button class="sec" onclick="location.reload()">Refresh</button>
+
+<div id="status-area"></div>
+<div id="log"></div>
+
+<script>
+var SK = 'siddhant_os_v4';
+var FB_PROJECT = 'sid-os-be870';
+var FB_KEY = 'AIzaSyCvprUlhuwljSUYYHQsiT_9RKgaNlwwi_8';
+var SYNC_KEYS = ['siddhant_os_v4','siddhant_os_cal_v1','siddhant_cal_edu','siddhant_cal_per','siddhant_cal_car','siddhant_cal_swatch','siddhant_cal_splay','siddhant_os_dark'];
+
+var D = null;
+var toRemove = []; // {monthKey, expenseIndex}
+
+function log(msg) {
+  document.getElementById('log').innerHTML += msg + '<br>';
+}
+
+function setStatus(msg, type) {
+  document.getElementById('status-area').innerHTML = '<div class="status ' + type + '">' + msg + '</div>';
+}
+
+function isFlagged(e) {
+  var amt = parseFloat(e.amount) || 0;
+  var cat = (e.category || '').toLowerCase();
+  var note = (e.note || '').toLowerCase();
+  var name = (e.name || '').toLowerCase();
+  // Flag if: amount is 21000, OR category/note/name contains "sip"
+  return amt === 21000 || cat.includes('sip') || note.includes('sip') || name.includes('sip');
+}
+
+function loadAndRender() {
+  try {
+    var raw = localStorage.getItem(SK);
+    if (!raw) { setStatus('No data found in localStorage. Make sure you open this file in the same browser as sid.os.', 'err'); return; }
+    D = JSON.parse(raw);
+  } catch(e) {
+    setStatus('Failed to parse data: ' + e.message, 'err'); return;
+  }
+
+  var fin = D.finance || {};
+  var months = fin.months || {};
+  var html = '';
+  var flagCount = 0;
+  toRemove = [];
+
+  Object.keys(months).forEach(function(mk) {
+    var mdata = months[mk];
+    var expenses = mdata.expenses || [];
+    if (!expenses.length) return;
+    
+    html += '<div style="font-size:11px;font-weight:700;color:#6e6660;text-transform:uppercase;letter-spacing:1px;padding:8px 0 4px">' + mk + ' — ' + expenses.length + ' expenses</div>';
+    
+    expenses.forEach(function(e, i) {
+      var flagged = isFlagged(e);
+      if (flagged) { toRemove.push({month: mk, idx: i}); flagCount++; }
+      html += '<div class="exp">' +
+        '<span class="amt ' + (flagged ? '' : 'ok') + '">₹' + (e.amount || 0).toLocaleString('en-IN') + '</span>' +
+        '<span class="cat">' + (e.category || '—') + '</span>' +
+        '<span class="date">' + (e.date || '—') + '</span>' +
+        '<span class="note">' + (e.note || e.name || '') + '</span>' +
+        '<span class="badge ' + (flagged ? 'del' : 'keep') + '">' + (flagged ? '⚠ REMOVE' : '✓ keep') + '</span>' +
+        '</div>';
+    });
+  });
+
+  if (!html) { html = '<div style="color:#6e6660;font-size:13px">No expenses found in data.</div>'; }
+  
+  document.getElementById('expense-list').innerHTML = html;
+
+  if (flagCount > 0) {
+    setStatus(flagCount + ' expense(s) flagged for removal. Review above, then click Remove.', 'info');
+    document.getElementById('clean-btn').disabled = false;
+  } else {
+    setStatus('No phantom expenses found — data looks clean!', 'ok');
+  }
+}
+
+function cleanAndSave() {
+  if (!D || !toRemove.length) return;
+  document.getElementById('clean-btn').disabled = true;
+  
+  log('Starting cleanup…');
+  
+  // Remove flagged expenses (reverse order to preserve indices)
+  var grouped = {};
+  toRemove.forEach(function(r) {
+    if (!grouped[r.month]) grouped[r.month] = [];
+    grouped[r.month].push(r.idx);
+  });
+  
+  Object.keys(grouped).forEach(function(mk) {
+    var indices = grouped[mk].sort(function(a,b){return b-a;}); // reverse
+    indices.forEach(function(i) {
+      var removed = D.finance.months[mk].expenses.splice(i, 1)[0];
+      log('Removed: ₹' + removed.amount + ' — ' + (removed.category||'') + ' — ' + (removed.date||''));
+    });
+  });
+
+  // Reconcile category.spent
+  Object.keys(D.finance.months).forEach(function(mk) {
+    var m = D.finance.months[mk];
+    (m.categories||[]).forEach(function(c){c.spent=0;});
+    (m.expenses||[]).forEach(function(e){
+      var c=(m.categories||[]).find(function(c2){return c2.name===e.category;});
+      if(c) c.spent+=e.amount;
+    });
+  });
+
+  // Save to localStorage
+  localStorage.setItem(SK, JSON.stringify(D));
+  log('Saved to localStorage ✓');
+
+  // Push to Firebase
+  setStatus('Pushing to Firebase…', 'info');
+  var data = {};
+  SYNC_KEYS.forEach(function(key) {
+    var v = localStorage.getItem(key);
+    if (v) data[key] = v;
+  });
+  data['_lastUpdated'] = new Date().toISOString();
+  data['_device'] = 'cleaner';
+
+  var fields = {};
+  Object.keys(data).forEach(function(k) {
+    fields[k] = {stringValue: data[k]};
+  });
+
+  fetch('https://firestore.googleapis.com/v1/projects/' + FB_PROJECT + '/databases/(default)/documents/sidOS/allKeys?key=' + FB_KEY, {
+    method: 'PATCH',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({fields: fields})
+  }).then(function(r){ return r.json(); }).then(function(){
+    log('Pushed to Firebase ✓');
+    setStatus('Done! Phantom expense removed from localStorage and Firebase. Reload sid.os on both devices.', 'ok');
+  }).catch(function(e){
+    log('Firebase push failed: ' + e.message + ' — but localStorage was cleaned successfully.');
+    setStatus('localStorage cleaned. Firebase push failed — open sid.os and click ↑↓ Sync Now to push manually.', 'err');
+  });
+}
+
+// Run on load
+loadAndRender();
+</script>
+</body>
+</html>
