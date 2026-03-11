@@ -1168,7 +1168,11 @@ function renderHome(){
   var tasks=D.focusTasks||[];
   var doneTasks=tasks.filter(function(t){return t.done;}).length;
   var habits=D.daily; var today2=today;
-  if(habits.lastDate!==today2)habits.checked={};
+  if(habits.lastDate!==today2){
+    var _pc=habits.checked||{};
+    (habits.items||[]).forEach(function(it){it.streak=_pc[it.id]?(it.streak||0)+1:0;});
+    habits.checked={};habits.lastDate=today2;saveD();
+  }
   var checkedH=Object.values(habits.checked||{}).filter(Boolean).length;
   var el=document.getElementById('home-stats');
   el.innerHTML=
@@ -1752,6 +1756,15 @@ function renderGenericSections(tab){
 loadD();
 initDark();
 renderHome();
+// Auto-reset habits at midnight without page reload
+setInterval(function(){
+  var today=isoToday();
+  if(D.daily.lastDate!==today){
+    var _pc=D.daily.checked||{};
+    (D.daily.items||[]).forEach(function(it){it.streak=_pc[it.id]?(it.streak||0)+1:0;});
+    D.daily.checked={};D.daily.lastDate=today;saveD();renderHome();
+  }
+},60000);
 // Default dates
 (function(){var t=isoToday();['exp-date'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=t;});})();
 
