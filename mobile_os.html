@@ -488,6 +488,52 @@ select.inp option{background:var(--card);color:var(--text)}
 ═══════════════════════════════════════════════════════ */
 .bar-bg{height:6px;background:var(--bg3);border-radius:99px;overflow:hidden}
 .bar-fill{height:100%;border-radius:99px;transition:width 0.4s ease}
+
+/* ── MY SPORTS (mobile) ─────────────────────────── */
+.ms-page{background:#0d1117;min-height:100%}
+.ms-section{background:#131b27;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:16px;margin-bottom:14px}
+.ms-section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.ms-section-title{font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#7eb8f7;font-family:var(--mono)}
+.ms-btn{background:#00c8ff;color:#0d1117;border:none;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font)}
+.ms-week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.ms-day-col{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:10px 6px;min-height:80px;display:flex;flex-direction:column;align-items:center;gap:4px}
+.ms-day-col.today{border-color:#00c8ff;background:rgba(0,200,255,0.06)}
+.ms-day-lbl{font-size:9px;font-weight:700;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.5px}
+.ms-day-num{font-size:16px;font-weight:800;color:rgba(255,255,255,0.7)}
+.ms-day-col.today .ms-day-num{color:#00c8ff}
+.ms-day-sess{width:28px;height:28px;background:rgba(0,200,255,0.15);border:1px solid rgba(0,200,255,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;margin-top:2px}
+.ms-day-add{width:20px;height:20px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;color:rgba(255,255,255,0.3);cursor:pointer;margin-top:2px}
+.ms-sport-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:10px;position:relative}
+.ms-sport-icon{width:44px;height:44px;background:rgba(0,200,255,0.12);border:1px solid rgba(0,200,255,0.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.ms-sport-name{font-size:15px;font-weight:700;color:#fff}
+.ms-sport-sub{font-size:12px;color:rgba(255,255,255,0.45);margin-top:2px}
+.ms-sport-del{position:absolute;top:8px;right:10px;background:rgba(255,255,255,0.07);border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;color:rgba(255,255,255,0.4);font-size:12px;display:flex;align-items:center;justify-content:center;line-height:1}
+.ms-watch-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.ms-watch-dot{width:8px;height:8px;border-radius:50%;background:#00c8ff;flex-shrink:0}
+.ms-watch-body{flex:1;min-width:0}
+.ms-watch-teams{font-size:14px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ms-watch-meta{font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px}
+.ms-watch-del{background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.3);font-size:16px;padding:0;flex-shrink:0}
+.ms-add-sess-form{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:14px;margin-bottom:14px}
+.ms-inp{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:10px 12px;color:#fff;font-size:14px;font-family:var(--font);width:100%;box-sizing:border-box;margin-bottom:8px;outline:none}
+.ms-inp::placeholder{color:rgba(255,255,255,0.3)}
+.ms-sub-tabs{display:flex;gap:0;margin-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.ms-sub-tab{background:none;border:none;border-bottom:2px solid transparent;padding:10px 16px;color:rgba(255,255,255,0.4);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all 0.15s;margin-bottom:-1px}
+.ms-sub-tab.active{color:#00c8ff;border-bottom-color:#00c8ff}
+
+
+/* ── MOBILE FINANCE CHART ─── */
+.mob-chart-wrap{margin:14px 0 0;background:var(--bg3);border-radius:12px;padding:14px}
+.mob-chart-title{font-size:10px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;font-family:var(--mono)}
+.mob-cat-bar-row{margin-bottom:10px}
+.mob-cat-bar-label{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.mob-cat-bar-name{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text2)}
+.mob-cat-bar-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.mob-cat-bar-amt{font-size:12px;font-weight:700;color:var(--text);font-family:var(--mono)}
+.mob-cat-bar-bg{height:6px;background:var(--border);border-radius:99px;overflow:hidden}
+.mob-cat-bar-fill{height:100%;border-radius:99px;transition:width 0.4s}
+.mob-cat-bar-pct{font-size:10px;color:var(--dim);font-family:var(--mono);margin-top:2px;text-align:right}
+
 </style>
 </head>
 <body>
@@ -566,6 +612,7 @@ select.inp option{background:var(--card);color:var(--text)}
         <button class="sport-tab" onclick="sportTab('cricket',this)">🏏 Cricket</button>
         <button class="sport-tab" onclick="sportTab('f1',this)">🏎 F1</button>
         <button class="sport-tab" onclick="sportTab('tennis',this)">🎾 Tennis</button>
+        <button class="sport-tab" onclick="sportTab('mysports',this)">🤩 My Sports</button>
       </div>
       <div id="sports-content"></div>
     </div>
@@ -1008,6 +1055,12 @@ function loadD(){
   if(!D.education.examTT)D.education.examTT=[];
 }
 function saveD(){try{localStorage.setItem(SK,JSON.stringify(D));}catch(e){}}
+// ── DATE HELPERS (IST-safe) ──────────────────────────────────────
+function localISO(d){var y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return y+'-'+m+'-'+day;}
+function isoToday(){return localISO(new Date());}
+function isoOffset(days){var d=new Date();d.setDate(d.getDate()+days);return localISO(d);}
+// ─────────────────────────────────────────────────────────────────
+
 function calLoad(src){try{var s=localStorage.getItem(CAL_KEYS[src]||CAL_KEY);return s?JSON.parse(s):[];}catch(e){return [];}}
 function calSave(src,items){try{localStorage.setItem(CAL_KEYS[src]||CAL_KEY,JSON.stringify(items));}catch(e){}}
 function calAll(){var a=[];Object.keys(CAL_KEYS).forEach(function(src){calLoad(src).forEach(function(x){a.push(Object.assign({},x,{_src:src}));});});return a;}
@@ -1082,7 +1135,7 @@ function openSheet(id){
   var sh=document.getElementById(id), ov=document.getElementById(id+'-ov');
   if(sh)sh.classList.add('show');
   if(ov)ov.classList.add('show');
-  var td=new Date().toISOString().slice(0,10);
+  var td=isoToday();
   var df=sh&&sh.querySelector('input[type="date"]');
   if(df&&!df.value)df.value=td;
   setTimeout(function(){var f=sh&&sh.querySelector('input:not([type="date"]):not([type="time"]):not(select),textarea');if(f)f.focus();},350);
@@ -1107,7 +1160,7 @@ function renderHome(){
 
   // Stats
   var allItems=calAll();
-  var today=now.toISOString().slice(0,10);
+  var today=localISO(now);
   var todayItems=allItems.filter(function(x){return x.date===today;});
   var mn=D.finance.months[D.finance.activeMonth];
   var spent=mn?(mn.expenses||[]).reduce(function(a,e){return a+e.amount;},0):0;
@@ -1199,7 +1252,7 @@ function addTask(){
   closeSheet('sh-task');renderHome();
 }
 function toggleHabit(id){
-  var today=new Date().toISOString().slice(0,10);
+  var today=isoToday();
   if(!D.daily.checked)D.daily.checked={};
   D.daily.checked[id]=!D.daily.checked[id];
   var item=D.daily.items.find(function(x){return x.id===id;});
@@ -1218,7 +1271,7 @@ function calNav(d){_calM+=d;if(_calM>11){_calM=0;_calY++;}if(_calM<0){_calM=11;_
 function renderCalendar(){
   document.getElementById('cal-lbl').textContent=MONTH_NAMES[_calM]+' '+_calY;
   var all=calAll();
-  var today=new Date().toISOString().slice(0,10);
+  var today=isoToday();
   // Build dot map
   var dotMap={};
   all.forEach(function(x){
@@ -1346,24 +1399,21 @@ function renderSports(){renderSportsContent();}
 function renderSportsContent(){
   var el=document.getElementById('sports-content');
   var now=new Date();
-  var today=now.toISOString().slice(0,10);
+  var today=localISO(now);
 
   if(_sport==='football'){
     // Sort by date
     var fxs=FOOTBALL_FIXTURES.slice().sort(function(a,b){return (a[0]+a[1]).localeCompare(b[0]+b[1]);});
-    // Show upcoming only (next 30 fixtures)
-    var upcoming=fxs.filter(function(f){return f[0]>=today;}).slice(0,25);
-    var past=fxs.filter(function(f){return f[0]<today;}).slice(-5).reverse();
-    var html='';
-    if(past.length){
-      html+='<div class="list-hdr">Recent Results</div>';
-      past.forEach(function(f){html+=makeFxCard(f,today,'done');});
-    }
-    html+='<div class="list-hdr">Upcoming</div>';
-    upcoming.forEach(function(f){
-      var status=f[0]===today?'live':'soon';
+    var html='<div class="list-hdr">Upcoming</div>';
+    var shown=0;
+    fxs.forEach(function(f){
+      var dur=FT_DURATION&&FT_DURATION[f[4]]?FT_DURATION[f[4]]:2;
+      var status=shStatus(f[0],f[1],dur);
+      if(status==='done')return; // hide completed
       html+=makeFxCard(f,today,status);
+      shown++;
     });
+    if(!shown)html='';
     el.innerHTML=html||'<div class="empty"><div class="empty-i">⚽</div><div class="empty-m">No fixtures</div></div>';
 
   } else if(_sport==='cricket'){
@@ -1372,7 +1422,9 @@ function renderSportsContent(){
     crFx.forEach(function(f){
       // f = [date, time, team1, team2, competition, venue]
       var d=new Date(f[0]+'T12:00:00');
-      var isPast=f[0]<today;
+      var crDur=shStatus(f[0],f[1]||'TBC',7); // cricket day match ~7h
+      if(crDur==='done')return; // hide completed
+      var isPast=false;
       var isToday2=f[0]===today;
       var accent=SPORT_ACCENTS.cricket;
       html+='<div class="fx-card" style="border-left-color:'+accent+'">'+
@@ -1382,7 +1434,7 @@ function renderSportsContent(){
           '<div class="fx-teams">'+esc(f[2])+' vs '+esc(f[3])+'</div>'+
           '<div class="fx-time">'+esc(f[1]||'TBC')+(f[5]?' · '+esc(f[5]):'')+'</div>'+
         '</div>'+
-        '<span class="fx-badge '+(isToday2?'live':isPast?'done':'soon')+'">'+(isToday2?'● LIVE':isPast?'Done':'Soon')+'</span>'+
+        '<span class="fx-badge '+(isToday2?'live':'soon')+'">'+(isToday2?'● LIVE':shCountdown(f[0],f[1]||'TBC'))+'</span>'+
       '</div>';
     });
     el.innerHTML=html;
@@ -1412,6 +1464,7 @@ function renderSportsContent(){
       // [startDate, endDate, name, surface, location, tier]
       var isActive=ev[0]<=today&&ev[1]>=today;
       var isPast=ev[1]<today;
+      if(isPast)return; // hide past tournaments
       html+='<div class="tn-card">'+
         '<div class="tn-badge'+(isActive?' style="background:var(--redlt);color:var(--red)"':'')+'">'+esc(ev[5]||'ATP')+(isActive?' · LIVE':'')+'</div>'+
         '<div class="tn-name">'+esc(ev[2])+'</div>'+
@@ -1419,6 +1472,8 @@ function renderSportsContent(){
       '</div>';
     });
     el.innerHTML=html;
+  } else if(_sport==='mysports'){
+    renderMySports();
   }
 }
 
@@ -1461,7 +1516,7 @@ function renderEducation(){
   }
 
   // Exam timetable
-  var today=new Date().toISOString().slice(0,10);
+  var today=isoToday();
   if(ed.examTT&&ed.examTT.length){
     var upcoming=ed.examTT.filter(function(e){return e.date>=today;}).sort(function(a,b){return a.date.localeCompare(b.date);});
     if(upcoming.length){
@@ -1479,6 +1534,40 @@ function renderEducation(){
         '</div>';
       });
     }
+  }
+
+  // Education calendar items (upcoming)
+  var eduCalItems=(typeof calLoad==='function'?calLoad('edu'):[]).filter(function(x){return x.date>=today;}).sort(function(a,b){return a.date.localeCompare(b.date);}).slice(0,5);
+  if(eduCalItems.length){
+    html+='<div class="list-hdr">Education Calendar</div>';
+    eduCalItems.forEach(function(x){
+      var t=CAL_TYPES[x.type]||CAL_TYPES.task;
+      var d=new Date(x.date+'T12:00:00');
+      var daysLeft=Math.round((d-new Date(today+'T00:00:00'))/86400000);
+      var when=daysLeft===0?'Today':daysLeft===1?'Tomorrow':daysLeft+'d';
+      html+='<div class="exam-card">'+
+        '<div class="exam-date-box" style="background:'+t.bg+';border-color:'+t.color+'"><div class="exam-d" style="color:'+t.color+'">'+d.getDate()+'</div><div class="exam-m" style="color:'+t.color+'">'+MON_SHORT[d.getMonth()]+'</div></div>'+
+        '<div><div class="exam-subj">'+esc(x.title)+'</div>'+
+          '<div class="exam-meta">'+(x.time||'')+' <span style="background:'+t.bg+';color:'+t.color+';padding:1px 6px;border-radius:4px;font-size:9px">'+t.label+'</span></div>'+
+          '<div class="exam-days">'+when+'</div>'+
+        '</div>'+
+      '</div>';
+    });
+  }
+
+  // Today's classes from timetable
+  var dayNames=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var todayDay=dayNames[new Date().getDay()];
+  var shortDay=todayDay.slice(0,3);
+  var todayClasses=(ed.classTT||[]).filter(function(s){return s.day===shortDay;}).sort(function(a,b){return a.time.localeCompare(b.time);});
+  if(todayClasses.length){
+    html+='<div class="list-hdr">Today\'s Classes ('+shortDay+')</div>';
+    todayClasses.forEach(function(s){
+      html+='<div class="exam-card">'+
+        '<div class="exam-date-box"><div class="exam-d" style="font-size:14px">🏫</div><div class="exam-m">'+s.time+'</div></div>'+
+        '<div><div class="exam-subj">'+esc(s.subject)+'</div>'+(s.room?'<div class="exam-meta">'+esc(s.room)+'</div>':'')+'</div>'+
+      '</div>';
+    });
   }
 
   // Subjects
@@ -1537,6 +1626,25 @@ function renderFinance(){
         }).join('')+
       '</div>'+
     '</div>'+
+    // Bar chart per category
+    (function(){
+      if(!mn.categories||!mn.categories.length)return '';
+      var maxSpent=Math.max.apply(null,mn.categories.map(function(c){return c.budget||1;}));
+      var chartHtml='<div class="mob-chart-wrap"><div class="mob-chart-title">Category Breakdown</div>';
+      mn.categories.forEach(function(c){
+        var pct=c.budget?Math.min(100,Math.round((c.spent||0)/c.budget*100)):0;
+        chartHtml+='<div class="mob-cat-bar-row">'+
+          '<div class="mob-cat-bar-label">'+
+            '<div class="mob-cat-bar-name"><div class="mob-cat-bar-dot" style="background:'+(c.color||'#7c3aed')+'"></div>'+esc(c.name)+'</div>'+
+            '<span class="mob-cat-bar-amt">₹'+fmt(c.spent||0)+'</span>'+
+          '</div>'+
+          '<div class="mob-cat-bar-bg"><div class="mob-cat-bar-fill" style="width:'+pct+'%;background:'+(c.color||'#7c3aed')+'"></div></div>'+
+          '<div class="mob-cat-bar-pct">'+pct+'% of ₹'+fmt(c.budget)+'</div>'+
+        '</div>';
+      });
+      chartHtml+='</div>';
+      return chartHtml;
+    })()+
     '<div class="list-hdr">Expenses</div>'+
     '<div class="card">';
 
@@ -1597,7 +1705,7 @@ function saveJournal(){
   var text=document.getElementById('journal-inp').value.trim();
   if(!text)return;
   if(!D.journal)D.journal={entries:[]};
-  D.journal.entries.push({id:Date.now(),date:new Date().toISOString().slice(0,10),text:text});
+  D.journal.entries.push({id:Date.now(),date:isoToday(),text:text});
   saveD();document.getElementById('journal-inp').value='';
   closeSheet('sh-journal');renderJournal();
 }
@@ -1645,11 +1753,378 @@ loadD();
 initDark();
 renderHome();
 // Default dates
-(function(){var t=new Date().toISOString().slice(0,10);['exp-date'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=t;});})();
+(function(){var t=isoToday();['exp-date'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=t;});})();
 
 </script>
 
 <script>
+
+
+/* ── MY SPORTS (mobile) ─────────────────────────── */
+var _msSub = 'playing'; // 'playing' or 'watching'
+var SH_KEY='siddhant_sports_v3';
+var _shState = {
+  tab:'football', ftSub:'all', crSub:'all', f1Sub:'calendar',
+  tnSub:'calendar', mySub:'watch',
+  watching:["Football","Cricket","F1","Tennis"],
+  playing:["Squash","Lawn Tennis","Football"],
+  sessions:[],
+  customTimes:{},
+  notif:false,
+};
+
+function shLoad(){
+  // Clear old keys from previous Sports Hub versions
+  localStorage.removeItem('siddhant_sports_v1');
+  localStorage.removeItem('siddhant_sports_v2');
+  localStorage.removeItem('siddhant_mysports_v1');
+  var saved = localStorage.getItem(SH_KEY);
+  if(saved){
+    try{
+      var p = JSON.parse(saved);
+      // Merge carefully — only copy known keys, keep defaults for anything missing
+      if(p.tab !== undefined) _shState.tab = p.tab;
+      if(p.ftSub !== undefined) _shState.ftSub = p.ftSub;
+      if(p.crSub !== undefined) _shState.crSub = p.crSub;
+      if(p.f1Sub !== undefined) _shState.f1Sub = p.f1Sub;
+      if(p.tnSub !== undefined) _shState.tnSub = p.tnSub;
+      if(p.mySub !== undefined) _shState.mySub = p.mySub;
+      if(Array.isArray(p.watching)) _shState.watching = p.watching;
+      if(Array.isArray(p.playing)) _shState.playing = p.playing;
+      if(Array.isArray(p.sessions)) _shState.sessions = p.sessions;
+      if(p.customTimes && typeof p.customTimes === 'object') _shState.customTimes = p.customTimes;
+      if(p.notif !== undefined) _shState.notif = p.notif;
+    }catch(e){ console.warn('shLoad parse error:', e); }
+  }
+}
+function shSave(){
+  localStorage.setItem(SH_KEY, JSON.stringify(_shState));
+}
+
+// ── TAB SWITCHING ────────────────────────────────────────────────
+function shFmtDate(dateStr){
+  var d = new Date(dateStr+'T12:00:00Z');
+  var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return { day: d.getUTCDate(), mon: months[d.getUTCMonth()], year: d.getUTCFullYear() };
+}
+
+// ── FOOTBALL ────────────────────────────────────────────────────
+var HIGHLIGHT_TEAMS = {
+  'Barcelona':true,'Arsenal':true,'Manchester City':true,'Argentina':true,
+  'RR':true
+};
+var COMP_FILTER = {
+  'laliga':['La Liga'],'ucl':['UCL'],'pl':['PL'],'wc':['FIFA WC'],'all':null
+};
+var COMP_CLASS = {
+  'La Liga':'laliga','UCL':'ucl','PL':'pl','FIFA WC':'fifawc',
+  'IPL':'ipl','T20I':'t20wc','Test':'','ODI':''
+};
+var FT_DURATION = {'La Liga':2,'UCL':2.5,'PL':2,'FIFA WC':2.5,'default':2};
+
+function shStatus(dateStr, timeStr, durationH){
+  var now = shNow();
+  var start = shParseIST(dateStr, timeStr);
+  if(!start) return 'tbc';
+  var end = new Date(start.getTime() + durationH*3600*1000);
+  if(now > end) return 'done';
+  if(now >= start) return 'live';
+  return 'upcoming';
+}
+function shCountdown(dateStr, timeStr){
+  var start = shParseIST(dateStr, timeStr);
+  if(!start) return '';
+  var diff = start - shNow();
+  if(diff <= 0) return '';
+  var d = Math.floor(diff/86400000);
+  var h = Math.floor((diff%86400000)/3600000);
+  var m = Math.floor((diff%3600000)/60000);
+  if(d > 0) return 'in '+d+'d '+h+'h';
+  if(h > 0) return 'in '+h+'h '+m+'m';
+  return 'in '+m+'m';
+}
+function shLoadMyWatch(){ try{var s=localStorage.getItem(_myWatchKey);return s?JSON.parse(s):[]}catch(e){return [];} }
+function shSaveMyWatch(a){ try{localStorage.setItem(_myWatchKey,JSON.stringify(a));}catch(e){} }
+
+function shAddToMyWatch(key, match, meta, date, time, sport){
+  var list=shLoadMyWatch();
+  if(list.find(function(x){return x.key===key})){ alert('Already in your watch calendar.'); return; }
+  list.push({key:key,match:match,meta:meta,date:date,time:time,sport:sport});
+  shSaveMyWatch(list);
+  // Also sync to Sports Watch calendar
+  var swItems=calLoadSource('swatch');
+  var exists=swItems.find(function(x){return x.title===match&&x.date===date;});
+  if(!exists){
+    swItems.push({title:sport+' '+match,date:date,time:time||'',type:'event',note:meta,priority:'medium',src:'swatch'});
+    calSaveSource('swatch',swItems);
+  }
+  shRenderMyWatchList();
+}
+
+
+function shRemoveMyWatch(i){
+  var list=shLoadMyWatch();
+  var removed=list[i];
+  list.splice(i,1);
+  shSaveMyWatch(list);
+  // Also remove from swatch calendar
+  if(removed){
+    var swItems=calLoadSource('swatch');
+    swItems=swItems.filter(function(x){return !(x.title.indexOf(removed.match)>=0&&x.date===removed.date);});
+    calSaveSource('swatch',swItems);
+  }
+  shRenderMyWatchList();
+}
+
+var _shBrowseItems = [];
+
+function shAddSession(){
+  var sport=document.getElementById('sh-sess-sport').value.trim();
+  var date=document.getElementById('sh-sess-date').value;
+  var time=document.getElementById('sh-sess-time').value;
+  var loc=document.getElementById('sh-sess-loc')?document.getElementById('sh-sess-loc').value.trim():'';
+  var dur=document.getElementById('sh-sess-dur')?document.getElementById('sh-sess-dur').value:'60';
+  if(!sport||!date) return;
+  var sessId=Date.now();
+  _shState.sessions.push({sport:sport,date:date,time:time||'TBC',loc:loc,dur:parseInt(dur)||60,id:sessId});
+  shSave();
+  // Also sync to Sports Play calendar
+  var spItems=calLoadSource('splay');
+  spItems.push({title:sport+' session'+(loc?' @ '+loc:''),date:date,time:time||'',type:'event',note:dur+'min'+(loc?' · '+loc:''),priority:'medium',src:'splay',sessId:sessId});
+  calSaveSource('splay',spItems);
+  shRenderSessions();
+  shRenderPlayCal();
+  document.getElementById('sh-sess-sport').value='';
+  document.getElementById('sh-sess-date').value='';
+  document.getElementById('sh-sess-time').value='';
+  if(document.getElementById('sh-sess-loc'))document.getElementById('sh-sess-loc').value='';
+}
+
+// ── PLAY CALENDAR ─────────────────────────────────────────────
+var _playCalYear=new Date().getFullYear(), _playCalMonth=new Date().getMonth();
+
+function shDelSession(id){
+  _shState.sessions=_shState.sessions.filter(function(s){return s.id!==id});
+  shSave();
+  // Also remove from splay calendar
+  var spItems=calLoadSource('splay');
+  spItems=spItems.filter(function(x){return x.sessId!==id;});
+  calSaveSource('splay',spItems);
+  shRenderSessions();
+  shRenderPlayCal();
+}
+
+function renderMySports(){
+  var el=document.getElementById('sports-content');
+  if(!el)return;
+
+  // Sub tabs
+  var tabsHtml='<div class="ms-sub-tabs">'+
+    '<button class="ms-sub-tab '+((_msSub==='playing')?'active':'')+'" onclick="msSwitchTab(\'playing\')">MY PLAYING</button>'+
+    '<button class="ms-sub-tab '+((_msSub==='watching')?'active':'')+'" onclick="msSwitchTab(\'watching\')">MY WATCHING</button>'+
+  '</div>';
+
+  if(_msSub==='playing'){
+    el.innerHTML=tabsHtml+renderMsPlaying();
+  } else {
+    el.innerHTML=tabsHtml+renderMsWatching();
+  }
+}
+
+function msSwitchTab(tab){
+  _msSub=tab;
+  renderMySports();
+}
+
+function renderMsPlaying(){
+  var today=new Date();
+  var weekStart=new Date(today);
+  weekStart.setDate(today.getDate()-today.getDay()+1); // Mon
+  var days=['MON','TUE','WED','THU','FRI','SAT','SUN'];
+  var sessions=(_shState.sessions||[]);
+
+  // Week header
+  var ws=weekStart.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+  var we=new Date(weekStart); we.setDate(we.getDate()+6);
+  var weStr=we.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+
+  var weekHtml='<div class="ms-section">'+
+    '<div class="ms-section-hdr">'+
+      '<div>'+
+        '<div class="ms-section-title">Playing This Week</div>'+
+        '<div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:2px">'+ws+' – '+weStr+'</div>'+
+      '</div>'+
+      '<button class="ms-btn" onclick="msAddSessionSheet()">+ Add Session</button>'+
+    '</div>'+
+    '<div class="ms-week-grid">';
+
+  for(var di=0;di<7;di++){
+    var d=new Date(weekStart); d.setDate(weekStart.getDate()+di);
+    var ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    var isToday=ds===localISO(today);
+    var daySess=sessions.filter(function(s){return s.date===ds;});
+    weekHtml+='<div class="ms-day-col'+(isToday?' today':'')+'" onclick="msShowSessDetail(\''+ds+'\')">'+
+      '<div class="ms-day-lbl">'+days[di]+'</div>'+
+      '<div class="ms-day-num">'+d.getDate()+'</div>'+
+      daySess.map(function(s){return '<div class="ms-day-sess" title="'+esc(s.sport)+'">'+msSportEmoji(s.sport)+'</div>';}).join('')+
+      (daySess.length===0?'<div class="ms-day-add">+</div>':'')+
+    '</div>';
+  }
+  weekHtml+='</div></div>';
+
+  // Add session form (hidden by default)
+  var formHtml='<div class="ms-section" id="ms-add-form" style="display:none">'+
+    '<div class="ms-section-title" style="margin-bottom:12px">Schedule Session</div>'+
+    '<select id="ms-sport" class="ms-inp"><option value="">Sport…</option>'+
+    ['🎾 Squash','🎾 Lawn Tennis','⚽ Football','🏸 Badminton','🏊 Swimming'].map(function(s){return '<option>'+s+'</option>';}).join('')+
+    '</select>'+
+    '<input id="ms-date" type="date" class="ms-inp">'+
+    '<input id="ms-time" type="time" class="ms-inp">'+
+    '<input id="ms-loc" placeholder="Location (optional)" class="ms-inp">'+
+    '<div style="display:flex;gap:8px">'+
+      '<button class="ms-btn" style="flex:1" onclick="msAddSess()">Add</button>'+
+      '<button class="ms-btn" style="background:rgba(255,255,255,0.1);color:#fff;flex:1" onclick="document.getElementById(\'ms-add-form\').style.display=\'none\'">Cancel</button>'+
+    '</div>'+
+  '</div>';
+
+  // My Sports grid
+  var sports=[
+    {name:'Squash',sub:'Recreational · Favourite sport',icon:'🎾'},
+    {name:'Lawn Tennis',sub:'Recreational · Inspired by Alcaraz',icon:'🎾'},
+    {name:'Football',sub:'Recreational · 5-a-side',icon:'⚽'},
+  ];
+  var sportsHtml='<div class="ms-section">'+
+    '<div class="ms-section-hdr">'+
+      '<div class="ms-section-title">My Sports</div>'+
+      '<button class="ms-btn" onclick="">+ Add Sport</button>'+
+    '</div>'+
+    sports.map(function(s){
+      return '<div class="ms-sport-card">'+
+        '<div class="ms-sport-icon">'+s.icon+'</div>'+
+        '<div><div class="ms-sport-name">'+s.name+'</div><div class="ms-sport-sub">'+s.sub+'</div></div>'+
+      '</div>';
+    }).join('')+
+  '</div>';
+
+  // Sessions list
+  var sessHtml='';
+  var upcoming=sessions.filter(function(s){return s.date>=localISO(today);})
+    .sort(function(a,b){return a.date.localeCompare(b.date);});
+  if(upcoming.length){
+    sessHtml='<div class="ms-section"><div class="ms-section-title" style="margin-bottom:12px">Upcoming Sessions</div>'+
+    upcoming.map(function(s){
+      var dt=shFmtDate(s.date);
+      return '<div class="ms-watch-card">'+
+        '<div class="ms-watch-dot"></div>'+
+        '<div class="ms-watch-body">'+
+          '<div class="ms-watch-teams">'+esc(s.sport)+'</div>'+
+          '<div class="ms-watch-meta">'+dt.day+' '+dt.mon+(s.time?' · '+s.time:'')+' IST'+(s.loc?' · '+s.loc:'')+'</div>'+
+        '</div>'+
+        '<button class="ms-watch-del" onclick="msDel('+s.id+')">×</button>'+
+      '</div>';
+    }).join('')+
+    '</div>';
+  }
+
+  return formHtml+weekHtml+sportsHtml+sessHtml;
+}
+
+function renderMsWatching(){
+  var list=shLoadMyWatch();
+  list.sort(function(a,b){return a.date.localeCompare(b.date);});
+  var today=isoToday();
+
+  var watchHtml='<div class="ms-section">'+
+    '<div class="ms-section-hdr">'+
+      '<div class="ms-section-title">My Watch List</div>'+
+    '</div>';
+
+  if(!list.length){
+    watchHtml+='<div style="color:rgba(255,255,255,0.3);font-size:14px;padding:8px 0">No matches saved — browse fixtures in Football/Cricket/F1/Tennis tabs and tap ★ to save</div>';
+  } else {
+    // Filter out completed, show upcoming only
+    list=list.filter(function(i){return shStatus(i.date,i.time||'TBC',2.5)!=='done';});
+    var upcoming=list.filter(function(i){return i.date>=today;});
+    var past=[];
+    if(upcoming.length){
+      watchHtml+='<div style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.3);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Upcoming</div>'+
+      upcoming.map(function(item,i){
+        var dt=shFmtDate(item.date);
+        var idx=list.indexOf(item);
+        return '<div class="ms-watch-card">'+
+          '<div class="ms-watch-dot" style="background:'+(item.accentColor||'#00c8ff')+'"></div>'+
+          '<div class="ms-watch-body">'+
+            '<div class="ms-watch-teams">'+esc(item.teams||item.title||'')+'</div>'+
+            '<div class="ms-watch-meta">'+esc(item.comp||'')+(item.time?' · '+item.time:'')+' · '+dt.day+' '+dt.mon+'</div>'+
+          '</div>'+
+          '<button class="ms-watch-del" onclick="shRemoveMyWatch('+idx+');renderMySports()">×</button>'+
+        '</div>';
+      }).join('');
+    }
+    if(past.length){
+      watchHtml+='<div style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.3);letter-spacing:1px;text-transform:uppercase;margin:12px 0 8px">Past</div>'+
+      past.map(function(item,i){
+        var dt=shFmtDate(item.date);
+        var idx=list.indexOf(item);
+        return '<div class="ms-watch-card" style="opacity:0.5">'+
+          '<div class="ms-watch-dot" style="background:#555"></div>'+
+          '<div class="ms-watch-body">'+
+            '<div class="ms-watch-teams">'+esc(item.teams||item.title||'')+'</div>'+
+            '<div class="ms-watch-meta">'+esc(item.comp||'')+' · '+dt.day+' '+dt.mon+'</div>'+
+          '</div>'+
+          '<button class="ms-watch-del" onclick="shRemoveMyWatch('+idx+');renderMySports()">×</button>'+
+        '</div>';
+      }).join('');
+    }
+  }
+  watchHtml+='</div>';
+  return watchHtml;
+}
+
+function msSportEmoji(sport){
+  if(!sport)return '🏃';
+  var s=sport.toLowerCase();
+  if(s.includes('squash')||s.includes('tennis'))return '🎾';
+  if(s.includes('football'))return '⚽';
+  if(s.includes('badminton'))return '🏸';
+  if(s.includes('swim'))return '🏊';
+  return '🏃';
+}
+
+function msAddSessionSheet(){
+  var f=document.getElementById('ms-add-form');
+  if(!f)return;
+  f.style.display=f.style.display==='none'?'block':'none';
+  var t=isoToday();
+  var ti=document.getElementById('ms-date');
+  if(ti&&!ti.value)ti.value=t;
+}
+
+function msAddSess(){
+  var sport=document.getElementById('ms-sport').value;
+  var date=document.getElementById('ms-date').value;
+  var time=document.getElementById('ms-time').value;
+  var loc=document.getElementById('ms-loc').value;
+  if(!sport||!date)return;
+  shLoad();
+  _shState.sessions=_shState.sessions||[];
+  _shState.sessions.push({id:Date.now(),sport:sport,date:date,time:time,loc:loc,dur:60});
+  shSave();
+  document.getElementById('ms-add-form').style.display='none';
+  renderMySports();
+}
+
+function msDel(id){
+  shLoad();
+  _shState.sessions=(_shState.sessions||[]).filter(function(s){return s.id!==id;});
+  shSave();
+  renderMySports();
+}
+
+function msShowSessDetail(ds){
+  // Stub — could show bottom sheet in future
+}
+
 
 /* ═══════════════════════════════════════════════════════════════
    FIREBASE REAL-TIME SYNC
@@ -1899,8 +2374,10 @@ renderHome();
     pullAll().then(function(updated){
       _lastKnownUpdate = new Date().toISOString();
       if (updated) {
-        // Cloud had newer data — reload D from localStorage
+        // Cloud had newer data — reload D from localStorage and re-render
         if (typeof loadD === 'function') { loadD(); }
+        if (typeof renderPage === 'function') try { renderPage(_tab); } catch(e){}
+        if (typeof renderHome === 'function') try { renderHome(); } catch(e){}
         syncStatus('synced', 'Loaded from cloud');
       } else {
         syncStatus('synced', 'Connected');
