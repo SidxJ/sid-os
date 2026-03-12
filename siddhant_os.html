@@ -521,7 +521,8 @@ body.dark .dm-toggle:hover{background:rgba(255,255,255,0.12);color:var(--accent)
 .fx-card.fx-done::before{background:var(--border)}
 .fx-card.fx-next{border-color:var(--accent);background:rgba(var(--c1,124,58,237),0.05)}
 .fx-card.fx-next::before{background:var(--accent)}
-.fx-card.fx-highlight::after{content:'★';position:absolute;top:8px;right:10px;font-size:11px;color:var(--fx-accent,var(--accent));opacity:0.7}
+.fx-card.fx-highlight{border-left-color:var(--fx-accent,var(--accent));border-left-width:3px}
+.fx-card.fx-highlight::after{content:'';display:none}
 @keyframes fxpulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.1)}50%{box-shadow:0 0 0 6px rgba(239,68,68,0.0)}}
 
 .fx-date{text-align:center}
@@ -652,15 +653,6 @@ body.dark .fx-badge.upcoming{background:rgba(255,255,255,0.06);border-color:rgba
   padding:16px;
   margin:-8px;
 }
-#shp-mysports .card{background:#131b27;border-color:rgba(255,255,255,0.08);color:#fff}
-#shp-mysports .card-title{color:rgba(126,184,247,0.9)}
-#shp-mysports .sh-stab{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.5)}
-#shp-mysports .sh-stab.active{background:rgba(0,200,255,0.15);border-color:rgba(0,200,255,0.3);color:#00c8ff}
-#shp-mysports .sh-loading{color:rgba(255,255,255,0.35)}
-#shp-mysports .ms-sport{background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.08)}
-#shp-mysports .ms-sport-name{color:#fff}
-#shp-mysports .ms-sport-sub{color:rgba(255,255,255,0.4)}
-#shp-mysports .ms-session{background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.08)}
 
 /* Week grid: dark navy cards */
 #sh-play-cal-grid div{color:rgba(255,255,255,0.6)!important}
@@ -673,44 +665,41 @@ body.dark .fx-badge.upcoming{background:rgba(255,255,255,0.06);border-color:rgba
 }
 
 /* Section heading */
-#shp-mysports h4{color:rgba(126,184,247,0.9);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px}
+body.dark #shp-mysports h4{color:rgba(126,184,247,0.9);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px}
 
 /* Week play calendar inside shp-mysports */
-#sh-play-cal-wrap{background:#131b27;border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px}
+#sh-play-cal-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px}
 #sh-play-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
 
 /* My watch list horizontal scroll cards — dark themed */
-#sh-my-watch-list > div > div{
-  background:#1a2332!important;
-  border-color:rgba(0,200,255,0.2)!important;
-  color:#f1f5f9!important;
-}
-#sh-my-watch-list > div > div *{color:#f1f5f9!important}
-#sh-my-watch-list > div > div [style*="color:var(--dim)"]{color:rgba(255,255,255,0.45)!important}
-#sh-my-watch-list button{color:rgba(255,255,255,0.4)!important}
-#sh-my-watch-list .fx-badge.done,#sh-my-watch-list .fx-badge.upcoming,#sh-my-watch-list .fx-badge.tbc{
+#sh-my-watch-list > div > div{background:var(--card);border:1px solid var(--border);border-radius:12px}
+body.dark #sh-my-watch-list > div > div{background:var(--card)!important;border-color:rgba(0,200,255,0.2)!important;color:#f1f5f9!important}
+body.dark #sh-my-watch-list > div > div *{color:#f1f5f9!important}
+body.dark #sh-my-watch-list > div > div [style*="color:var(--dim)"]{color:rgba(255,255,255,0.45)!important}
+body.dark #sh-my-watch-list button{color:rgba(255,255,255,0.4)!important}
+body.dark #sh-my-watch-list .fx-badge.done,body.dark #sh-my-watch-list .fx-badge.upcoming,body.dark #sh-my-watch-list .fx-badge.tbc{
   background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);
 }
-#sh-my-watch-list .fx-badge.live{background:rgba(220,38,38,0.2);color:#f87171;}
+body.dark #sh-my-watch-list .fx-badge.live{background:rgba(220,38,38,0.2);color:#f87171;}
 
 /* Watch section heading */
-#shp-mysports .card-hdr .card-title{color:rgba(126,184,247,0.9)}
+body.dark #shp-mysports .card-hdr .card-title{color:rgba(126,184,247,0.9)}
 
 /* Add to watch btn */
-#shp-mysports .btn{background:#00c8ff;color:#0d1117;border:none}
+body.dark #shp-mysports .btn{background:#00c8ff;color:#0d1117;border:none}
 /* Comprehensive text visibility overrides for dark my-sports panel */
-#shp-mysports,#shp-mysports *{color-scheme:dark}
+/* My Sports uses page color-scheme */
 #shp-mysports .sh-wc-item{border-bottom-color:rgba(255,255,255,0.08)}
-#shp-mysports .sh-wc-date-d,#shp-mysports .sh-wc-match{color:#f1f5f9!important}
-#shp-mysports .sh-wc-date-m,#shp-mysports .sh-wc-meta,#shp-mysports .sh-wc-sport:not(.sh-wc-live):not(.sh-wc-soon){color:rgba(255,255,255,0.5)!important}
-#shp-mysports .sh-wc-live{color:#4ade80!important;font-weight:700}
-#shp-mysports .sh-wc-soon{color:#60a5fa!important}
+body.dark #shp-mysports .sh-wc-date-d,body.dark #shp-mysports .sh-wc-match{color:#f1f5f9!important}
+body.dark #shp-mysports .sh-wc-date-m,body.dark #shp-mysports .sh-wc-meta,#shp-mysports .sh-wc-sport:not(.sh-wc-live):not(.sh-wc-soon){color:rgba(255,255,255,0.5)!important}
+body.dark #shp-mysports .sh-wc-live{color:#4ade80!important;font-weight:700}
+body.dark #shp-mysports .sh-wc-soon{color:#60a5fa!important}
 #shp-mysports .fx-badge{font-size:9px}
-#shp-mysports .ms-section-title{color:#e2e8f0}
+body.dark #shp-mysports .ms-section-title{color:#e2e8f0}
 #shp-mysports .ms-section{background:rgba(255,255,255,0.03);border-radius:12px;padding:12px;margin-bottom:8px}
 
-#shp-mysports .btn:hover{background:#33d4ff}
-#shp-mysports .btn-ghost{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6)}
+body.dark #shp-mysports .btn:hover{background:#33d4ff}
+body.dark #shp-mysports .btn-ghost{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6)}
 
 /* My Sports week-day play boxes (big week view) */
 .sh-week-day-card{
@@ -1191,11 +1180,11 @@ body.dark .fx-badge.upcoming{background:rgba(255,255,255,0.06);border-color:rgba
 
   <!-- Sport tabs -->
   <div class="sh-tabs">
-    <button class="sh-tab active" onclick="shTab('football',this)">⚽ Football</button>
-    <button class="sh-tab" onclick="shTab('cricket',this)">🏏 Cricket</button>
-    <button class="sh-tab" onclick="shTab('f1',this)">🏎 F1</button>
-    <button class="sh-tab" onclick="shTab('tennis',this)">🎾 Tennis</button>
-    <button class="sh-tab" onclick="shTab('mysports',this)">🏆 My Sports</button>
+    <button class="sh-tab active" onclick="shTab('football',this)">Football</button>
+    <button class="sh-tab" onclick="shTab('cricket',this)">Cricket</button>
+    <button class="sh-tab" onclick="shTab('f1',this)">F1</button>
+    <button class="sh-tab" onclick="shTab('tennis',this)">Tennis</button>
+    <button class="sh-tab" onclick="shTab('mysports',this)">My Sports</button>
   </div>
 
   <!-- ── FOOTBALL ── -->
@@ -1275,8 +1264,8 @@ body.dark .fx-badge.upcoming{background:rgba(255,255,255,0.06);border-color:rgba
   <!-- ── MY SPORTS ── -->
   <div id="shp-mysports" class="sh-pane">
     <div class="sh-subtabs">
-      <button class="sh-stab active" onclick="shSubTab('mysports','watch',this)">📺 I Watch</button>
-      <button class="sh-stab" onclick="shSubTab('mysports','play',this)">🎽 I Play</button>
+      <button class="sh-stab active" onclick="shSubTab('mysports','watch',this)">I Watch</button>
+      <button class="sh-stab" onclick="shSubTab('mysports','play',this)">I Play</button>
     </div>
 
     <!-- ── I WATCH ─────────────────────────────────────── -->
@@ -1296,10 +1285,10 @@ body.dark .fx-badge.upcoming{background:rgba(255,255,255,0.06);border-color:rgba
             <div class="card-title" style="margin-bottom:0">📡 Browse Fixtures</div>
             <div style="display:flex;gap:6px;flex-wrap:wrap">
               <button class="sh-wf active" data-wf="all" onclick="shWatchFilter('all',this)">All</button>
-              <button class="sh-wf" data-wf="football" onclick="shWatchFilter('football',this)">⚽</button>
-              <button class="sh-wf" data-wf="cricket" onclick="shWatchFilter('cricket',this)">🏏</button>
-              <button class="sh-wf" data-wf="f1" onclick="shWatchFilter('f1',this)">🏎</button>
-              <button class="sh-wf" data-wf="tennis" onclick="shWatchFilter('tennis',this)">🎾</button>
+              <button class="sh-wf" data-wf="football" onclick="shWatchFilter('football',this)">Fbl</button>
+              <button class="sh-wf" data-wf="cricket" onclick="shWatchFilter('cricket',this)">Ckt</button>
+              <button class="sh-wf" data-wf="f1" onclick="shWatchFilter('f1',this)">F1</button>
+              <button class="sh-wf" data-wf="tennis" onclick="shWatchFilter('tennis',this)">Tns</button>
             </div>
           </div>
           <div id="sh-watch-cal"></div>
@@ -1312,10 +1301,10 @@ body.dark .fx-badge.upcoming{background:rgba(255,255,255,0.06);border-color:rgba
     <!-- ── I PLAY ──────────────────────────────────────── -->
     <div id="shp-mysports-play" class="sh-subpane">
       <!-- Week strip -->
-      <div class="card" style="background:#131b27;border-color:rgba(255,255,255,0.08)">
+      <div class="card" style="background:var(--bg2);border-color:var(--border)">
         <div class="card-hdr" style="margin-bottom:14px">
           <div>
-            <span class="card-title" style="color:rgba(126,184,247,0.9)">PLAYING THIS WEEK</span>
+            <span class="card-title" style="color:var(--text)">PLAYING THIS WEEK</span>
             <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:4px" id="sh-week-range-lbl"></div>
           </div>
           <button class="btn" style="background:#00c8ff;color:#0d1117;border:none;white-space:nowrap" onclick="shShowAddSessForm()">+ Add Session</button>
@@ -1323,7 +1312,7 @@ body.dark .fx-badge.upcoming{background:rgba(255,255,255,0.06);border-color:rgba
         <div id="sh-week-strip" style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px"></div>
       </div>
       <!-- Add session form (hidden) -->
-      <div class="card" id="sh-add-sess-card" style="display:none;background:#131b27;border-color:rgba(255,255,255,0.08)">
+      <div class="card" id="sh-add-sess-card" style="display:none;background:var(--bg2);border-color:rgba(255,255,255,0.08)">
         <div class="card-title" style="color:rgba(126,184,247,0.9);margin-bottom:12px">Schedule a Session</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px">
           <div>
@@ -1354,14 +1343,14 @@ body.dark .fx-badge.upcoming{background:rgba(255,255,255,0.06);border-color:rgba
         </div>
       </div>
       <!-- My Sports grid -->
-      <div class="card" style="background:#131b27;border-color:rgba(255,255,255,0.08)">
+      <div class="card" style="background:var(--bg2);border-color:var(--border)">
         <div class="card-hdr" style="margin-bottom:14px">
-          <span class="card-title" style="color:rgba(126,184,247,0.9)">MY SPORTS</span>
+          <span class="card-title" style="color:var(--text)">MY SPORTS</span>
         </div>
         <div id="sh-play-list"></div>
       </div>
       <!-- Upcoming sessions -->
-      <div class="card" style="background:#131b27;border-color:rgba(255,255,255,0.08)">
+      <div class="card" style="background:var(--bg2);border-color:var(--border)">
         <div class="card-title" style="color:rgba(126,184,247,0.9);margin-bottom:12px">UPCOMING SESSIONS</div>
         <div id="sh-sessions"></div>
       </div>
@@ -2733,96 +2722,6 @@ function renderFinance(){
     drawTrend(mn.expenses||[]);
   }, 80);
 
-  // ── Calendar grid (reuse html for grid rendering) ─────────────
-  var html='';  for(var i=0;i<startOffset;i++){
-    var pd=daysInPrev-startOffset+1+i;
-    html+='<div class="cal-day other-month"><div class="cal-day-num">'+pd+'</div></div>';
-  }
-  for(var d=1;d<=daysInMonth;d++){
-    var ds=_calYear+'-'+String(_calMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-    var isToday=today.getFullYear()===_calYear&&today.getMonth()===_calMonth&&today.getDate()===d;
-    var entries=dotMap[ds]||[];
-    var dotsHtml=entries.slice(0,4).map(function(e){
-      var srcMeta=CAL_SOURCE_META[e.src||'master']||CAL_SOURCE_META.master;
-      var col=srcMeta.color;
-      var hasPri=e.priority==='top'||e.priority==='high';
-      return '<span class="cal-dot" style="background:'+col+';'+(hasPri?'box-shadow:0 0 3px '+col+';width:5px;height:5px':'')+' "></span>';
-    }).join('');
-    var itemsForDay=(dotMap[ds]||[]);
-    var tooltipData=itemsForDay.slice(0,5).map(function(e){
-      var t=CAL_TYPES[e.type]||CAL_TYPES.task;
-      var pm=e.priority?PRIORITY_META[e.priority]:null;
-      return (pm?pm.icon+' ':'')+esc2(e.title||'')+(e.note?' — '+esc2(e.note.slice(0,40)):'')+(e.time?' ⏰'+e.time:'');
-    }).join('||');
-    html+='<div class="cal-day'+(isToday?' today':'')+'" data-ds="'+ds+'" data-tips="'+esc2(tooltipData)+'" onclick="calDayClick(this.dataset.ds)" onmouseenter="calShowTip(this,event)" onmouseleave="calHideTip()">';
-    html+='<div class="cal-day-num">'+d+'</div>';
-    html+='<div class="cal-dots">'+dotsHtml+'</div>';
-    html+='</div>';
-  }
-  var total=startOffset+daysInMonth;
-  var rem=total%7===0?0:7-(total%7);
-  for(var n=1;n<=rem;n++){
-    html+='<div class="cal-day other-month"><div class="cal-day-num">'+n+'</div></div>';
-  }
-  grid.innerHTML=html;
-
-  // ── Today's Focus (next 36 hours, sorted by priority)
-  // Source filter
-  var srcFilter=(document.getElementById('cal-src-filter')||{}).value||'all';
-  if(srcFilter && srcFilter!=='all'){
-    allItems=allItems.filter(function(x){return (x._src||'master')===srcFilter;});
-  }
-  var now=localISO(today);
-  var cutoff=isoOffset(1); // show today + tomorrow
-  var focusItems=allItems.filter(function(x){return x.date>=now&&x.date<=cutoff;});
-  var focusSorted=calSortItems(focusItems);
-  renderTodayFocus(focusSorted, allItems);
-
-  // ── Upcoming list
-  var list=document.getElementById('cal-list');
-  if(!list) return;
-  var filter=(document.getElementById('cal-filter')||{}).value||'all';
-  var future=allItems.filter(function(x){
-    return x.date>=now&&(filter==='all'||x.type===filter);
-  });
-  var sorted=calSortItems(future);
-
-  if(!sorted.length){
-    list.innerHTML='<div class="cal-empty">No upcoming items · click + Add to get started</div>';
-    return;
-  }
-  list.innerHTML=sorted.map(function(x){
-    var xSrc=x._src||'master';
-    var srcItems=calLoadSource(xSrc);
-    // Find index within its own source array
-    var realIdx=srcItems.findIndex(function(s){return s.title===x.title&&s.date===x.date&&s.type===x.type;});
-    var t=CAL_TYPES[x.type]||CAL_TYPES.task;
-    var d=new Date(x.date+'T12:00:00');
-    var diff=x.date===now?0:Math.round((new Date(x.date+'T00:00:00')-new Date(now+'T00:00:00'))/86400000);
-    var recurDisp=x.recur?' 🔁':'';
-    var urgStr=diff===0?'Today'+recurDisp:diff===1?'Tomorrow'+recurDisp:diff<=6?diff+'d away'+recurDisp:d.toLocaleDateString('en-IN',{day:'numeric',month:'short'})+recurDisp;
-    var urgColor=diff===0?'var(--red)':diff<=2?'var(--orange)':'var(--dim)';
-    var pm=x.priority?PRIORITY_META[x.priority]:null;
-    var priHtml=pm?'<span class="cal-priority" style="background:'+pm.color+'22;color:'+pm.color+';border-color:'+pm.color+'44">'+pm.icon+' '+pm.label+'</span> ':'';
-    var srcMeta=CAL_SOURCE_META[xSrc]||CAL_SOURCE_META.master;
-    var srcBadge='<span style="font-size:9px;padding:1px 6px;border-radius:6px;background:'+srcMeta.color+'22;color:'+srcMeta.color+';font-family:var(--font-mono);font-weight:600;border:1px solid '+srcMeta.color+'44">'+srcMeta.icon+' '+srcMeta.label+'</span>';
-    return '<div class="cal-item" style="border-color:'+srcMeta.color+';background:'+t.bg+'">'+
-      '<div class="cal-item-date" style="color:'+urgColor+'">'+urgStr+'</div>'+
-      '<div class="cal-item-body">'+
-        '<div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:3px">'+
-          srcBadge+
-          '<span class="cal-badge" style="background:'+t.bg+';color:'+t.color+'">'+t.label+'</span>'+
-          priHtml+
-        '</div>'+
-        '<div class="cal-item-title">'+esc2(x.title)+'</div>'+
-        ((x.time||x.note)?'<div class="cal-item-sub">'+(x.time?'⏰ '+x.time+(x.note?' · ':' '):'')+(x.note?esc2(x.note):'')+'</div>':'')+
-      '</div>'+
-      '<div class="cal-item-actions">'+
-        '<button class="cal-item-edit" onclick="calEditOpen('+realIdx+',event,null,\''+xSrc+'\')" title="Edit">✏</button>'+
-        '<button class="cal-item-del" onclick="calDelFromSrc(\''+xSrc+'\','+realIdx+',event)">×</button>'+
-      '</div>'+
-      '</div>';
-  }).join('');
 }
 
 function calMarkDone(src, idx, btn){
@@ -2830,8 +2729,8 @@ function calMarkDone(src, idx, btn){
   if(!items[idx]) return;
   items[idx].done = !items[idx].done;
   calSaveSource(src, items);
-  renderHome();
-  calRender();
+  if(typeof mRenderCal==='function') mRenderCal();
+  if(typeof renderHome==='function') renderHome();
 }
 
 function renderTodayFocus(items, allItems){
@@ -4261,6 +4160,9 @@ var FOOTBALL_FIXTURES = [
 
 // ── CRICKET FIXTURES ──────────────────────────────────────────────
 // Format: [date, time_IST, team1, team2, format, series, venue]
+var CRICKET_DURATION = {
+  'Test': 30, 'ODI': 8, 'T20I': 3.5, 'IPL': 3.5, 'T20': 3.5, 'default': 3.5
+};
 var CRICKET_FIXTURES = [
   // ── IPL 2026 — Phase 1 Schedule (released Mar 11 2026) ──────────────────
   // 84 matches total · Mar 28 – May 31 · Phase 2 TBA after state elections
@@ -4902,7 +4804,7 @@ function shRenderFootball(filter){
       var isNext=!nextFound&&status==='upcoming';
       if(isNext) nextFound=true;
       var key=date+home+away+comp;
-      var fxClass='fx-card'+(isHighlight?' fx-highlight':'')+(status==='live'?' fx-live':isNext?' fx-next':'');
+      var fxClass='fx-card'+(status==='live'?' fx-live':isNext?' fx-next':'');
       var dt=shFmtDate(date);
       var compCls='fx-comp comp-'+(COMP_CLASS[comp]||'');
       var badge=status==='live'?'<span class="fx-badge live">● LIVE</span>':
@@ -4920,7 +4822,7 @@ function shRenderFootball(filter){
           '<div class="fx-meta"><span class="'+compCls+'">'+comp+'</span><span>'+md+'</span></div>'+
         '</div>'+
         '<div class="fx-status">'+badge+
-          (isHighlight?'<button class="fx-star '+(shLoadMyWatch().find(function(x){return x.key===date+home+away;})?'saved':'')+'" onclick="shStarToggle(\''+date+'\',\''+time+'\',\''+home+'\',\''+away+'\',\''+comp+'\',\''+md+'\')" title="Save to My Sports">★</button>':'')+'</div>'+
+          '<button class="fx-star '+(shLoadMyWatch().find(function(x){return x.key===date+home+away;})?'saved':'')+'" onclick="shStarToggle(\''+date+'\',\''+time+'\',\''+home+'\',\''+away+'\',\''+comp+'\',\''+md+'\')" title="Watch">☆</button>'+'</div>'+
       '</div>';
     });
     html+='</div>';
@@ -4982,7 +4884,7 @@ function shRenderCricket(filter){
       var isIndia=t1==='India'||t2==='India';
       var isNext=!nextFound&&(status==='upcoming'||status==='tbc');
       if(isNext) nextFound=true;
-      var fxClass='fx-card'+(isRR||isIndia?' fx-highlight':'')+(status==='live'?' fx-live':isNext?' fx-next':'');
+      var fxClass='fx-card'+(status==='live'?' fx-live':isNext?' fx-next':'');
       var dt=shFmtDate(date);
       var fmtCls=fmt==='IPL'?'comp-ipl':'comp-t20wc';
       var badge=status==='live'?'<span class="fx-badge live">&#9679; LIVE</span>':
@@ -5789,7 +5691,7 @@ function shRenderFootball(filter){
       var isNext=!nextFound&&status==='upcoming';
       if(isNext) nextFound=true;
       var key=date+home+away+comp;
-      var fxClass='fx-card'+(isHighlight?' fx-highlight':'')+(status==='live'?' fx-live':isNext?' fx-next':'');
+      var fxClass='fx-card'+(status==='live'?' fx-live':isNext?' fx-next':'');
       var dt=shFmtDate(date);
       var compCls='fx-comp comp-'+(COMP_CLASS[comp]||'');
       var badge=status==='live'?'<span class="fx-badge live">● LIVE</span>':
@@ -5807,7 +5709,7 @@ function shRenderFootball(filter){
           '<div class="fx-meta"><span class="'+compCls+'">'+comp+'</span><span>'+md+'</span></div>'+
         '</div>'+
         '<div class="fx-status">'+badge+
-          (isHighlight?'<button class="fx-star '+(shLoadMyWatch().find(function(x){return x.key===date+home+away;})?'saved':'')+'" onclick="shStarToggle(\''+date+'\',\''+time+'\',\''+home+'\',\''+away+'\',\''+comp+'\',\''+md+'\')" title="Save to My Sports">★</button>':'')+'</div>'+
+          '<button class="fx-star '+(shLoadMyWatch().find(function(x){return x.key===date+home+away;})?'saved':'')+'" onclick="shStarToggle(\''+date+'\',\''+time+'\',\''+home+'\',\''+away+'\',\''+comp+'\',\''+md+'\')" title="Watch">☆</button>'+'</div>'+
       '</div>';
     });
     html+='</div>';
@@ -5936,9 +5838,9 @@ function shRenderTennisCal(){
   if(past.length){
     html+='<details style="margin-bottom:8px"><summary style="cursor:pointer;padding:6px 0;font-size:11px;font-weight:700;color:var(--dim);letter-spacing:0.8px;list-style:none;display:flex;align-items:center;gap:6px"><span style="flex:1">PAST ('+past.length+')</span></summary><div style="opacity:0.7">';
     past.slice(-10).reverse().forEach(function(t){
-      var tierCls=t[5]==='Grand Slam'?'gs':t[5]==='Masters'?'masters':'tour';
+      var tierCls=t[5]==='Grand Slam'?'gs':t[5]==='Masters 1000'?'masters':'tour';
       html+='<div class="tn-card tn-done">'+
-        '<div><div class="tn-name">'+t[0]+'</div><div class="tn-meta">'+t[2]+' – '+t[1].slice(5)+' · '+t[3]+' · '+t[4]+'</div></div>'+
+        '<div><div class="tn-name">'+t[2]+'</div><div class="tn-meta">'+t[0].slice(5)+' – '+t[1].slice(5)+' · '+t[3]+' · '+t[4]+'</div></div>'+
         '<span class="tn-tier '+tierCls+'">'+t[5]+'</span></div>';
     });
     html+='</div></details>';
@@ -5947,20 +5849,20 @@ function shRenderTennisCal(){
   // Upcoming
   var nextFound=false;
   upcoming.forEach(function(t){
-    var start=new Date(t[2]+'T00:00:00Z');
+    var start=new Date(t[0]+'T00:00:00Z');
     var end=new Date(t[1]+'T23:59:00Z');
     var isLive=now>=start&&now<=end;
     var isNext=!nextFound&&!isLive;
     if(!isLive&&isNext) nextFound=true;
-    var tierCls=t[5]==='Grand Slam'?'gs':t[5]==='Masters'?'masters':'tour';
-    var startFmt=shFmtDate(t[2]);
+    var tierCls=t[5]==='Grand Slam'?'gs':t[5]==='Masters 1000'?'masters':'tour';
+    var startFmt=shFmtDate(t[0]);
     var endFmt=shFmtDate(t[1]);
     var dateRange=startFmt.day+' '+startFmt.mon+' – '+endFmt.day+' '+endFmt.mon;
     var statusHtml=isLive?'<span class="fx-badge live">&#9679; LIVE</span>':
                    isNext?'<span class="fx-badge upcoming">Next</span>':'';
     var cls='tn-card'+(isLive?' tn-live':isNext?' tn-next':'');
     html+='<div class="'+cls+'">'+
-      '<div><div class="tn-name">'+t[0]+'</div>'+
+      '<div><div class="tn-name">'+t[2]+'</div>'+
       '<div class="tn-meta">'+dateRange+' · '+t[3]+' · '+t[4]+'</div></div>'+
       '<div style="text-align:right"><span class="tn-tier '+tierCls+'">'+t[5]+'</span><div style="margin-top:4px">'+statusHtml+'</div></div>'+
     '</div>';
