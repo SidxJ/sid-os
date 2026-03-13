@@ -502,6 +502,28 @@ body.dark .dm-toggle:hover{background:rgba(255,255,255,0.12);color:var(--accent)
 .sh-tab{background:none;border:1px solid transparent;border-radius:8px;padding:7px 14px;cursor:pointer;font-size:12.5px;font-weight:600;color:var(--dim);font-family:var(--font-body);transition:all 0.15s}
 .sh-tab:hover{background:var(--bg2);color:var(--text)}
 .sh-tab.active{background:var(--accent);color:#fff;border-color:transparent}
+
+/* ── KNOWLEDGE REPOSITORY ── */
+.kr-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:10px;cursor:pointer;transition:border-color 0.18s,box-shadow 0.18s}
+.kr-card:hover{border-color:var(--accent);box-shadow:0 2px 12px rgba(124,58,237,0.1)}
+.kr-card.kr-expanded{border-color:var(--accent);box-shadow:0 4px 20px rgba(124,58,237,0.12)}
+.kr-card.kr-read{opacity:0.72;background:var(--bg2)}
+.kr-card.kr-read:hover{opacity:1;border-color:var(--accent)}
+.kr-cat-chip{display:inline-block;font-size:9px;font-weight:800;font-family:var(--font-mono);letter-spacing:.8px;text-transform:uppercase;padding:2px 8px;border-radius:8px;border:1px solid;margin-bottom:8px}
+.kr-title{font-family:var(--font-display);font-size:15px;font-weight:800;color:var(--text);margin-bottom:6px;line-height:1.3}
+.kr-summary{font-size:12px;color:var(--dim);line-height:1.6}
+.kr-meta{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+.kr-badge{font-size:9px;font-weight:700;font-family:var(--font-mono);padding:2px 8px;border-radius:8px}
+.kr-badge-unread{background:#7c3aed22;color:var(--accent);border:1px solid var(--accent)}
+.kr-badge-read{background:#05966922;color:#059669;border:1px solid #059669}
+.kr-expand-body{margin-top:14px;border-top:1px solid var(--border);padding-top:14px;display:none}
+.kr-card.kr-expanded .kr-expand-body{display:block}
+.kr-note-wrap{margin-top:12px}
+.kr-note-lbl{font-size:10px;font-family:var(--font-mono);color:var(--dim);letter-spacing:.8px;text-transform:uppercase;margin-bottom:5px}
+.kr-note-inp{width:100%;padding:8px 10px;border-radius:9px;border:1px solid var(--border);background:var(--bg2);font-size:12px;color:var(--text);font-family:var(--font-body);resize:vertical;min-height:56px;outline:none;box-sizing:border-box}
+.kr-note-inp:focus{border-color:var(--accent)}
+.kr-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.kr-section-lbl{font-size:10px;font-family:var(--font-mono);color:var(--dim);letter-spacing:1px;text-transform:uppercase;margin:16px 0 8px;font-weight:700}
 .sh-pane{display:none}.sh-pane.on{display:block}
 .sh-subtabs{display:flex;gap:4px;margin-bottom:14px;flex-wrap:wrap}
 .sh-stab{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:5px 12px;cursor:pointer;font-size:11.5px;font-weight:500;color:var(--text2);font-family:var(--font-body);transition:all 0.15s}
@@ -817,6 +839,41 @@ body.dark .sh-week-day-sess{background:rgba(0,200,255,0.12);border-color:rgba(0,
     <div class="card-hdr"><span class="card-title">Daily Habits</span><button class="btn btn-sm btn-ghost" onclick="goTo('daily')">All habits →</button></div>
     <div class="daily-grid" id="home-daily-grid"></div>
   </div>
+  <div class="card" id="backlog-card">
+    <div class="card-hdr" style="margin-bottom:12px">
+      <span class="card-title">📋 Backlog</span>
+      <div style="display:flex;gap:6px;align-items:center">
+        <select id="bl-filter" onchange="renderBacklog()" style="font-size:11px;padding:3px 8px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);color:var(--text);cursor:pointer">
+          <option value="all">All</option>
+          <option value="Personal">Personal</option>
+          <option value="Education">Education</option>
+          <option value="Career">Career</option>
+          <option value="Finance">Finance</option>
+          <option value="Health">Health</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+    </div>
+    <div id="backlog-list" style="margin-bottom:10px"></div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <input id="bl-text" class="inp" placeholder="Add backlog item…" style="flex:1;min-width:180px" onkeydown="if(event.key==='Enter')addBacklogItem()">
+      <select id="bl-tag" style="font-size:11px;padding:6px 8px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);color:var(--text)">
+        <option value="Personal">Personal</option>
+        <option value="Education">Education</option>
+        <option value="Career">Career</option>
+        <option value="Finance">Finance</option>
+        <option value="Health">Health</option>
+        <option value="Other">Other</option>
+      </select>
+      <select id="bl-pri" style="font-size:11px;padding:6px 8px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);color:var(--text)">
+        <option value="high">🔴 High</option>
+        <option value="normal" selected>🟡 Normal</option>
+        <option value="low">🟢 Low</option>
+      </select>
+      <button class="btn btn-sm" onclick="addBacklogItem()">+ Add</button>
+    </div>
+  </div>
+
   <div class="card">
     <div class="card-hdr"><span class="card-title">Quick Access</span></div>
     <div class="ov-grid">
@@ -943,6 +1000,7 @@ body.dark .sh-week-day-sess{background:rgba(0,200,255,0.12);border-color:rgba(0,
     <span onclick="calSrcFilter('edu',this)" class="cal-src-pill" data-src="edu" style="cursor:pointer;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;font-family:var(--font-mono);border:1px solid #2563eb;color:#2563eb;background:#2563eb11">🎓 Education</span>
     <span onclick="calSrcFilter('per',this)" class="cal-src-pill" data-src="per" style="cursor:pointer;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;font-family:var(--font-mono);border:1px solid #059669;color:#059669;background:#05966911">🙋 Personal</span>
     <span onclick="calSrcFilter('car',this)" class="cal-src-pill" data-src="car" style="cursor:pointer;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;font-family:var(--font-mono);border:1px solid #d97706;color:#d97706;background:#d9770611">💼 Career</span>
+    <span onclick="calSrcFilter('health',this)" class="cal-src-pill" data-src="health" style="cursor:pointer;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;font-family:var(--font-mono);border:1px solid #e11d48;color:#e11d48;background:#e11d4811">🏥 Health</span>
     <span onclick="calSrcFilter('swatch',this)" class="cal-src-pill" data-src="swatch" style="cursor:pointer;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;font-family:var(--font-mono);border:1px solid #dc2626;color:#dc2626;background:#dc262611">👁 Watch</span>
     <span onclick="calSrcFilter('splay',this)" class="cal-src-pill" data-src="splay" style="cursor:pointer;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;font-family:var(--font-mono);border:1px solid #0891b2;color:#0891b2;background:#0891b211">🏃 Play</span>
   </div>
@@ -978,8 +1036,7 @@ body.dark .sh-week-day-sess{background:rgba(0,200,255,0.12);border-color:rgba(0,
 <div id="page-personal" class="page">
   <div class="page-hdr"><div><div class="page-title">Personal</div><div class="page-sub" contenteditable="true" id="personal-sub" onblur="saveField('personal-sub')" title="Click to edit">Click any text to edit. Drag ≡ to reorder sections.</div></div></div>
   <div id="mc-per-wrap" style="margin-bottom:16px"></div>
-  <div id="personal-sections" class="sections-container"></div>
-  <button class="btn btn-ghost" style="width:100%;margin-top:4px" onclick="addSection('personal')">+ Add Section</button>
+  
   <div class="notes-panel" style="margin-top:14px"><button class="notes-toggle" onclick="toggleNotes('personal')"><span style="display:flex;align-items:center;gap:6px"><span id="ndot-personal"></span>Page Notes</span><span>▼</span></button><div class="notes-body" id="nb-personal"><textarea class="notes-ta" placeholder="Personal thoughts..." oninput="saveNote('personal',this.value)" id="nt-personal"></textarea><div class="notes-saved" id="ns-personal">saved</div></div></div>
 </div>
 
@@ -1038,8 +1095,7 @@ body.dark .sh-week-day-sess{background:rgba(0,200,255,0.12);border-color:rgba(0,
   </div>
 
   <!-- SECTIONS (goals, kanban, custom tables, checklists) -->
-  <div id="education-sections" class="sections-container"></div>
-  <button class="btn btn-ghost" style="width:100%;margin-top:4px" onclick="addSection('education')">+ Add Section</button>
+  
 
   <!-- ATTENDANCE (embedded in education) -->
   <div class="card" style="border-color:rgba(202,138,4,0.25);background:linear-gradient(135deg,var(--card),var(--yellowlt))">
@@ -1131,8 +1187,7 @@ body.dark .sh-week-day-sess{background:rgba(0,200,255,0.12);border-color:rgba(0,
   </div>
 
   <div id="mc-car-wrap" style="margin-bottom:16px"></div>
-  <div id="professional-sections" class="sections-container"></div>
-  <button class="btn btn-ghost" style="width:100%;margin-top:4px" onclick="addSection('professional')">+ Add Section</button>
+  
   <div class="notes-panel" style="margin-top:14px"><button class="notes-toggle" onclick="toggleNotes('professional')"><span style="display:flex;align-items:center;gap:6px"><span id="ndot-professional"></span>Page Notes</span><span>▼</span></button><div class="notes-body" id="nb-professional"><textarea class="notes-ta" placeholder="Career notes..." oninput="saveNote('professional',this.value)" id="nt-professional"></textarea><div class="notes-saved" id="ns-professional">saved</div></div></div>
 <div id="mc-car-wrap"></div>
 </div>
@@ -1158,26 +1213,116 @@ body.dark .sh-week-day-sess{background:rgba(0,200,255,0.12);border-color:rgba(0,
 
 <!-- HEALTH -->
 <div id="page-health" class="page">
-  <div class="page-hdr"><div><div class="page-title">Health & Fitness</div><div class="page-sub" contenteditable="true" id="pro-sub" onblur="saveField('pro-sub')" title="Click to edit">EY Parthenon Intern · Strategy · MBA Y1</div></div></div>
+  <div class="page-hdr"><div><div class="page-title">Health & Fitness</div><div class="page-sub" contenteditable="true" id="health-sub" onblur="saveField('health-sub')" title="Click to edit">Gym · Recovery · Appointments</div></div></div>
   <div class="banner">⚠ Left wrist fractured — gym paused. Focus: daily walks, diet, recovery.</div>
-  <div id="health-sections" class="sections-container"></div>
-  <button class="btn btn-ghost" style="width:100%;margin-top:4px" onclick="addSection('health')">+ Add Section</button>
+  <div id="mc-health-wrap" style="margin-bottom:16px"></div>
+  <div class="card">
+    <div class="card-hdr" style="margin-bottom:14px">
+      <span class="card-title">🏥 Health Calendar</span>
+      <button class="btn btn-sm" onclick="calAddFromHealth()">+ Add Event</button>
+    </div>
+    <div id="health-cal-upcoming" style="color:var(--dim);font-size:13px">Loading…</div>
+  </div>
   <div class="notes-panel" style="margin-top:14px"><button class="notes-toggle" onclick="toggleNotes('health')"><span style="display:flex;align-items:center;gap:6px"><span id="ndot-health"></span>Notes</span><span>▼</span></button><div class="notes-body" id="nb-health"><textarea class="notes-ta" placeholder="Fitness notes..." oninput="saveNote('health',this.value)" id="nt-health"></textarea><div class="notes-saved" id="ns-health">saved</div></div></div>
 </div>
 
 <!-- UPSKILLING -->
 <div id="page-upskilling" class="page">
-  <div class="page-hdr"><div><div class="page-title">Upskilling</div><div class="page-sub">Track skills and open the Excel Mastery tracker</div></div></div>
-  <div class="card" style="padding:0;overflow:hidden;margin-bottom:14px">
-    <div style="padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
-      <div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">📊</span><div style="font-family:var(--font-display);font-size:15px">Excel Mastery — EY Parthenon Prep</div></div>
-      <a href="excel_tracker.html" target="_blank" class="btn btn-sm">Open Tracker →</a>
-    </div>
-    <div style="padding:20px;text-align:center;color:var(--dim);font-size:13px">Opens in a new tab. Keep both files in the same folder.</div>
+  <div class="page-hdr">
+    <div><div class="page-title">Upskilling</div><div class="page-sub" id="up-sub">Excel Mastery · Knowledge Repository</div></div>
   </div>
-  <div id="upskilling-sections" class="sections-container"></div>
-  <button class="btn btn-ghost" style="width:100%;margin-top:4px" onclick="addSection('upskilling')">+ Add Section</button>
-  <div class="notes-panel" style="margin-top:14px"><button class="notes-toggle" onclick="toggleNotes('upskilling')"><span style="display:flex;align-items:center;gap:6px"><span id="ndot-upskilling"></span>Notes</span><span>▼</span></button><div class="notes-body" id="nb-upskilling"><textarea class="notes-ta" placeholder="Learning notes..." oninput="saveNote('upskilling',this.value)" id="nt-upskilling"></textarea><div class="notes-saved" id="ns-upskilling">saved</div></div></div>
+
+  <!-- Subtabs -->
+  <div class="sh-tabs">
+    <button class="sh-tab active" onclick="upTab('excel',this)">📊 Excel Mastery</button>
+    <button class="sh-tab" onclick="upTab('knowledge',this)">🧠 Knowledge Repository</button>
+  </div>
+
+  <!-- ── EXCEL SUBTAB ── -->
+  <div id="up-pane-excel" class="sh-pane on">
+    <div class="card" style="padding:0;overflow:hidden;margin-bottom:14px">
+      <div style="padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">📊</span><div style="font-family:var(--font-display);font-size:15px">Excel Mastery — EY Parthenon Prep</div></div>
+        <a href="excel_tracker.html" target="_blank" class="btn btn-sm">Open Tracker →</a>
+      </div>
+      <div style="padding:20px;text-align:center;color:var(--dim);font-size:13px">Opens in a new tab. Keep both files in the same folder.</div>
+    </div>
+    <div class="notes-panel" style="margin-top:14px"><button class="notes-toggle" onclick="toggleNotes('upskilling')"><span style="display:flex;align-items:center;gap:6px"><span id="ndot-upskilling"></span>Notes</span><span>▼</span></button><div class="notes-body" id="nb-upskilling"><textarea class="notes-ta" placeholder="Learning notes..." oninput="saveNote('upskilling',this.value)" id="nt-upskilling"></textarea><div class="notes-saved" id="ns-upskilling">saved</div></div></div>
+  </div>
+
+  <!-- ── KNOWLEDGE REPOSITORY SUBTAB ── -->
+  <div id="up-pane-knowledge" class="sh-pane">
+
+    <!-- API Key setup -->
+    <div id="kr-apikey-setup" class="card" style="display:none;border-color:rgba(124,58,237,0.3);background:linear-gradient(135deg,var(--card),var(--accentlt))">
+      <div style="font-family:var(--font-display);font-size:15px;font-weight:800;margin-bottom:6px">🔑 One-time API Key Setup</div>
+      <div style="font-size:12px;color:var(--dim);margin-bottom:12px">Enter your Gemini API key to enable Deep Dive. Free tier, no credit card needed. Saved locally, never leaves your device.</div>
+      <div style="display:flex;gap:8px">
+        <input id="kr-apikey-inp" type="password" class="inp" placeholder="AIza..." style="flex:1;font-family:var(--font-mono);font-size:12px">
+        <button class="btn" onclick="krSaveKey()">Save Key</button>
+      </div>
+    </div>
+
+    <!-- Controls bar -->
+    <div class="card" style="padding:12px 16px">
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <button class="btn" onclick="krRoll()" style="background:var(--accent);color:#fff;gap:6px;display:flex;align-items:center">🎲 Roll Random</button>
+        <input id="kr-search" class="inp" placeholder="Search topics…" style="flex:1;min-width:140px;font-size:12px" oninput="krRender()">
+        <select id="kr-cat-filter" class="inp" style="font-size:12px;width:auto;padding:6px 10px" onchange="krRender()">
+          <option value="all">All Categories</option>
+          <option value="Geopolitics">🌍 Geopolitics</option>
+          <option value="History">🏛 History</option>
+          <option value="Psychology">🧠 Psychology</option>
+          <option value="Finance">💰 Finance</option>
+          <option value="Science">🔬 Science</option>
+          <option value="Culture">🎭 Culture</option>
+          <option value="Sports">⚽ Sports</option>
+          <option value="Technology">💻 Technology</option>
+          <option value="Philosophy">💡 Philosophy</option>
+          <option value="Business">📈 Business</option>
+        </select>
+        <select id="kr-status-filter" class="inp" style="font-size:12px;width:auto;padding:6px 10px" onchange="krRender()">
+          <option value="unread">Unread</option>
+          <option value="read">Read</option>
+          <option value="all">All</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:16px;margin-top:10px;font-size:11px;color:var(--dim);font-family:var(--font-mono)">
+        <span id="kr-stats-read">0 read</span>
+        <span id="kr-stats-total">0 total</span>
+        <span id="kr-stats-pct">0% explored</span>
+        <button onclick="krSetKey()" style="background:none;border:none;cursor:pointer;color:var(--dim);font-size:10px;margin-left:auto;padding:0">⚙ API Key</button>
+      </div>
+    </div>
+
+    <!-- Topic grid -->
+    <div id="kr-grid"></div>
+
+    <!-- Deep Dive reading panel (full overlay) -->
+    <div id="kr-dive-panel" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:3000;overflow-y:auto;padding:0">
+      <div style="max-width:720px;margin:0 auto;padding:32px 24px 80px">
+        <button onclick="krClosePanel()" style="display:flex;align-items:center;gap:6px;background:none;border:1px solid var(--border);border-radius:8px;padding:6px 14px;cursor:pointer;color:var(--dim);font-size:12px;margin-bottom:28px">← Back to Repository</button>
+        <div id="kr-dive-cat" style="font-size:10px;font-family:var(--font-mono);font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--accent);margin-bottom:8px"></div>
+        <div id="kr-dive-title" style="font-family:var(--font-display);font-size:28px;font-weight:900;color:var(--text);line-height:1.15;margin-bottom:20px"></div>
+        <div id="kr-dive-content" style="font-size:14px;color:var(--text);line-height:1.8;white-space:pre-wrap"></div>
+        <div id="kr-dive-loading" style="display:none;padding:40px 0;text-align:center;color:var(--dim)">
+          <div style="font-size:24px;margin-bottom:10px">✦</div>
+          <div style="font-family:var(--font-mono);font-size:12px">Claude is thinking…</div>
+        </div>
+        <!-- Notes -->
+        <div style="margin-top:32px;border-top:1px solid var(--border);padding-top:20px">
+          <div style="font-size:11px;font-family:var(--font-mono);color:var(--dim);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Your Notes</div>
+          <textarea id="kr-dive-notes" class="notes-ta" placeholder="Key takeaways, thoughts…" style="width:100%;min-height:100px;font-size:13px" oninput="krSaveNote()"></textarea>
+        </div>
+        <!-- Actions -->
+        <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap">
+          <button id="kr-dive-mark-btn" class="btn" onclick="krMarkReadFromPanel()" style="background:var(--accent);color:#fff">✓ Mark as Read</button>
+          <button class="btn btn-ghost" onclick="krDiveAgain()">↻ Regenerate</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <!-- SPORTS HUB -->
@@ -1462,6 +1607,14 @@ body.dark .sh-week-day-sess{background:rgba(0,200,255,0.12);border-color:rgba(0,
 </div>
 
 <script>
+
+
+
+
+
+
+
+
 var SK="siddhant_os_v4";
 var DEF={
   focusTasks:[
@@ -1540,7 +1693,8 @@ var DEF={
   journal:{entries:[]},
   watchlist:[],
   attendance:{subjects:[],log:[]},
-  cv:{entries:[],edu:[],skills:[],extra:[]},notes:{},fields:{}
+  cv:{entries:[],edu:[],skills:[],extra:[]},notes:{},fields:{},
+  backlog:[]
 };
 
 var D;
@@ -1556,8 +1710,11 @@ function loadD(){
   D.education.subjects.forEach(function(s){if(!s.marks)s.marks=[];});
   ['personal','education','professional','health','upskilling'].forEach(function(t){
     if(!D[t])D[t]={sections:[]};
-    if(!D[t].sections)D[t].sections=JSON.parse(JSON.stringify(DEF[t].sections));
+    if(!D[t].sections)D[t].sections=[];
   });
+  if(!D.backlog)D.backlog=[];
+  if(!D.journal)D.journal={entries:[]};
+  if(!D.journal.entries)D.journal.entries=[];
 }
 function saveD(){try{localStorage.setItem(SK,JSON.stringify(D))}catch(e){}}
 // ── DATE HELPERS (IST-safe) ──────────────────────────────────────
@@ -1665,11 +1822,11 @@ function goTo(tab){
   // Preserve dark mode across tab switches
   if(localStorage.getItem(_darkKey) === 'dark') document.body.classList.add('dark');
   var map={home:renderHome,daily:renderDaily,
-    personal:function(){renderSections("personal");setTimeout(function(){var el=document.getElementById('mc-per-wrap');if(el){el.innerHTML=calMiniCardHTML('per');calMiniRender('per');}},50);},
+    personal:function(){setTimeout(function(){var el=document.getElementById('mc-per-wrap');if(el){el.innerHTML=calMiniCardHTML('per');calMiniRender('per');}},50);},
     education:function(){renderEducation();renderSGPA();setTimeout(function(){var el=document.getElementById('mc-edu-wrap');if(el){el.innerHTML=calMiniCardHTML('edu');calMiniRender('edu');}},50);},
-    professional:function(){renderSections("professional");cvRender();setTimeout(function(){var el=document.getElementById('mc-car-wrap');if(el){el.innerHTML=calMiniCardHTML('car');calMiniRender('car');}},50);},
-    finance:renderFinance,health:function(){renderSections("health")},
-    upskilling:function(){renderSections("upskilling")},journal:renderJournal,transfer:function(){},
+    professional:function(){cvRender();setTimeout(function(){var el=document.getElementById('mc-car-wrap');if(el){el.innerHTML=calMiniCardHTML('car');calMiniRender('car');}},50);},
+    finance:renderFinance,health:function(){renderHealthCal();setTimeout(function(){var el=document.getElementById('mc-health-wrap');if(el){el.innerHTML=calMiniCardHTML('health');calMiniRender('health');}},50);},
+    upskilling:function(){krInit();},journal:renderJournal,transfer:function(){},
     sports:function(){shRenderActive();shRenderMySports();setTimeout(function(){var sw=document.getElementById('mc-swatch-wrap');if(sw){sw.innerHTML=calMiniCardHTML('swatch');calMiniRender('swatch');}var sp=document.getElementById('mc-splay-wrap');if(sp){sp.innerHTML=calMiniCardHTML('splay');calMiniRender('splay');}},300);},
     attendance:attRender,watchlist:wlRender,
     calendar:function(){calRender();}};
@@ -1681,6 +1838,759 @@ var PC={high:"#dc2626",medium:"#d97706",low:"#059669"};
 var TC={"Education":"#2563eb","Finance":"#059669","Health":"#dc2626","Personal":"#7c3aed","Professional":"#d97706","Upskilling":"#0891b2","Daily":"#7c3aed"};
 
 // ── HOME ─────────────────────────────────────────────────────────────────
+// ── BACKLOG ──────────────────────────────────────────────────────────────
+var BL_PRI_COLOR = {high:'#ef4444', normal:'#f59e0b', low:'#10b981'};
+var BL_TAG_COLOR = {Personal:'#7c3aed',Education:'#2563eb',Career:'#d97706',Finance:'#059669',Health:'#e11d48',Other:'#6b7280'};
+
+function renderBacklog(){
+  var el = document.getElementById('backlog-list');
+  if(!el) return;
+  var filter = (document.getElementById('bl-filter')||{}).value || 'all';
+  var items = (D.backlog||[]).filter(function(i){
+    return filter==='all' || i.tag===filter;
+  }).sort(function(a,b){
+    var po = {high:0,normal:1,low:2};
+    return (po[a.pri]||1) - (po[b.pri]||1);
+  });
+  if(!items.length){
+    el.innerHTML='<div style="color:var(--dim);font-size:12px;padding:4px 0">No items' + (filter!=='all'?' in '+filter:'') + '. Add something above.</div>';
+    return;
+  }
+  el.innerHTML = items.map(function(item){
+    var priColor = BL_PRI_COLOR[item.pri]||'#f59e0b';
+    var tagColor = BL_TAG_COLOR[item.tag]||'#6b7280';
+    return '<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)">'
+      +'<button onclick="doneBacklogItem(\'' + item.id + '\')" style="width:18px;height:18px;border-radius:50%;border:2px solid '+priColor+';background:none;cursor:pointer;flex-shrink:0" title="Mark done"></button>'
+      +'<div style="flex:1;font-size:13px;color:var(--text)">'+esc(item.text)+'</div>'
+      +'<span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;border:1px solid '+tagColor+';color:'+tagColor+'">'+item.tag+'</span>'
+      +'<button onclick="delBacklogItem(\'' + item.id + '\')" style="background:none;border:none;cursor:pointer;color:var(--dim);font-size:14px;padding:0 2px" title="Delete">×</button>'
+      +'</div>';
+  }).join('');
+}
+
+function addBacklogItem(){
+  var txt = (document.getElementById('bl-text')||{}).value||'';
+  if(!txt.trim()) return;
+  var tag = (document.getElementById('bl-tag')||{}).value||'Personal';
+  var pri = (document.getElementById('bl-pri')||{}).value||'normal';
+  if(!D.backlog) D.backlog=[];
+  if(D.backlog.length >= 30){alert('Max 30 items. Complete or delete some first.');return;}
+  D.backlog.push({id:Date.now(),text:txt.trim(),tag:tag,pri:pri,created:isoToday()});
+  saveD(); renderBacklog();
+  var inp = document.getElementById('bl-text');
+  if(inp) inp.value='';
+}
+
+function doneBacklogItem(id){
+  D.backlog = (D.backlog||[]).filter(function(i){return String(i.id)!==String(id);});
+  saveD(); renderBacklog();
+}
+
+function delBacklogItem(id){
+  D.backlog = (D.backlog||[]).filter(function(i){return String(i.id)!==String(id);});
+  saveD(); renderBacklog();
+}
+
+
+// ══════════════════════════════════════════════════════════════════════
+// UPSKILLING SUBTAB SWITCHER
+// ══════════════════════════════════════════════════════════════════════
+function upTab(name, btn) {
+  document.querySelectorAll('#page-upskilling .sh-tab').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('#page-upskilling .sh-pane').forEach(function(p){ p.classList.remove('on'); });
+  btn.classList.add('active');
+  var pane = document.getElementById('up-pane-'+name);
+  if(pane) pane.classList.add('on');
+  if(name === 'knowledge') krInit();
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// KNOWLEDGE REPOSITORY — DATA (350 topics)
+// ══════════════════════════════════════════════════════════════════════
+var KR_TOPICS = (function(){
+  var t = [];
+  var id = 1;
+  function add(cat, title, summary) { t.push({id: id++, cat: cat, title: title, summary: summary}); }
+
+  // GEOPOLITICS (40)
+  add('Geopolitics','The Belt and Road Initiative','China\'s $1T+ infrastructure investment program spanning 150+ countries, reshaping global trade routes and creating geopolitical leverage through debt diplomacy.');
+  add('Geopolitics','NATO\'s Eastern Expansion','The alliance\'s growth from 12 to 32 members since 1949, its relationship with Russia\'s security concerns, and how enlargement has shaped European security architecture.');
+  add('Geopolitics','The South China Sea Dispute','Overlapping territorial claims among China, Vietnam, Philippines, Malaysia, and others over strategic shipping lanes carrying $3.4T in annual trade.');
+  add('Geopolitics','The Abraham Accords','2020 normalization agreements between Israel and UAE, Bahrain, Sudan, and Morocco — reshaping Middle East alliances and marginalizing the Palestinian question.');
+  add('Geopolitics','Dollar Hegemony and De-dollarization','How the US dollar\'s reserve currency status gives America outsized global influence, and emerging efforts by BRICS nations to build alternatives.');
+  add('Geopolitics','The Taiwan Strait Crisis','Cross-strait tensions between Taiwan\'s de facto independence and China\'s reunification claims, with major implications for global semiconductor supply chains.');
+  add('Geopolitics','Proxy Wars in the 21st Century','How major powers fight through intermediaries — Yemen, Syria, Libya, Ukraine — avoiding direct confrontation while pursuing strategic objectives.');
+  add('Geopolitics','The Arctic Race','Melting ice opening new shipping routes and exposing vast untapped resources, driving competition among Russia, US, Canada, Norway, and China for Arctic dominance.');
+  add('Geopolitics','ASEAN and Southeast Asian Neutrality','How Southeast Asia\'s 10-nation bloc navigates great power competition, maintaining strategic ambiguity between US and Chinese spheres of influence.');
+  add('Geopolitics','The Sahel Crisis','A vast band of instability across northern Africa where state collapse, jihadist insurgency, climate stress, and great power competition intersect dramatically.');
+  add('Geopolitics','Nuclear Non-Proliferation Challenges','How the NPT regime is under strain as North Korea develops weapons, Iran approaches capability, and extended deterrence commitments are questioned.');
+  add('Geopolitics','The Quad Alliance','US, India, Japan, and Australia\'s informal security framework aimed at countering Chinese influence in the Indo-Pacific through military and economic cooperation.');
+  add('Geopolitics','Resource Nationalism','The trend of governments asserting control over natural resources — lithium in Latin America, oil in Africa — reshaping global supply chains and investment flows.');
+  add('Geopolitics','The War in Yemen','The world\'s worst humanitarian crisis, a proxy conflict between Saudi Arabia and Iran playing out through Houthi rebels versus a Saudi-led coalition.');
+  add('Geopolitics','India\'s Strategic Autonomy','How India maintains partnerships with both the US and Russia while pursuing independent foreign policy — a defining feature of its post-colonial strategic tradition.');
+  add('Geopolitics','The Uighur Crisis','China\'s mass detention of Muslim minorities in Xinjiang, its global diplomatic fallout, and debates around sovereignty versus human rights intervention.');
+  add('Geopolitics','Sanctions as Foreign Policy','How the US, EU, and others use economic coercion — Iran, Russia, North Korea, Cuba — its effectiveness, unintended consequences, and erosion of dollar trust.');
+  add('Geopolitics','The Global Refugee Crisis','With 100M+ displaced globally, how failed states, climate change, and conflict drive migration — and how it reshapes domestic politics in receiving countries.');
+  add('Geopolitics','Five Eyes Intelligence Alliance','The US, UK, Canada, Australia, and New Zealand\'s signals intelligence sharing network — its history, capabilities, and growing role in cyber competition.');
+  add('Geopolitics','Climate Geopolitics','How climate change is becoming a national security issue — water wars, climate refugees, food insecurity, and the geopolitics of the energy transition.');
+  add('Geopolitics','The Horn of Africa\'s Strategic Importance','Why Djibouti hosts military bases from the US, China, France, and Japan — gateway to the Red Sea and critical chokepoint for global shipping.');
+  add('Geopolitics','AUKUS and Submarine Deal','The 2021 security pact where the US and UK help Australia acquire nuclear-powered submarines, signaling a new era of Indo-Pacific security partnerships.');
+  add('Geopolitics','Venezuela\'s Crisis and Regional Impact','The collapse of an oil-rich state — hyperinflation, authoritarian consolidation, 7M+ refugees — and its implications for Latin American democracy.');
+  add('Geopolitics','The Future of the United Nations','How geopolitical rivalry between permanent Security Council members paralyzes collective action, and debates around reform of an institution built for 1945.');
+  add('Geopolitics','Israel-Palestine: Two-State Solution','The shrinking possibility of a Palestinian state, settlement expansion, the Gaza conflict, and what various stakeholders actually want from the peace process.');
+  add('Geopolitics','Central Asia After the Soviet Union','How Kazakhstan, Uzbekistan, Turkmenistan, Kyrgyzstan, and Tajikistan navigate between Russian, Chinese, and American influence in the world\'s most landlocked region.');
+  add('Geopolitics','The Strait of Hormuz','Why this 33km-wide chokepoint — through which 20% of global oil flows — is the most strategically sensitive waterway on Earth.');
+  add('Geopolitics','Global Water Wars','How freshwater scarcity is emerging as a source of geopolitical tension — the Nile dispute, Mekong dams, and aquifer depletion across the Global South.');
+  add('Geopolitics','Brexit\'s Geopolitical Legacy','How Britain\'s departure from the EU reshaped European unity, the special relationship with the US, and the UK\'s global role five years on.');
+  add('Geopolitics','The Space Race 2.0','NASA, SpaceX, China\'s CNSA, and private actors competing for lunar resources, satellite dominance, and eventual Mars colonization — with major defense implications.');
+  add('Geopolitics','Pakistan\'s Strategic Paradox','An American ally hosting Taliban leadership, a Chinese partner through CPEC, nuclear-armed neighbor of India — how Pakistan navigates impossible contradictions.');
+  add('Geopolitics','The European Union\'s Federal Future','Debates over fiscal union, defense integration, and democratic legitimacy as the EU faces pressure from populist member states and external adversaries.');
+  add('Geopolitics','Iran\'s Regional Ambitions','Tehran\'s strategy of building influence through proxy militias — Hezbollah, Hamas, Houthis, PMF — to project power without direct confrontation.');
+  add('Geopolitics','Turkey\'s Neo-Ottoman Strategy','Erdogan\'s vision of Turkey as regional hegemon — active in Syria, Libya, Azerbaijan, Somalia — navigating between NATO membership and Russian partnership.');
+  add('Geopolitics','The Digital Silk Road','China\'s strategy of building telecommunications infrastructure (Huawei, undersea cables) across developing nations, raising data sovereignty and surveillance concerns.');
+  add('Geopolitics','Mercenaries and Private Military Companies','How Wagner Group, Blackwater, and others give governments plausible deniability in conflicts from Libya to Mali to Ukraine.');
+  add('Geopolitics','The Korean Peninsula Freeze','Seven decades of armistice — how North Korea\'s nuclear deterrent, China\'s interests, and US-South Korea alliance have locked in an unresolved conflict.');
+  add('Geopolitics','Gulf State Diversification','Saudi Arabia\'s Vision 2030, UAE\'s knowledge economy — how Gulf monarchies are racing to build post-oil economies before energy transition makes their wealth obsolete.');
+  add('Geopolitics','Ethiopia\'s Tigray War','Africa\'s deadliest recent conflict — federal government versus a regional ethnic group — and what it revealed about international indifference to African crises.');
+  add('Geopolitics','The Indo-Pacific Economic Framework','Washington\'s trade-lite alternative to the TPP, trying to compete with China\'s economic influence without offering market access — its limitations and significance.');
+
+  // HISTORY (40)
+  add('History','The Partition of India, 1947','How the hasty division of British India into two nations displaced 15M people and caused 200,000–2M deaths, shaping South Asian politics for generations.');
+  add('History','The Mongol Empire\'s Legacy','How Genghis Khan\'s empire — the largest contiguous land empire in history — simultaneously destroyed civilizations and connected the world through trade and ideas.');
+  add('History','The Cold War\'s Third World','How US-Soviet rivalry played out across Asia, Africa, and Latin America — coups, proxy wars, and development aid as geopolitical weapons.');
+  add('History','The Berlin Wall: Rise and Fall','A concrete symbol of ideological division — why it was built in 1961, how it shaped German and European identity, and what its 1989 fall truly meant.');
+  add('History','The Armenian Genocide','Ottoman Turkey\'s systematic killing of 600,000–1.5M Armenians in 1915–1923 — its historical documentation, political denial, and relevance to modern genocide law.');
+  add('History','The Trans-Atlantic Slave Trade','How 12.5M Africans were forcibly transported to the Americas over 400 years, structuring the world economy and leaving legacies still visible today.');
+  add('History','The Fall of the Roman Empire','The 476 CE collapse that wasn\'t — how Rome\'s fall was a centuries-long transformation, and what it teaches about state fragility and institutional decay.');
+  add('History','Japan\'s Meiji Restoration','The 1868 revolution that transformed feudal Japan into an industrial power in a single generation — the fastest modernization in history and its militarist consequences.');
+  add('History','The Haitian Revolution','The only successful slave revolt in history — how enslaved Africans overthrew French colonial rule in 1804, creating the first Black republic and terrifying slaveholders worldwide.');
+  add('History','The Spanish Flu of 1918','How a pandemic killed 50–100M people, ended faster than COVID due to fewer interventions, and was suppressed from public consciousness by wartime censorship.');
+  add('History','The Ottoman Empire\'s Long Decline','How the "Sick Man of Europe" contracted across two centuries — minority nationalism, Western encroachment, and reform failures that produced modern Middle Eastern borders.');
+  add('History','The Cultural Revolution','Mao\'s 1966–1976 campaign that destroyed China\'s professional class, killed 500,000–2M people, and left psychological scars on an entire generation.');
+  add('History','The Scramble for Africa','How European powers divided an entire continent at the 1884 Berlin Conference, drawing borders that ignored ethnic realities and created post-colonial dysfunction.');
+  add('History','The Marshall Plan','America\'s $13B program to rebuild Western Europe after WWII — enlightened self-interest that created decades of prosperity and bound Europe to the US orbit.');
+  add('History','The Rwandan Genocide','100 days in 1994 in which 800,000 Tutsis were killed while the world watched — and what it means for humanitarian intervention and the Responsibility to Protect.');
+  add('History','The Cuban Missile Crisis','Thirteen days in 1962 when nuclear war was genuinely close — how back-channel diplomacy, luck, and restraint prevented catastrophe.');
+  add('History','The Green Revolution','Norman Borlaug\'s agricultural transformation that saved a billion lives from famine — and the environmental and social trade-offs that came with it.');
+  add('History','The Dissolution of the Soviet Union','How the world\'s second superpower collapsed between 1989–1991 — Gorbachev\'s reforms, nationalist movements, economic failure, and a coup that backfired.');
+  add('History','The East India Company','How a trading company became a sovereign colonial power ruling 200M people — the original example of corporate power overwhelming state authority.');
+  add('History','The Holocaust\'s Bureaucratic Machinery','How ordinary people participated in industrialized genocide — Hannah Arendt\'s "banality of evil" and what it reveals about obedience to authority.');
+  add('History','The Boxer Rebellion','China\'s 1900 anti-foreign uprising, the international coalition that crushed it, and how it accelerated the Qing dynasty\'s collapse and Chinese nationalism.');
+  add('History','The War of 1971','How Bangladesh was born — Pakistan\'s military crackdown, India\'s decisive intervention, and 300,000 dead in one of the 20th century\'s most overlooked conflicts.');
+  add('History','The Crusades\'s Legacy','How 200 years of Christian-Muslim conflict shaped Mediterranean trade, Islamic defensiveness toward the West, and European exposure to classical knowledge.');
+  add('History','The French Revolution\'s Contradictions','How ideals of liberty, equality, and fraternity produced the Reign of Terror, Napoleon, and 25 years of continental war — the paradox of revolutionary violence.');
+  add('History','The Manhattan Project','How the US assembled the greatest concentration of scientific talent in history to build the atomic bomb — its physics, ethics, and geopolitical consequences.');
+  add('History','The Vietnam War\'s Domestic Impact','How a military failure transformed American political culture — the credibility gap, anti-war movement, and the Vietnam Syndrome that shaped US foreign policy for decades.');
+  add('History','The Black Death','How the 14th-century plague killed 1/3 of Europe\'s population — and how labor scarcity after the pandemic accelerated the end of feudalism and the rise of capitalism.');
+  add('History','The Partition of Korea','How a line drawn at the 38th parallel in 1945 created two entirely different societies — and remains the world\'s most militarized border 80 years later.');
+  add('History','The British Raj and Indian Independence','The contradictions of the largest empire in history — how Britain simultaneously modernized and extracted from India, and how Gandhi\'s nonviolence defeated it.');
+  add('History','The Troubles in Northern Ireland','30 years of sectarian conflict between Catholics and Protestants in Northern Ireland — and how the 1998 Good Friday Agreement achieved what seemed impossible.');
+  add('History','Alexander the Great\'s Empire','How a 32-year-old Macedonian conquered the known world — the military genius, the cultural synthesis he created, and why his empire fell apart immediately after his death.');
+  add('History','The Atomic Bombing of Japan','Was it necessary? The debates around Hiroshima and Nagasaki — the casualty estimates, the alternatives considered, and the beginning of the nuclear age.');
+  add('History','The Non-Aligned Movement','How newly independent nations tried to stay out of the Cold War — India\'s Nehru, Egypt\'s Nasser, Yugoslavia\'s Tito — and why it ultimately failed.');
+  add('History','The Industrial Revolution\'s Social Cost','Child labor, 14-hour workdays, urban squalor — how capitalism\'s first great transformation created immense wealth and immense suffering simultaneously.');
+  add('History','The Trail of Tears','The forced displacement of 60,000 Native Americans from their homelands in the 1830s — and what it reveals about the American founding\'s contradictions.');
+  add('History','The Taiping Rebellion','China\'s 1850–1864 civil war — the bloodiest conflict before WWI, killing 20–30M — almost entirely unknown outside China.');
+  add('History','Apartheid South Africa','The architecture of racial separation — how it was built, how it functioned economically, and how the ANC and international pressure brought it down.');
+  add('History','The Silk Road\'s Cultural Exchange','How the ancient trade network transmitted Buddhism, Islam, plague, paper, gunpowder, and mathematics across Eurasia for a thousand years.');
+  add('History','The Iranian Revolution of 1979','How a broad coalition overthrew a US-backed Shah and a Shia cleric hijacked the revolution — reshaping Middle Eastern geopolitics for half a century.');
+  add('History','The Korean War: The Forgotten War','1950–1953: 36,000 American dead, 1M+ Korean casualties, Chinese intervention that shocked US commanders — and an armistice that never became a peace treaty.');
+
+  // PSYCHOLOGY (35)
+  add('Psychology','Cognitive Dissonance','The mental discomfort of holding contradictory beliefs — and the creative mental gymnastics people perform to resolve it rather than change their behavior.');
+  add('Psychology','The Milgram Experiment','Stanley Milgram\'s 1961 study showed 65% of ordinary people would administer apparently lethal electric shocks if ordered by an authority figure.');
+  add('Psychology','Attachment Theory','How early bonds with caregivers create secure, anxious, avoidant, or disorganized attachment styles — patterns that echo through adult relationships for life.');
+  add('Psychology','The Stanford Prison Experiment','Philip Zimbardo\'s 1971 study where students assigned as "guards" became abusive within days — and what it (and its later controversies) reveal about situational evil.');
+  add('Psychology','Flow State','Mihaly Csikszentmihalyi\'s concept of optimal experience — the psychology of complete absorption in a challenging task, and how to design life around it.');
+  add('Psychology','The Bystander Effect','Why people are less likely to help in emergencies when others are present — diffusion of responsibility and pluralistic ignorance that killed Kitty Genovese.');
+  add('Psychology','Confirmation Bias','The tendency to seek, interpret, and remember information that confirms existing beliefs — the most pervasive cognitive bias and how it distorts decision-making.');
+  add('Psychology','Imposter Syndrome','The persistent feeling of being a fraud despite evidence of competence — especially prevalent among high achievers, women, and first-generation professionals.');
+  add('Psychology','The Dunning-Kruger Effect','Why incompetent people overestimate their abilities while experts underestimate theirs — the double curse of ignorance and the U-shaped confidence curve.');
+  add('Psychology','Trauma and the Nervous System','How traumatic experiences rewire the autonomic nervous system — the physiological basis of PTSD, and why talking therapies alone often fail to heal it.');
+  add('Psychology','Social Proof','Robert Cialdini\'s principle that people look to others\' behavior in uncertain situations — the mechanism behind viral trends, panic buying, and cult membership.');
+  add('Psychology','Growth vs Fixed Mindset','Carol Dweck\'s research showing that believing intelligence is malleable (not fixed) predicts academic achievement, resilience to failure, and career success.');
+  add('Psychology','The Psychology of Money','Daniel Kahneman\'s finding that losses feel 2x worse than equivalent gains feel good — loss aversion and how it distorts financial decisions.');
+  add('Psychology','Learned Helplessness','Martin Seligman\'s discovery that animals (and humans) who experience uncontrollable negative events stop trying to escape — the psychology behind depression.');
+  add('Psychology','The Halo Effect','How one positive quality colors our entire perception of a person — why attractive people are assumed to be smarter, and why brand associations matter so much.');
+  add('Psychology','Scarcity Mindset','The cognitive bandwidth tax of poverty — how the stress of scarcity hijacks executive function and forces short-term thinking, perpetuating disadvantage.');
+  add('Psychology','Terror Management Theory','Ernest Becker\'s idea that awareness of mortality drives most of human culture, religion, nationalism, and self-esteem — an unsettling but compelling framework.');
+  add('Psychology','The Power of Habit','Charles Duhigg\'s neurological framework: cue-routine-reward loops are hardwired in the basal ganglia and can be changed by substituting routines while keeping cues and rewards.');
+  add('Psychology','Emotional Intelligence','Daniel Goleman\'s argument that self-awareness, self-regulation, empathy, and social skill predict life success better than IQ — and whether it can be developed.');
+  add('Psychology','Narcissistic Personality Disorder','Not just selfishness — a clinical pattern of grandiosity, lack of empathy, and fragile self-esteem, and how narcissistic individuals systematically harm those around them.');
+  add('Psychology','The Placebo Effect\'s Power','Placebos work even when patients know they\'re placebos — what this reveals about the mind-body connection and the role of expectation in healing.');
+  add('Psychology','Cognitive Behavioral Therapy','The most evidence-based psychotherapy: how identifying and challenging distorted thoughts changes emotions and behavior — and why it outperforms medication for many conditions.');
+  add('Psychology','Tribalism and In-Group Bias','Henri Tajfel\'s minimal group experiments showed people favor their own group even when groups are assigned randomly — the deep evolutionary roots of "us vs them."');
+  add('Psychology','The Self-Serving Bias','The tendency to attribute successes to internal factors and failures to external ones — protecting self-esteem at the cost of learning and accountability.');
+  add('Psychology','Willpower as a Limited Resource','Roy Baumeister\'s ego depletion theory — that self-control draws on a finite daily resource — and why environment design beats willpower for behavior change.');
+  add('Psychology','The Peak-End Rule','People judge experiences by their peak moment and how they ended, not the total experience — why a good ending transforms how we remember an entire event.');
+  add('Psychology','Gaslighting','A form of psychological manipulation that causes victims to question their own reality, memory, and perception — originally from a 1944 film, now clinical language.');
+  add('Psychology','Intrinsic vs Extrinsic Motivation','The overjustification effect: external rewards can destroy intrinsic motivation — why paying children for reading can make them stop reading for pleasure.');
+  add('Psychology','The Psychology of Cult Membership','How intelligent, healthy people join cults — love bombing, thought-terminating clichés, isolation, and the gradual escalation of commitment.');
+  add('Psychology','Sunk Cost Fallacy','Why people continue investing in failing projects because of past investment — the psychology behind bad marriages, bad wars, and bad trades.');
+  add('Psychology','Optimism Bias','The universal tendency to believe we\'re less likely than average to experience misfortune — why humans consistently underestimate project timelines and overestimate returns.');
+  add('Psychology','The Mere Exposure Effect','Robert Zajonc\'s finding that repeated exposure to a stimulus increases liking — the psychology behind advertising repetition, propaganda, and why familiar music is comforting.');
+  add('Psychology','Resilience and Post-Traumatic Growth','Not all trauma leads to PTSD — many survivors report positive psychological change. What distinguishes those who grow from those who are destroyed?');
+  add('Psychology','Decision Fatigue','Why judges give harsher sentences before lunch, doctors prescribe more medications at day\'s end — how depleted cognitive resources lead to poor choices and defaults.');
+  add('Psychology','The Overton Window','The range of ideas considered acceptable in public discourse — how fringe positions become mainstream through gradual normalization and the role of "radical flanks."');
+
+  // FINANCE (35)
+  add('Finance','The 2008 Financial Crisis','Mortgage-backed securities, credit default swaps, and leverage — how Wall Street\'s financial engineering created a global catastrophe and why the lessons were quickly forgotten.');
+  add('Finance','Venture Capital\'s Power Law','Why 90% of VC returns come from 10% of deals — the power law distribution that makes portfolio concentration, not diversification, the right strategy for early-stage investing.');
+  add('Finance','The Efficient Market Hypothesis','Eugene Fama\'s claim that stock prices reflect all available information — why it can\'t both be true and explain why fund managers get paid to try to beat the market.');
+  add('Finance','Inflation: Causes and Consequences','The quantity theory of money, demand-pull vs cost-push inflation, and why central banks target 2% — not 0% — as the inflation sweet spot.');
+  add('Finance','Private Equity\'s Mechanics','LBO structures, EBITDA multiples, value creation vs financial engineering — how buyout firms generate returns and what it means for employees of acquired companies.');
+  add('Finance','The Federal Reserve\'s Dual Mandate','How the Fed balances maximum employment against price stability, the tools it uses (interest rates, QE, forward guidance), and why it\'s the most powerful institution you don\'t vote for.');
+  add('Finance','Behavioral Finance\'s Challenge','How Kahneman, Thaler, and Shiller proved markets aren\'t rational — prospect theory, mental accounting, and why housing bubbles happen despite efficient market claims.');
+  add('Finance','The Index Fund Revolution','John Bogle\'s insight that most active managers underperform the index net of fees — how Vanguard democratized investing and what it\'s doing to price discovery.');
+  add('Finance','Short Selling Mechanics','How shorting works, why it\'s essential for market efficiency, and the mechanics of the GameStop short squeeze that briefly made Reddit users richer than hedge funds.');
+  add('Finance','The Yield Curve and Recessions','Why an inverted yield curve (short rates above long rates) has predicted every US recession since 1950 — the intuition behind this signal and its current relevance.');
+  add('Finance','Cryptocurrency\'s Promise and Problems','Blockchain\'s genuine innovations in trustless settlement, Bitcoin\'s fixed supply as inflation hedge, and why 99% of crypto projects are worthless speculation.');
+  add('Finance','ESG Investing\'s Controversies','Environmental, Social, and Governance investing — whether it generates alpha, whether the metrics mean anything, and the political backlash from both left and right.');
+  add('Finance','The Debt Ceiling\'s Absurdity','Why the US voluntarily creates periodic crises by requiring Congress to authorize borrowing it has already approved spending — and the real costs of the drama.');
+  add('Finance','Sovereign Wealth Funds','How Norway\'s $1.7T oil fund, Abu Dhabi\'s ADIA, and Singapore\'s GIC manage national savings — and whether India should have one.');
+  add('Finance','Michael Porter\'s Five Forces','Competitive rivalry, supplier power, buyer power, threat of substitutes, threat of entry — the framework that became the foundation of strategy consulting.');
+  add('Finance','The DCF Valuation Method','How discounting future cash flows works, why the terminal value dominates the result, and why DCFs are simultaneously the most principled and most manipulable valuation method.');
+  add('Finance','Hedge Fund Strategies','Long-short equity, global macro, event-driven, quant — how different hedge fund strategies work, their actual performance record, and why most fail to justify their fees.');
+  add('Finance','The J-Curve in Private Markets','Why PE and VC funds show negative returns in early years before turning profitable — and why LPs must understand this before committing to illiquid assets.');
+  add('Finance','Basel III and Bank Regulation','How the 2008 crisis led to tighter capital requirements, stress testing, and resolution planning — and whether the banking system is actually safer now.');
+  add('Finance','India\'s UPI Revolution','How a government-built payments infrastructure processed 10B+ monthly transactions, threatening Visa and Mastercard while making India a model for digital finance globally.');
+  add('Finance','Mergers & Acquisitions: Why Most Fail','Studies consistently show 70-80% of M&A deals destroy shareholder value — the integration challenges, CEO hubris, and cultural clashes that sink most deals.');
+  add('Finance','The Carry Trade','Borrowing in low-interest currencies to invest in high-yield ones — the strategy that periodically blows up spectacularly, most recently in the 2024 yen carry unwind.');
+  add('Finance','Real Estate as an Asset Class','Cap rates, NOI, leverage effects, and the REIT structure — how real estate generates returns differently from equities, and its role in institutional portfolios.');
+  add('Finance','EBITDA\'s Limitations','Why "earnings before interest, taxes, depreciation, and amortization" became the standard metric — and why Warren Buffett calls it nonsensical manipulation that ignores real costs.');
+  add('Finance','The IPO Process','How companies go public — the role of investment banks, road shows, book building, and the systematic underpricing that transfers value from companies to institutional investors.');
+  add('Finance','Currency Wars','How countries competitively devalue currencies to gain export advantage — the 1930s experience, Quantitative Easing\'s beggar-thy-neighbor effects, and current tensions.');
+  add('Finance','Financial Modeling Best Practices','The structure of three-statement models, scenario analysis, sensitivity tables — the craft that separates good from great analysts at investment banks and consulting firms.');
+  add('Finance','The Dutch Disease','How resource wealth can paradoxically harm an economy by strengthening the currency, making other exports uncompetitive — Nigeria, Venezuela, and resource curse dynamics.');
+  add('Finance','Activist Investing','How Carl Icahn, Bill Ackman, and Elliott Management take stakes in companies and force changes — the governance debate around whether shareholder activism creates or destroys value.');
+  add('Finance','Central Bank Digital Currencies','How China\'s digital yuan, the ECB\'s digital euro project, and India\'s e-rupee could reshape monetary sovereignty, financial surveillance, and cross-border payments.');
+  add('Finance','The Gig Economy\'s Financial Logic','How platform companies externalize risk onto workers — the labor economics of Uber, Ola, Swiggy — and whether classification as contractors will eventually change.');
+  add('Finance','Monte Carlo Simulation','How randomly sampling from probability distributions generates thousands of scenarios — the risk management tool used in finance, engineering, and climate modeling.');
+  add('Finance','Green Bonds and Sustainable Finance','How labeled debt instruments funnel capital toward climate projects, the greenwashing risks, and whether the growing market is actually changing corporate behavior.');
+  add('Finance','India\'s Startup Ecosystem','The journey from 0 to 100+ unicorns — the role of Flipkart\'s exit in catalyzing VC interest, the funding winter of 2022-23, and what the next decade holds.');
+  add('Finance','Porter\'s Value Chain Analysis','How breaking a firm into primary and support activities reveals where competitive advantage actually lives — and why it\'s more useful than surface-level industry analysis.');
+
+  // SCIENCE (35)
+  add('Science','CRISPR-Cas9 Gene Editing','The bacterial immune system repurposed as molecular scissors — how Jennifer Doudna and Emmanuelle Charpentier\'s discovery is rewriting medicine, agriculture, and ethical boundaries.');
+  add('Science','The Theory of General Relativity','Einstein\'s 1915 revelation that gravity is curved spacetime, not a force — its experimental confirmations, GPS implications, and the prediction of black holes.');
+  add('Science','The Microbiome and Human Health','The 38 trillion bacteria in your gut outnumber human cells — how they regulate immunity, mood, and metabolism, and why antibiotics may have hidden long-term costs.');
+  add('Science','Quantum Entanglement','Einstein\'s "spooky action at a distance" — how measuring one particle instantly affects its entangled partner regardless of distance, and what it does and doesn\'t imply.');
+  add('Science','The Fermi Paradox','If the universe is 13.8B years old with billions of potential civilizations, why haven\'t we detected any? The Great Filter hypothesis and its disturbing implications.');
+  add('Science','Epigenetics','How environment and behavior can switch genes on and off — and how these changes can be inherited across generations without altering DNA sequence itself.');
+  add('Science','The Standard Model of Physics','The framework describing 17 fundamental particles and three of four forces — its extraordinary predictive power, and the deep mysteries it leaves completely unexplained.');
+  add('Science','Neuroplasticity','The brain\'s ability to rewire itself throughout life — how London taxi drivers grow larger hippocampi, and what it means for learning, recovery, and aging.');
+  add('Science','The Science of Sleep','Why sleep is not passive rest but active consolidation — the glymphatic system clearing brain waste, memory consolidation, and what chronic sleep deprivation actually does.');
+  add('Science','Black Holes: Physics and Paradoxes','From Schwarzschild radius to Hawking radiation — how black holes work, the information paradox, and what the first image of a black hole actually showed us.');
+  add('Science','Evolution and Sexual Selection','Darwin\'s second great insight — how mate choice drives the evolution of extravagant traits (peacock tails, bird-of-paradise dances) that seem to contradict natural selection.');
+  add('Science','The Anthropocene','The proposed geological epoch defined by human impact — mass extinction, ocean acidification, the nitrogen cycle disruption — and its contested scientific and political implications.');
+  add('Science','mRNA Vaccine Technology','How Katalin Karikó\'s decades of ignored research suddenly became the foundation for COVID-19 vaccines — and what mRNA platforms mean for cancer and other diseases.');
+  add('Science','The Origin of Life','From Miller-Urey to RNA World — the competing hypotheses for how chemistry became biology 3.8 billion years ago, and why the question remains genuinely open.');
+  add('Science','Nuclear Fusion\'s Promise','The joke that fusion is always 30 years away — why achieving sustained net energy gain is so hard, and whether recent NIF breakthroughs signal a genuine turning point.');
+  add('Science','The Human Genome Project','How sequencing 3 billion base pairs transformed medicine — pharmacogenomics, gene therapy, direct-to-consumer genetics, and what we still don\'t understand about the genome.');
+  add('Science','Climate Science\'s Confidence','The difference between weather and climate, the radiative forcing of greenhouse gases, climate sensitivity ranges — and why the scientific consensus is overwhelming despite complexity.');
+  add('Science','Artificial Intelligence: The Basics','From perceptrons to transformers — how deep learning actually works, why GPUs matter, what "training" means, and the difference between narrow AI and AGI.');
+  add('Science','The Placebo-Nocebo Effect','If expectation of healing heals (placebo), expectation of harm harms (nocebo) — what this reveals about the mind-body connection and clinical trial design.');
+  add('Science','Antibiotic Resistance','How overuse has bred superbugs resistant to last-resort drugs — the 10M annual deaths projected by 2050, and why no pharmaceutical company wants to solve this problem.');
+  add('Science','The Big Bang: Evidence and Limits','Cosmic microwave background radiation, hydrogen-helium abundance, galaxy recession — how we know the universe began 13.8B years ago, and what happened before.');
+  add('Science','Gut-Brain Axis','The vagus nerve highway between gut and brain — how intestinal bacteria produce neurotransmitters, why gut health affects mood, and the emerging field of psychobiotics.');
+  add('Science','The Measurement Problem in Quantum Mechanics','Why quantum particles exist in superposition until measured — the Copenhagen interpretation, Many Worlds, and why physicists still argue about what quantum mechanics means.');
+  add('Science','Longevity Science','Senolytics, mTOR inhibition, telomere biology, caloric restriction — the serious science behind aging research and realistic timelines for extending healthy human lifespan.');
+  add('Science','The Tragedy of the Commons','Garrett Hardin\'s 1968 insight that shared resources are over-exploited — and Elinor Ostrom\'s Nobel-winning refutation showing communities can manage commons sustainably.');
+  add('Science','Plate Tectonics','How the theory rejected for decades became fundamental to geology — continental drift, subduction zones, and why earthquakes, volcanoes, and mountain ranges are where they are.');
+  add('Science','The Placebo Surgery Problem','Sham surgeries that produce real outcomes — what arthroscopic knee surgery trials reveal about surgical evidence standards and the power of expectation in invasive treatment.');
+  add('Science','DNA Forensics and Its Limits','How PCR, STR analysis, and genealogy databases solve crimes — and the contamination risks, probabilistic misinterpretation, and wrongful convictions that result.');
+  add('Science','Systems Biology','Instead of studying genes or proteins in isolation, mapping the whole network — how systems approaches are transforming drug discovery and our understanding of disease.');
+  add('Science','The Science of Addiction','Dopamine dysregulation, reward prediction error, and why addiction is a brain disease not a moral failure — implications for policy, treatment, and how we design products.');
+  add('Science','Dark Matter and Dark Energy','Together comprising 95% of the universe, neither has ever been directly detected — what they are, why we believe they exist, and the experiments trying to find them.');
+  add('Science','The Replication Crisis','Why 60%+ of psychology studies fail to replicate — p-hacking, publication bias, small samples — and what it means for evidence-based policy and popular science books.');
+  add('Science','Synthetic Biology','Engineering organisms with standardized biological parts — insulin-producing bacteria, malaria-resistant mosquitoes, and the biosecurity risks of democratized genetic engineering.');
+  add('Science','The Science of Exercise','How aerobic exercise grows new neurons, resistance training reverses sarcopenia, and Zone 2 training optimizes mitochondrial health — the dose-response relationships that matter.');
+  add('Science','Nuclear Power\'s Renaissance','Why countries are reconsidering nuclear energy as climate urgency intensifies — the safety record in context, small modular reactors, and the waste storage problem.');
+
+  // CULTURE (30)
+  add('Culture','The Myth of Meritocracy','How social capital, nepotism, and structural advantages make outcomes predictable by birth — and why belief in meritocracy paradoxically makes privileged people less empathetic.');
+  add('Culture','K-Pop\'s Global Industrial Machine','How South Korea built a cultural export industry from scratch — idol training systems, parasocial fandom engineering, and what BTS\'s success means for soft power.');
+  add('Culture','The Oxford Comma Debate','More than punctuation — how a serial comma became a proxy war over language authority, descriptivism vs prescriptivism, and once cost a dairy company $10M.');
+  add('Culture','Architecture as Power','How buildings project authority — Versailles, Washington\'s grid, Stalin\'s Seven Sisters, and what the aesthetics of contemporary tech campuses say about Silicon Valley ideology.');
+  add('Culture','The Attention Economy','Tim Wu\'s concept of minds as the scarce resource sold to advertisers — how platforms optimize for engagement over wellbeing and what this means for democracy.');
+  add('Culture','Hip Hop\'s 50-Year Cultural Takeover','From the South Bronx to the world\'s dominant music genre — how hip hop encoded economic marginalization, built its own industry, and became the language of global youth.');
+  add('Culture','The Philosophy of Sport','What makes athletic achievement admirable — the role of luck vs skill, doping\'s ethical status, disability classification in para-sport, and what we\'re actually celebrating.');
+  add('Culture','Food and Cultural Identity','Why cuisine is among the most powerful markers of ethnic identity, how immigration transforms food cultures bidirectionally, and the politics of "authenticity."');
+  add('Culture','The Economics of Luxury Goods','Why price increases can increase demand for luxury goods (Veblen goods) — the psychology of conspicuous consumption and how LVMH built a $400B empire on desire.');
+  add('Culture','Science Fiction as Social Commentary','How Orwell, Le Guin, Octavia Butler, and Gibson used speculative fiction to analyze present realities — why the best sci-fi is sociology in disguise.');
+  add('Culture','The Festival Economy','How Glastonbury, Burning Man, Coachella, and Sunburn became cultural institutions — the economics of live experience and why concerts survived streaming when recorded music didn\'t.');
+  add('Culture','Language Death and Revival','6,000 languages exist; half will be gone by 2100. Hebrew\'s revival from liturgical death shows revival is possible — but at what cultural cost to other aspects of identity?');
+  add('Culture','The Meme as Cultural Unit','Richard Dawkins\' original concept — how ideas replicate, mutate, and compete like genes — and what internet memes reveal about collective sense-making and humor as coping mechanism.');
+  add('Culture','Gender Roles in Transition','Across the world, men are struggling with new definitions of masculinity — stagnant wages, educational underperformance, and the social vacuum left by industrial identity.');
+  add('Culture','The Indian Premier League\'s Cultural Impact','How the IPL franchised cricket, created a new class of celebrity, reshaped how Indians consume sport, and exported a model now copied globally.');
+  add('Culture','Urban Gentrification\'s Double Bind','How neighborhood improvement simultaneously raises quality of life and displaces the communities that made neighborhoods worth improving — no city has solved this.');
+  add('Culture','The Philosophy of Death','How different traditions approach mortality — Stoic equanimity, Buddhist impermanence, existentialist authenticity, and what terror management theory suggests about our death anxiety.');
+  add('Culture','Social Media and Teenage Mental Health','Jonathan Haidt\'s argument that smartphones and Instagram caused the adolescent mental health crisis — the evidence, counterarguments, and policy implications.');
+  add('Culture','The Paradox of Choice','Barry Schwartz\'s argument that more consumer options increase anxiety and decrease satisfaction — and why Costco with 4,000 SKUs outperforms supermarkets with 40,000.');
+  add('Culture','Celebrity Culture\'s Social Function','Why we care about people we\'ve never met — parasocial relationships, celebrity as collective mythology, and the shift from studio-manufactured to social media-native fame.');
+  add('Culture','The Philosophy of Education','What school is actually for — credentialing, socialization, economic mobility, or human flourishing — and why these competing goals produce incompatible institutions.');
+  add('Culture','Cricket and Indian National Identity','How cricket became India\'s de facto national religion — the 1983 World Cup, Sachin\'s mythology, the IPL\'s transformation, and what cricket means that other sports don\'t.');
+  add('Culture','The Museum\'s Political Problem','Who owns ancient artifacts? The Elgin Marbles, Benin Bronzes, and Koh-i-Noor diamond debates — and how institutions navigate between acquisition ethics and universal accessibility.');
+  add('Culture','Streaming\'s Effect on Narrative','How Netflix\'s all-at-once release model killed weekly appointment viewing, changed storytelling pacing, reduced cultural conversation around shows, and what\'s being lost.');
+  add('Culture','The Rise of Podcasting','From niche hobbyist medium to $4B industry — how podcasting democratized audio publishing, created new intellectual communities, and whether it can survive consolidation.');
+  add('Culture','Yoga\'s Western Transformation','How a Hindu spiritual practice became a $90B global wellness industry — what was preserved, what was commodified, and the ongoing debates around cultural appropriation.');
+  add('Culture','The Architecture of Social Trust','Robert Putnam\'s finding that social capital — civic participation, community ties — predicts economic success and health outcomes better than income does.');
+  add('Culture','Fast Fashion\'s True Cost','The environmental and human cost of 92M tons of textile waste annually — and why knowing doesn\'t stop people from buying, including people who know.');
+  add('Culture','The Philosophy of Privacy','Why privacy matters beyond "nothing to hide" — its role in autonomy, dignity, and the power asymmetry between surveilled citizens and surveilling institutions.');
+  add('Culture','India\'s Classical Dance Traditions','Bharatanatyam, Kathak, Odissi, Kuchipudi — how each tradition encodes distinct regional histories, philosophies, and social functions beyond their aesthetic dimensions.');
+
+  // SPORTS (35)
+  add('Sports','How Formula 1 Teams Actually Make Money','Prize money, sponsorship, manufacturer support, and the Concorde Agreement — the complex economics that separate top teams from backmarkers beyond just winning.');
+  add('Sports','The Science of Penalty Kicks','Research shows goalkeepers should stay center more often than they do — why they dive anyway, and what penalty psychology reveals about action bias and regret aversion.');
+  add('Sports','Football Tactics: The High Press','How Klopp\'s gegenpressing and Guardiola\'s positional play represent different philosophical traditions — and the physical and cognitive demands that limit how long intense pressing can be sustained.');
+  add('Sports','India\'s Test Cricket Legacy','The unique cultural weight of Test cricket in India — why five-day matches still matter, the evolution from defensive battlers to attacking dominance, and the Bazball challenge.');
+  add('Sports','The Grand Slam of Tennis','Why winning all four Majors in a calendar year is sport\'s hardest achievement — the surface variation (clay, grass, hard), the physical demands across 13 weeks, and the GOAT debate.');
+  add('Sports','Cricket\'s DRS Revolution','How ball-tracking technology and edge detection changed the sport — its accuracy debates, the "Umpire\'s Call" controversy, and how technology is reshaping officiating authority.');
+  add('Sports','The Psychology of Choking','Why elite performers fail under pressure — the reinvestment theory, paralysis by analysis, and what Roger Federer\'s career teaches about competitive pressure management.');
+  add('Sports','Football\'s Transfer Market Economics','Why Neymar\'s £198M fee seemed insane and then didn\'t — how the circular inflation of football transfer fees works and what Financial Fair Play was meant to do about it.');
+  add('Sports','The Olympics\' Geopolitical History','Boycotts, propaganda, terrorist attacks, doping programs — how the Games became a canvas for state competition beyond sport, from 1936 Berlin to the IOC today.');
+  add('Sports','Sabermetrics and the Moneyball Revolution','How Billy Beane and Bill James used statistics to find market inefficiencies in baseball — and how analytics transformed every major sport\'s approach to talent identification.');
+  add('Sports','The Physiology of Endurance','How VO2 max, lactate threshold, and running economy interact — and why Eliud Kipchoge\'s sub-2-hour marathon was physiologically improbable and what it required.');
+  add('Sports','F1\'s Hybrid Power Unit Era','How the 1.6L V6 hybrid Power Unit introduced in 2014 became the most complex and efficient engine in history at ~50% thermal efficiency — and why Mercedes dominated for so long.');
+  add('Sports','The Business of European Football','TV rights, UEFA coefficient, Champions League money, and the European Super League attempt — why the gap between elite clubs and the rest is structurally widening.');
+  add('Sports','Rajasthan Royals\' Analytics Edge','How the IPL\'s 2008 inaugural champions used unconventional player selection and data — Shane Warne\'s leadership alchemy — to win with the tournament\'s smallest budget.');
+  add('Sports','Doping in Sport: Why It Persists','Cat-and-mouse testing limitations, marginal gains culture, institutional doping in Russia, and why clean sport faces a structural problem that banning alone can\'t solve.');
+  add('Sports','Rafael Nadal\'s Clay Court Dominance','14 French Open titles — the topspin geometry, physical durability, and psychological intensity that made one surface so completely owned by one player.');
+  add('Sports','How VAR Changed Football','The promise of eliminating clear errors versus the reality of offside lines, interruption of flow, and the replacement of emotional interpretation with geometric precision.');
+  add('Sports','The NFL\'s Global Expansion','How American football is trying to crack international markets through London and Munich games — the translation problem of a uniquely American cultural product.');
+  add('Sports','Cricket\'s Format Wars','Test, ODI, T20, and now The Hundred — whether format proliferation enriches the sport or fragments its identity, and the power struggle between ICC and franchise leagues.');
+  add('Sports','The Science of Recovery','Ice baths, compression, sleep optimization, HRV monitoring — what sports science actually knows about recovery versus what\'s placebo marketed to athletes with money.');
+  add('Sports','Novak Djokovic\'s Mental Model','The most decorated men\'s tennis player in history — his mindfulness practice, nutrition discipline, mid-match emotional management, and why the crowd rarely favors him.');
+  add('Sports','Basketball\'s Three-Point Revolution','How the analytics movement proved the corner three was the highest expected-value shot, making mid-range jumpers nearly extinct — and what gets lost when optimization wins.');
+  add('Sports','The Indian Cricket Board (BCCI) as Power Center','The richest cricket board in the world — its control over the ICC, player contracts, broadcasting rights, and how it effectively sets global cricket policy.');
+  add('Sports','Fitness Periodization','How athletes structure training cycles — base building, intensity, taper — the science of supercompensation, and how periodization principles apply to intellectual work.');
+  add('Sports','The Ashes: Cricket\'s Oldest Rivalry','The mythology of urn cricket between England and Australia since 1882 — what gives a bilateral series more prestige than most global tournaments.');
+  add('Sports','Biomechanics of a Perfect Golf Swing','Kinematic sequence, ground force reaction, shaft flex — why golf is harder to master than almost any sport and why swing changes in professional players take years to embed.');
+  add('Sports','The Psychology of Team Cohesion','Why the sum is often less than its parts in sports teams — social loafing, communication failures, and what the All Blacks\' "no dickheads" culture gets right.');
+  add('Sports','Manchester City\'s Financial Model','How Abu Dhabi money, multi-club ownership, and Guardiola\'s system created an era of domestic dominance — and whether FFP was ever going to stop it.');
+  add('Sports','The Marathon as Cultural Artifact','From Pheidippides\' legend to the democratization of marathons — why running 42km has become a global middle-class aspiration and a $4B participation sport industry.');
+  add('Sports','Squash: The Fittest Sport?','Why squash players have elite VO2 max, the tactical chess of the four-wall game, the Egyptian dynasty\'s dominance, and why the sport struggles with global visibility.');
+  add('Sports','The Haka: Sports Ritual and Identity','New Zealand\'s pre-match challenge — its Maori origins, its evolution into the All Blacks\' brand, and what sporting rituals reveal about collective identity and intimidation.');
+  add('Sports','Sports Injury Epidemiology','ACL tears, concussions, stress fractures — how injury patterns reveal overtraining, surface problems, and equipment flaws — and the long-term health implications for professional athletes.');
+  add('Sports','The Role of Agents in Sport','From Mark McCormack\'s IMG to Scott Boras\'s baseball empire — how agents reshaped athlete compensation, loyalty, and the economics of sports labor markets.');
+  add('Sports','How Weather Affects Cricket','Dew factor, pitch preparation, humidity and swing bowling, altitude and spin — why the toss matters more in some conditions and how weather strategy becomes match strategy.');
+  add('Sports','Esports: The New Sports Industry','A $1.8B industry with 600M viewers — how competitive gaming built an industry from scratch, its organizational challenges, and whether it deserves Olympic inclusion.');
+
+  // TECHNOLOGY (30)
+  add('Technology','How Large Language Models Work','Transformers, attention mechanisms, next-token prediction — what\'s happening inside GPT-4 and Claude when they generate text, and where the magic genuinely is.');
+  add('Technology','The Semiconductor Supply Chain','Why Taiwan makes 90% of advanced chips, how TSMC\'s 3nm process works, and why the US CHIPS Act is a geopolitical intervention dressed as industrial policy.');
+  add('Technology','Network Effects and Platform Economics','Why Facebook, WhatsApp, and Uber become monopolies naturally — the different types of network effects (direct, indirect, data) and why they create winner-take-all markets.');
+  add('Technology','The Internet\'s Physical Infrastructure','Submarine cables, IXPs, CDNs, and Tier 1 networks — the physical architecture of a system most people think of as wireless and invisible.');
+  add('Technology','Cybersecurity\'s Fundamental Problem','Why defense is structurally harder than offense, the economics of zero-days, and how nation-state cyber operations have blurred the line between espionage and warfare.');
+  add('Technology','The Attention Architecture of Social Media','How recommendation algorithms exploit psychological vulnerabilities — variable reward schedules, social validation loops — and why the designers\' children avoid their own products.');
+  add('Technology','Cloud Computing\'s Economics','AWS, Azure, and GCP\'s dominance — the unit economics of cloud versus on-premise, why enterprise migration is still incomplete, and multi-cloud as risk management.');
+  add('Technology','The Open Source Revolution','How Linux became the world\'s most important software despite being free — the economics of open source, corporate capture of projects, and what Linus Torvalds built.');
+  add('Technology','Autonomous Vehicles: Why It\'s Hard','The long tail problem — the 99% of driving is easy, but the 1% edge cases require solving general intelligence. Why 2016 predictions of 2020 autonomy were so wrong.');
+  add('Technology','Quantum Computing\'s Reality','What quantum computers can and cannot do — the difference between quantum supremacy (narrow tasks) and quantum advantage (practical applications), and the timeline reality.');
+  add('Technology','The Metaverse\'s Failure (So Far)','Why Meta lost $46B on VR/AR — the hardware friction problem, the chicken-and-egg content issue, and what genuine spatial computing needs that doesn\'t exist yet.');
+  add('Technology','GPS: The Hidden Infrastructure','How 31 satellites running atomic clocks provide the timing backbone for banking, power grids, and smartphones — and why GPS jamming is an underappreciated vulnerability.');
+  add('Technology','Generative AI\'s Economic Impact','Which jobs are automated by language models versus image generators versus robotics — the McKinsey projections, the historical parallels, and what\'s actually happening.');
+  add('Technology','The Browser Wars\' Legacy','How Netscape\'s defeat by Internet Explorer and then Explorer\'s defeat by Chrome shaped the web we have — and what browser dominance means for open internet standards.');
+  add('Technology','Recommendation Algorithms\' Power','How Netflix\'s recommendation engine saves $1B annually in churn, how Spotify\'s Discover Weekly changed music discovery — and how these systems can trap you in filter bubbles.');
+  add('Technology','Electric Vehicles\' True Carbon Math','Battery production emissions, grid electricity sources, vehicle lifecycle analysis — when EVs actually break even on emissions versus ICE, and how rapidly this is improving.');
+  add('Technology','The App Store Duopoly','Apple and Google\'s 30% cut on a $200B+ market — the antitrust cases, Epic\'s lawsuit, and whether the mobile distribution model is a legitimate platform fee or a tax on innovation.');
+  add('Technology','How Search Engines Work','Crawling, indexing, PageRank, and the evolution to machine learning ranking — why Google\'s advantage is data and infrastructure, not just a better algorithm.');
+  add('Technology','The Gig Platform\'s Optimization Problem','How Uber\'s surge pricing, driver matching, and route optimization work — and the labor economics embedded in algorithmic management of human workers.');
+  add('Technology','Biotech\'s Platform Moment','How mRNA, CRISPR, and synthetic biology are converging into programmable biology — why the next decade of biotech may look like the 2010s of software.');
+  add('Technology','Digital Public Infrastructure','India\'s Aadhaar, UPI, and ONDC as examples of government-built platforms — the argument that public digital infrastructure should be as fundamental as roads.');
+  add('Technology','The Trust Problem in AI','Hallucination, bias from training data, opacity of reasoning — why AI reliability in high-stakes decisions remains unsolved and what alignment research is trying to address.');
+  add('Technology','5G\'s Actual Impact','Separating marketing from reality — where 5G genuinely changes things (connected factories, autonomous vehicles) versus where it\'s incremental improvement over 4G.');
+  add('Technology','How Streaming Compression Works','Why Netflix uses 15 different quality levels, how H.265 encoding works, and the invisible engineering that delivers 4K video over a shared internet connection.');
+  add('Technology','Fintech\'s Unbundling of Banking','How PayPal, Stripe, Robinhood, and Chime disaggregated banking\'s bundled services — and why banks are now both threatened by and investing in their disruptors.');
+  add('Technology','The Economics of Free Software','Advertising, freemium, data monetization, and enterprise upsell — the four business models that sustain free consumer software and their hidden costs to users.');
+  add('Technology','Space-Based Internet','Starlink\'s 5,000 satellites providing broadband to remote areas — the orbital debris risk, spectrum allocation fights, and what global internet access could mean for the Global South.');
+  add('Technology','Technology and Political Polarization','Whether social media causes polarization (the evidence is mixed) or merely reflects it — what experiments on Facebook and Twitter reveal about algorithmic effects on belief.');
+  add('Technology','The Chip Design Ecosystem','ARM\'s architecture licensing model, fabless chip design, and why the separation of design from fabrication created both efficiency and fragility in the global chip supply chain.');
+  add('Technology','Robotics in Manufacturing','Boston Dynamics versus industrial robotics — the difference between general-purpose robots (still hard) and task-specific automation (advancing fast), and what displaces what jobs.');
+
+  // PHILOSOPHY (30)
+  add('Philosophy','The Trolley Problem\'s Real Use','Judith Jarvis Thomson\'s thought experiment wasn\'t meant to be solved — it was designed to reveal the incoherence in our moral intuitions between consequentialism and deontology.');
+  add('Philosophy','Plato\'s Allegory of the Cave','Prisoners watching shadows on a cave wall mistake them for reality — the epistemological point about perception, education, and what happens to the philosopher who returns.');
+  add('Philosophy','Free Will: The Neuroscience Problem','Benjamin Libet\'s experiments show neural activity predicts decisions 500ms before conscious awareness — what this means for moral responsibility and whether compatibilism saves us.');
+  add('Philosophy','Rawls\'s Veil of Ignorance','The "original position" thought experiment — designing a just society not knowing where you\'ll end up in it — and why it generates two principles of justice with profound implications.');
+  add('Philosophy','Nietzsche\'s Will to Power','Not domination over others but self-overcoming — Nietzsche\'s positive vision that\'s usually misread through his Nazi appropriation, and what he actually meant by the Übermensch.');
+  add('Philosophy','The Ship of Theseus','If you replace every plank, is it the same ship? How this ancient paradox maps onto personal identity, corporate continuity, and what makes you the same person as your childhood self.');
+  add('Philosophy','Effective Altruism\'s Premises','Peter Singer\'s argument that if you can prevent suffering without sacrificing anything of comparable importance, you should — and why it leads to uncomfortable conclusions about lifestyle.');
+  add('Philosophy','Stoicism as a Life Practice','Not passivity but focusing on what\'s within your control — Marcus Aurelius\'s meditations, Epictetus\'s dichotomy of control, and why Silicon Valley rediscovered ancient philosophy.');
+  add('Philosophy','The Simulation Argument','Nick Bostrom\'s trilemma — either civilizations go extinct before reaching post-humanity, post-human civilizations don\'t run ancestor simulations, or we\'re probably in a simulation.');
+  add('Philosophy','Utilitarianism\'s Dark Implications','Bentham\'s calculus taken seriously leads to organ harvesting from one healthy person to save five — what this reveals about consequentialism\'s limits and moral intuition\'s role.');
+  add('Philosophy','The Problem of Evil','If God is omnipotent, omniscient, and omnibenevolent, why does suffering exist? The philosophical debate that has occupied theologians and atheists for two millennia.');
+  add('Philosophy','Kant\'s Categorical Imperative','Act only according to maxims you could will to become universal laws — why lying is always wrong for Kant, and why this absolute prohibition feels both right and absurd.');
+  add('Philosophy','Existentialism\'s Core Insight','Sartre\'s "existence precedes essence" — humans are condemned to be free, creating meaning in a universe with none built in, and the anguish that comes with radical freedom.');
+  add('Philosophy','The Chinese Room Argument','John Searle\'s thought experiment: a person following Chinese syntax rules without understanding produces Chinese output — does AI "understand" anything or just manipulate symbols?');
+  add('Philosophy','Moral Relativism vs Universalism','Is ethics culturally constructed or are some moral truths universal? The philosophical debate with live implications for human rights, cultural practices, and international law.');
+  add('Philosophy','The Experience Machine','Robert Nozick\'s challenge to hedonism: if a machine could give you perfect simulated happiness, would you plug in? Most say no — revealing that we value reality, not just pleasure.');
+  add('Philosophy','Dialectical Materialism','Hegel\'s thesis-antithesis-synthesis applied to history by Marx — how material conditions (production, class relations) drive historical change rather than ideas driving reality.');
+  add('Philosophy','The Paradox of Tolerance','Karl Popper\'s argument that a tolerant society must be intolerant of intolerance — the philosophical foundation and its limits, and how it\'s being weaponized on both sides.');
+  add('Philosophy','Wittgenstein\'s Language Games','Meaning is use — there is no private language, philosophical puzzles arise from grammar not reality, and the philosophical tradition\'s problems dissolve rather than get solved.');
+  add('Philosophy','Camus and the Absurd','The confrontation between human need for meaning and the universe\'s silence — and why Camus\'s response is to imagine Sisyphus happy rather than to find false consolation.');
+  add('Philosophy','The Ethics of Artificial Intelligence','Who is responsible when an autonomous vehicle kills someone? How do we encode human values into systems? The practical philosophy problems AI is forcing us to answer.');
+  add('Philosophy','Social Contract Theory','Hobbes\'s Leviathan, Locke\'s natural rights, Rousseau\'s general will — three versions of why humans accept political authority and what makes government legitimate.');
+  add('Philosophy','The Is-Ought Problem','David Hume\'s observation that you cannot derive prescriptive conclusions from purely descriptive premises — the logical gap at the heart of most moral arguments and political debates.');
+  add('Philosophy','Philosophy of Mind: Hard Problem','David Chalmers\'s distinction between explaining cognitive functions (easy problems) and explaining subjective experience (the hard problem) — why it remains genuinely unsolved.');
+  add('Philosophy','Virtue Ethics\' Return','Aristotle\'s eudaimonia and the revival of character-based ethics — what it means to flourish as a human, and why Alasdair MacIntyre argues modernity lost the vocabulary for virtue.');
+  add('Philosophy','The Repugnant Conclusion','Derek Parfit\'s population ethics paradox: utilitarian calculus implies a world of billions living lives barely worth living is better than a smaller world of flourishing people.');
+  add('Philosophy','Epistemology: How Do We Know Anything?','Descartes\' systematic doubt, foundationalism vs coherentism, and Gettier\'s 1963 paper that demolished the 2,500-year-old definition of knowledge in three pages.');
+  add('Philosophy','The Paradox of Democracy','Majority rule can produce illiberal outcomes (the 51% tyrannizing the 49%) — the constitutional liberal constraints that protect minorities from democratic majorities.');
+  add('Philosophy','Moral Luck','Thomas Nagel\'s observation that we judge people for outcomes they couldn\'t control — the driver who runs a light and hits nothing versus one who kills a child.');
+  add('Philosophy','Anarchism as Political Philosophy','Not chaos but the abolition of unjustified authority — Kropotkin\'s mutual aid, Emma Goldman\'s anarchism, and serious arguments against the state that deserve serious refutation.');
+
+  // BUSINESS (30)
+  add('Business','Clayton Christensen\'s Disruptive Innovation','How small companies with inferior products attack from the low end, then improve until they topple incumbents — why established firms see the threat and still can\'t respond.');
+  add('Business','The McKinsey Way','The structured problem-solving toolkit — MECE frameworks, pyramid principle, hypothesis-driven analysis — and why consulting\'s analytical methods transfer across industries.');
+  add('Business','Platform vs Pipeline Businesses','Why Airbnb became more valuable than Marriott without owning hotels — the economics of matching platforms versus linear pipeline businesses, and the strategic implications.');
+  add('Business','The Toyota Production System','Kanban, just-in-time, kaizen, andon cord — how Toyota eliminated waste, invented lean manufacturing, and created a system that every industry has tried to copy.');
+  add('Business','Blue Ocean Strategy','W. Chan Kim\'s argument that competing in crowded markets is less valuable than creating new market space — the frameworks for finding uncontested territory.');
+  add('Business','The Innovator\'s Dilemma in Practice','Why Kodak invented digital photography and still went bankrupt — the organizational and financial incentives that make incumbents unable to cannibalize their own products.');
+  add('Business','McKinsey\'s 7-S Framework','Strategy, Structure, Systems, Shared Values, Skills, Style, Staff — the checklist for diagnosing why organizational change efforts fail.');
+  add('Business','Customer Lifetime Value Economics','The unit economics that matter — CAC, LTV, payback period — and why understanding LTV:CAC ratio determines whether a business model is actually viable.');
+  add('Business','The Four Types of Market Structures','Perfect competition, monopolistic competition, oligopoly, monopoly — how industry structure determines pricing power, profitability, and competitive behavior.');
+  add('Business','How Consulting Firms Actually Work','Leverage ratios, utilization, pyramid structure, up-or-out — the business model of selling client time at 10x the cost of the person delivering the work.');
+  add('Business','Competitive Moats: Buffett\'s Framework','Cost advantages, switching costs, network effects, intangible assets, and efficient scale — the five sources of durable competitive advantage Warren Buffett looks for.');
+  add('Business','The BCG Growth-Share Matrix','Stars, Cash Cows, Question Marks, Dogs — the portfolio planning tool that shaped corporate strategy in the 1970s and the sophisticated critiques that followed.');
+  add('Business','Organizational Culture Eats Strategy','Peter Drucker\'s observation — why the best strategies fail when culture is misaligned, and how leaders can diagnose and shift organizational culture.');
+  add('Business','First-Mover vs Fast-Follower Advantage','Being first to market is overrated — how Google beat Alta Vista, Facebook beat Friendster, and iPhone beat earlier smartphones by following better rather than leading first.');
+  add('Business','The Principal-Agent Problem','When agents (managers, lawyers, politicians) have interests that diverge from principals (shareholders, clients, voters) — and the incentive design solutions that reduce the gap.');
+  add('Business','Corporate Governance and Board Dynamics','How boards are supposed to work versus how they actually work — director independence, CEO succession, executive compensation, and the failures that led to Enron and WeWork.');
+  add('Business','The OODA Loop in Business','John Boyd\'s Observe-Orient-Decide-Act loop from fighter pilot tactics applied to competitive strategy — why speed of iteration beats analytical perfection in fast markets.');
+  add('Business','Economies of Scale and Scope','How unit costs fall with volume (scale) and how shared resources across products reduce costs (scope) — the structural advantages that make big businesses naturally self-reinforcing.');
+  add('Business','The Lean Startup Methodology','Eric Ries\'s Build-Measure-Learn loop and minimum viable product — how to test hypotheses cheaply before committing resources, and why pivoting is a feature not a failure.');
+  add('Business','Two-Sided Market Dynamics','Chicken-and-egg problems in marketplaces — how Airbnb, Uber, and OpenTable bootstrapped both sides simultaneously — and which side to subsidize when you can\'t subsidize both.');
+  add('Business','Organizational Design: Span of Control','How many direct reports a manager can effectively supervise — the trade-off between flat structures (speed, autonomy) and tall hierarchies (coordination, control).');
+  add('Business','The Balanced Scorecard','Kaplan and Norton\'s framework for measuring performance beyond financial metrics — financial, customer, internal process, and learning/growth perspectives in strategic management.');
+  add('Business','Zero-Based Budgeting','3G Capital\'s approach of rebuilding budgets from zero each year rather than using prior year as baseline — its efficiency gains and the innovation it tends to stifle.');
+  add('Business','Corporate Strategy vs Business Unit Strategy','The distinction between why a corporation exists as a portfolio (corporate strategy) and how each business unit competes in its market (competitive strategy).');
+  add('Business','The Flywheel Effect','Jeff Bezos\'s virtuous cycle — how Amazon\'s lower prices drove traffic, attracted sellers, expanded selection, and lowered costs, compounding into an unassailable position.');
+  add('Business','Pricing Strategy Frameworks','Cost-plus, value-based, competitive, dynamic, and freemium pricing — how the choice of pricing model is a strategic decision that reflects assumptions about customer psychology.');
+  add('Business','Business Model Canvas','Alexander Osterwalder\'s nine-box visual framework for mapping how businesses create, deliver, and capture value — and why it\'s more useful than a 40-page business plan.');
+  add('Business','Strategic Alliances and Joint Ventures','When to partner versus build versus buy — the governance challenges of alliances, how to structure them, and why most fail to deliver their promised synergies.');
+  add('Business','The Innovator\'s Solution','Christensen\'s follow-up: how incumbents can respond to disruption — the extendable core concept, separate business units, and why most corporate innovation efforts still fail.');
+  add('Business','EY Parthenon\'s Strategy Approach','Transaction strategy, corporate and growth strategy, and the restructuring practice — how EY-P differentiates from MBB and the type of analytical problems it specializes in.');
+
+  return t;
+})();
+
+// ══════════════════════════════════════════════════════════════════════
+// KNOWLEDGE REPOSITORY — STATE & STORAGE
+// ══════════════════════════════════════════════════════════════════════
+var KR_KEY  = 'siddhant_kr_v1';
+var KR_AKEY = 'siddhant_kr_apikey';
+var _krState = null;
+var _krOpenId = null;
+var _krPanelId = null;
+
+function krLoad() {
+  if (_krState) return _krState;
+  try { var s = localStorage.getItem(KR_KEY); _krState = s ? JSON.parse(s) : {}; }
+  catch(e) { _krState = {}; }
+  return _krState;
+}
+
+function krSave() {
+  try { localStorage.setItem(KR_KEY, JSON.stringify(_krState||{})); } catch(e){}
+}
+
+function krGetTopic(id) {
+  var st = krLoad();
+  return st[id] || {read:false, note:'', brief:'', readDate:''};
+}
+
+function krSetTopic(id, data) {
+  krLoad();
+  _krState[id] = Object.assign(krGetTopic(id), data);
+  krSave();
+}
+
+function krGetKey() {
+  return localStorage.getItem(KR_AKEY) || '';
+}
+
+function krSaveKey() {
+  var v = (document.getElementById('kr-apikey-inp')||{}).value||'';
+  v = v.trim();
+  if (!v) { alert('Please enter a valid API key.'); return; }
+  localStorage.setItem(KR_AKEY, v);
+  var setup = document.getElementById('kr-apikey-setup');
+  if (setup) setup.style.display = 'none';
+  alert('Gemini API key saved! You can now use Deep Dive.');
+}
+
+function krSetKey() {
+  var setup = document.getElementById('kr-apikey-setup');
+  if (!setup) return;
+  setup.style.display = setup.style.display === 'none' ? 'block' : 'none';
+  if (setup.style.display === 'block') {
+    var inp = document.getElementById('kr-apikey-inp');
+    if (inp) inp.value = krGetKey();
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// KNOWLEDGE REPOSITORY — INIT & RENDER
+// ══════════════════════════════════════════════════════════════════════
+var KR_CAT_COLORS = {
+  Geopolitics:'#dc2626', History:'#b45309', Psychology:'#7c3aed',
+  Finance:'#059669', Science:'#0891b2', Culture:'#db2777',
+  Sports:'#ea580c', Technology:'#2563eb', Philosophy:'#6d28d9', Business:'#047857'
+};
+
+function krInit() {
+  var hasKey = !!krGetKey();
+  var setup = document.getElementById('kr-apikey-setup');
+  if (setup) setup.style.display = hasKey ? 'none' : 'block';
+  krRender();
+}
+
+function krRender() {
+  var el = document.getElementById('kr-grid');
+  if (!el) return;
+  var catF   = (document.getElementById('kr-cat-filter')||{}).value || 'all';
+  var stF    = (document.getElementById('kr-status-filter')||{}).value || 'unread';
+  var search = ((document.getElementById('kr-search')||{}).value||'').toLowerCase();
+
+  var topics = KR_TOPICS.filter(function(t) {
+    if (catF !== 'all' && t.cat !== catF) return false;
+    var state = krGetTopic(t.id);
+    if (stF === 'unread' && state.read) return false;
+    if (stF === 'read' && !state.read) return false;
+    if (search && t.title.toLowerCase().indexOf(search) < 0 && t.summary.toLowerCase().indexOf(search) < 0) return false;
+    return true;
+  });
+
+  // Stats
+  var totalRead = KR_TOPICS.filter(function(t){ return krGetTopic(t.id).read; }).length;
+  var pct = Math.round(totalRead / KR_TOPICS.length * 100);
+  var sr = document.getElementById('kr-stats-read');
+  var st = document.getElementById('kr-stats-total');
+  var sp = document.getElementById('kr-stats-pct');
+  if (sr) sr.textContent = totalRead + ' read';
+  if (st) st.textContent = KR_TOPICS.length + ' total';
+  if (sp) sp.textContent = pct + '% explored';
+
+  if (!topics.length) {
+    el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--dim);font-size:13px">No topics match your filters.</div>';
+    return;
+  }
+
+  el.innerHTML = topics.map(function(t) { return krCardHTML(t); }).join('');
+
+  // Re-open expanded card if there was one
+  if (_krOpenId) {
+    var card = document.querySelector('.kr-card[data-id="'+_krOpenId+'"]');
+    if (card) card.classList.add('kr-expanded');
+  }
+
+  // Wire up note inputs
+  el.querySelectorAll('.kr-note-inp').forEach(function(inp) {
+    inp.addEventListener('input', function() {
+      var id = parseInt(this.dataset.id);
+      krSetTopic(id, {note: this.value});
+    });
+  });
+}
+
+function krCardHTML(t) {
+  var state = krGetTopic(t.id);
+  var col = KR_CAT_COLORS[t.cat] || '#7c3aed';
+  var isOpen = (_krOpenId === t.id);
+  var readDate = state.readDate ? ' · ' + state.readDate : '';
+
+  var expandBody = '<div class="kr-expand-body">'
+    + '<div style="font-size:12px;color:var(--text);line-height:1.65;margin-bottom:12px">' + esc(t.summary) + '</div>'
+    + '<div class="kr-note-wrap"><div class="kr-note-lbl">Your Notes</div>'
+    + '<textarea class="kr-note-inp" data-id="'+t.id+'" placeholder="Key takeaways…">' + esc(state.note||'') + '</textarea></div>'
+    + '<div class="kr-actions">';
+
+  if (!state.read) {
+    expandBody += '<button class="btn btn-sm" onclick="krDive('+t.id+')" style="background:var(--accent);color:#fff">✦ Claude Deep Dive</button>'
+      + '<button class="btn btn-sm btn-ghost" onclick="krMarkRead('+t.id+',event)">✓ Mark as Read</button>';
+  } else {
+    expandBody += '<button class="btn btn-sm btn-ghost" onclick="krDive('+t.id+')">↻ Read Deep Dive Again</button>'
+      + '<button class="btn btn-sm btn-ghost" onclick="krUnread('+t.id+',event)" style="color:var(--dim)">Unmark</button>';
+  }
+
+  expandBody += '</div></div>';
+
+  var briefPreview = state.brief
+    ? '<div style="font-size:11px;color:var(--dim);margin-top:6px;font-style:italic">Deep dive saved ·  click to re-read</div>'
+    : '';
+
+  return '<div class="kr-card'+(state.read?' kr-read':'')+(isOpen?' kr-expanded':'')+'" data-id="'+t.id+'" onclick="krToggle('+t.id+',event)">'
+    + '<span class="kr-cat-chip" style="border-color:'+col+';color:'+col+'">'+t.cat+'</span>'
+    + (state.read ? '<span class="kr-cat-chip" style="border-color:#059669;color:#059669;margin-left:6px">✓ Read'+readDate+'</span>' : '')
+    + '<div class="kr-title">'+esc(t.title)+'</div>'
+    + '<div class="kr-summary">'+esc(t.summary)+'</div>'
+    + briefPreview
+    + expandBody
+    + '</div>';
+}
+
+function krToggle(id, e) {
+  if (e && (e.target.tagName === 'BUTTON' || e.target.tagName === 'TEXTAREA')) return;
+  _krOpenId = (_krOpenId === id) ? null : id;
+  krRender();
+}
+
+function krMarkRead(id, e) {
+  if (e) e.stopPropagation();
+  var today = isoToday();
+  krSetTopic(id, {read:true, readDate:today});
+  _krOpenId = null;
+  krRender();
+}
+
+function krUnread(id, e) {
+  if (e) e.stopPropagation();
+  krSetTopic(id, {read:false, readDate:''});
+  krRender();
+}
+
+function krRoll() {
+  var filter = (document.getElementById('kr-status-filter')||{}).value || 'unread';
+  var catF   = (document.getElementById('kr-cat-filter')||{}).value || 'all';
+  var pool   = KR_TOPICS.filter(function(t) {
+    var state = krGetTopic(t.id);
+    if (filter === 'unread' && state.read) return false;
+    if (filter === 'read' && !state.read) return false;
+    if (catF !== 'all' && t.cat !== catF) return false;
+    return true;
+  });
+  if (!pool.length) { alert('No topics match current filters.'); return; }
+  var pick = pool[Math.floor(Math.random() * pool.length)];
+  _krOpenId = pick.id;
+  krRender();
+  setTimeout(function(){
+    var el = document.querySelector('.kr-card[data-id="'+pick.id+'"]');
+    if (el) el.scrollIntoView({behavior:'smooth', block:'center'});
+  }, 100);
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// KNOWLEDGE REPOSITORY — DEEP DIVE PANEL
+// ══════════════════════════════════════════════════════════════════════
+function krDive(id) {
+  var topic = KR_TOPICS.find(function(t){ return t.id === id; });
+  if (!topic) return;
+  _krPanelId = id;
+  var state = krGetTopic(id);
+  var panel = document.getElementById('kr-dive-panel');
+  if (!panel) return;
+
+  // Populate header
+  document.getElementById('kr-dive-cat').textContent = topic.cat.toUpperCase();
+  document.getElementById('kr-dive-title').textContent = topic.title;
+  document.getElementById('kr-dive-notes').value = state.note || '';
+  var markBtn = document.getElementById('kr-dive-mark-btn');
+  if (markBtn) markBtn.style.display = state.read ? 'none' : 'inline-flex';
+
+  // Show panel
+  panel.style.display = 'block';
+  panel.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+
+  // If brief already cached, show it; otherwise fetch
+  var contentEl = document.getElementById('kr-dive-content');
+  var loadingEl = document.getElementById('kr-dive-loading');
+  if (state.brief) {
+    contentEl.textContent = state.brief;
+    contentEl.style.display = 'block';
+    loadingEl.style.display = 'none';
+  } else {
+    contentEl.textContent = '';
+    contentEl.style.display = 'none';
+    loadingEl.style.display = 'block';
+    krFetchBrief(topic, function(brief) {
+      krSetTopic(id, {brief: brief});
+      contentEl.textContent = brief;
+      contentEl.style.display = 'block';
+      loadingEl.style.display = 'none';
+    });
+  }
+}
+
+function krDiveAgain() {
+  var id = _krPanelId;
+  var topic = KR_TOPICS.find(function(t){ return t.id === id; });
+  if (!topic) return;
+  var contentEl = document.getElementById('kr-dive-content');
+  var loadingEl = document.getElementById('kr-dive-loading');
+  contentEl.textContent = '';
+  contentEl.style.display = 'none';
+  loadingEl.style.display = 'block';
+  krFetchBrief(topic, function(brief) {
+    krSetTopic(id, {brief: brief});
+    contentEl.textContent = brief;
+    contentEl.style.display = 'block';
+    loadingEl.style.display = 'none';
+  });
+}
+
+function krClosePanel() {
+  var panel = document.getElementById('kr-dive-panel');
+  if (panel) panel.style.display = 'none';
+  document.body.style.overflow = '';
+  _krPanelId = null;
+  krRender();
+}
+
+function krMarkReadFromPanel() {
+  if (_krPanelId === null) return;
+  krSetTopic(_krPanelId, {read:true, readDate:isoToday()});
+  var btn = document.getElementById('kr-dive-mark-btn');
+  if (btn) btn.style.display = 'none';
+  krRender();
+}
+
+function krSaveNote() {
+  if (_krPanelId === null) return;
+  var val = (document.getElementById('kr-dive-notes')||{}).value || '';
+  krSetTopic(_krPanelId, {note: val});
+  // Also update the inline note textarea if card is open
+  var inlineInp = document.querySelector('.kr-note-inp[data-id="'+_krPanelId+'"]');
+  if (inlineInp) inlineInp.value = val;
+}
+
+function krFetchBrief(topic, cb) {
+  var key = krGetKey();
+  if (!key) {
+    cb('No API key set. Click "⚙ API Key" to add your Gemini key, then try again.');
+    return;
+  }
+  var prompt = 'Write a deep-dive brief on "' + topic.title + '" (category: ' + topic.cat + ').\n\n'
+    + 'Context: ' + topic.summary + '\n\n'
+    + 'Write 600-750 words in clean readable prose (no markdown, no headers, no bullet points). '
+    + 'Cover: (1) the core concept and why it matters, (2) the key mechanisms or historical context, '
+    + '(3) its most important real-world implications today, (4) a nuanced insight or counterintuitive angle most people miss. '
+    + 'Write as if briefing a sharp, curious MBA student. Be substantive, not superficial.';
+
+  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + key, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: { maxOutputTokens: 1200, temperature: 0.7 }
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    var text = (data.candidates && data.candidates[0] && data.candidates[0].content &&
+                data.candidates[0].content.parts && data.candidates[0].content.parts[0] &&
+                data.candidates[0].content.parts[0].text) ||
+               (data.error && ('Error: ' + data.error.message)) ||
+               'Could not generate brief. Check your API key.';
+    cb(text);
+  })
+  .catch(function(err) {
+    cb('Error fetching brief: ' + err.message + '. Check your API key and network connection.');
+  });
+}
+
+
 function renderHome(){
   var mn=D.finance.months[D.finance.activeMonth]||{budget:15000,categories:[],expenses:[]};
   var ts=mn.categories.reduce(function(a,c){return a+c.spent},0);
@@ -1705,6 +2615,7 @@ function renderHome(){
     var chk=!!D.daily.checked[it.id];
     return '<div class="daily-item'+(chk?" checked":"")+'" onclick="toggleDailyHome('+it.id+')">'+'<div class="daily-check-circle">'+(chk?"✓":"")+'</div><div class="daily-item-info"><div class="daily-item-name">'+it.icon+' '+it.name+'</div></div></div>';
   }).join("");
+  renderBacklog();
 }
 function toggleFocus(id){D.focusTasks=D.focusTasks.map(function(t){return t.id===id?Object.assign({},t,{done:!t.done}):t});saveD();renderHome()}
 function deleteFocus(id){D.focusTasks=D.focusTasks.filter(function(t){return t.id!==id});saveD();renderHome()}
@@ -1751,70 +2662,58 @@ function addDailyItem(){
 
 // ── SECTIONS SYSTEM ──────────────────────────────────────────────────────
 var dragSec=null,kDragInfo=null;
-function renderSections(tab){
-  var cont=document.getElementById(tab+"-sections");if(!cont)return;
-  cont.innerHTML="";
-  (D[tab].sections||[]).forEach(function(sec,idx){
-    var div=document.createElement("div");
-    div.className="draggable-section";div.dataset.idx=idx;
-    div.innerHTML=buildSecHTML(tab,sec,idx);
-    div.addEventListener("dragover",function(e){e.preventDefault();div.classList.add("drag-over")});
-    div.addEventListener("dragleave",function(){div.classList.remove("drag-over")});
-    div.addEventListener("drop",function(e){e.preventDefault();div.classList.remove("drag-over");if(dragSec!==null&&dragSec!==idx)reorderSec(tab,dragSec,idx);});
-    cont.appendChild(div);
+function renderHealthCal(){
+  var el=document.getElementById('health-cal-upcoming');
+  if(!el)return;
+  var items=calLoadSource('health');
+  var today=isoToday();
+  var upcoming=items.filter(function(e){return e.date>=today;}).sort(function(a,b){return a.date.localeCompare(b.date);}).slice(0,8);
+  if(!upcoming.length){
+    el.innerHTML='<div style="color:var(--dim);font-size:13px;padding:8px 0">No upcoming health events. Add appointments, check-ups, or recovery notes.</div>';
+    return;
+  }
+  var html=upcoming.map(function(e,i){
+    var dt=shFmtDate(e.date);
+    var typeColor=e.type==='appointment'?'#e11d48':e.type==='medicine'?'#0891b2':'#7c3aed';
+    var typeLabel=e.type==='appointment'?'Appt':e.type==='medicine'?'Med':(e.type||'Event');
+    var safeId=String(e.id).replace(/[^a-z0-9_-]/gi,'');
+    return '<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">'
+      +'<div style="text-align:center;min-width:36px"><div style="font-size:18px;font-weight:800;color:var(--text)">'+dt.day+'</div><div style="font-size:10px;color:var(--dim);text-transform:uppercase">'+dt.mon+'</div></div>'
+      +'<div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--text)">'+esc(e.title||e.text||'')+'</div>'+(e.time?'<div style="font-size:11px;color:var(--dim)">'+e.time+' IST</div>':'')+'</div>'
+      +'<span style="font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;border:1px solid '+typeColor+';color:'+typeColor+'">'+typeLabel+'</span>'
+      +'<button data-hid="'+safeId+'" class="hcal-del-btn" style="background:none;border:none;cursor:pointer;color:var(--dim);font-size:16px;padding:0 4px">×</button>'
+      +'</div>';
+  }).join('');
+  el.innerHTML=html;
+  el.querySelectorAll('.hcal-del-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){calDelHealthEvent(this.dataset.hid);});
   });
 }
-function buildSecHTML(tab,sec,idx){
-  var inner="";
-  if(sec.type==="goals")inner=buildGoalsHTML(tab,sec,idx);
-  else if(sec.type==="kanban")inner=buildKanbanHTML(tab,sec,idx);
-  else if(sec.type==="workout")inner=buildWorkoutHTML(tab,sec,idx);
-  else if(sec.type==="tracks")inner=buildTracksHTML(tab,sec,idx);
-  else if(sec.type==="notes")inner=buildSecNotesHTML(tab,sec,idx);
-  else if(sec.type==="checklist")inner=buildChecklistHTML(tab,sec,idx);
-  else if(sec.type==="table")inner=buildTableHTML(tab,sec,idx);
-  return '<div class="section-card"><div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">'+'<span class="drag-handle" draggable="true" ondragstart="dragSec='+idx+'" ondragend="dragSec=null">≡</span>'+'<span class="sec-title" contenteditable="true" onblur="editSecTitle(\''+tab+'\','+idx+',this.textContent)" style="flex:1">'+esc(sec.title)+'</span>'+'<button class="gdel" onclick="deleteSec(\''+tab+'\','+idx+')" style="opacity:1">×</button></div>'+inner+'</div>';
-}
-function reorderSec(tab,from,to){var s=D[tab].sections;s.splice(to,0,s.splice(from,1)[0]);saveD();renderSections(tab);}
-function addSection(tab){
-  var types=["goals","kanban","checklist","table","workout","tracks","notes"];
-  var type=prompt("Section type:\ngoals, kanban, checklist, table, workout, tracks, notes","goals");
-  if(!type||types.indexOf(type.trim())<0)return;
-  type=type.trim();
-  var title=prompt("Section title:",type.charAt(0).toUpperCase()+type.slice(1))||"New Section";
-  var ns={id:Date.now(),type:type,title:title};
-  if(type==="goals")ns.items=[];
-  else if(type==="kanban")ns.cols={todo:[],inprogress:[],done:[]};
-  else if(type==="workout")ns.days=[];
-  else if(type==="tracks")ns.tracks=[];
-  else if(type==="notes")ns.text="";
-  else if(type==="checklist")ns.items=[];
-  else if(type==="table"){var cols=prompt("Column names (comma-separated):","Column 1,Column 2,Column 3")||"Col 1,Col 2,Col 3";ns.cols=cols.split(",").map(function(c){return c.trim()});ns.rows=[];}
-  if(!D[tab].sections)D[tab].sections=[];
-  D[tab].sections.push(ns);saveD();renderSections(tab);
-}
-function deleteSec(tab,idx){if(!confirm("Delete this section?"))return;D[tab].sections.splice(idx,1);saveD();renderSections(tab);}
-function editSecTitle(tab,idx,txt){D[tab].sections[idx].title=txt.trim();saveD();}
 
-// goals section
+
+function calAddFromHealth(){
+  calEditOpen(-1,null,isoToday(),'health');
+}
+
+function calDelHealthEvent(id){
+  var items=calLoadSource('health');
+  items=items.filter(function(e){return e.id!==id;});
+  calSaveSource('health',items);
+  renderHealthCal();
+  setTimeout(function(){var el=document.getElementById('mc-health-wrap');if(el){el.innerHTML=calMiniCardHTML('health');calMiniRender('health');}},50);
+}
+
+
+function reorderSec(tab,from,to){var s=D[tab].sections;s.splice(to,0,s.splice(from,1)[0]);saveD();renderSections(tab);}
+function renderSections(tab){} // stub — sections feature removed
+
 function buildGoalsHTML(tab,sec,idx){
   var h=(sec.items||[]).map(function(g,gi){
     return '<div class="goal-item"><input type="checkbox" class="gcheck" '+(g.done?"checked":"")+' onchange="toggleSecGoal(\''+tab+'\','+idx+','+gi+')">'+'<div class="gbody"><div class="gtext'+(g.done?" done":"")+'" contenteditable="true" onblur="editSecGoalText(\''+tab+'\','+idx+','+gi+',this.textContent)">'+esc(g.text)+'</div>'+(g.deadline?'<div class="gmeta">Due: '+g.deadline+'</div>':'')+'</div>'+'<span class="badge" style="background:'+PC[g.priority||"medium"]+'22;color:'+PC[g.priority||"medium"]+'">'+((g.priority||"medium"))+'</span>'+'<button class="gdel" onclick="deleteSecGoal(\''+tab+'\','+idx+','+gi+')">×</button></div>';
   }).join("")||'<div style="color:var(--dim);font-size:12px">No goals yet.</div>';
   return h+'<div class="add-row"><input class="inp" id="sg-t-'+tab+'-'+idx+'" placeholder="New goal..." style="flex:2;min-width:130px"><input class="inp" id="sg-d-'+tab+'-'+idx+'" type="date" style="width:140px"><select class="sel" id="sg-p-'+tab+'-'+idx+'"><option value="high">High</option><option value="medium" selected>Medium</option><option value="low">Low</option></select><button class="btn" onclick="addSecGoal(\''+tab+'\','+idx+')">Add</button></div>';
 }
-function addSecGoal(tab,idx){
-  var txt=document.getElementById("sg-t-"+tab+"-"+idx).value.trim();if(!txt)return;
-  var dt=document.getElementById("sg-d-"+tab+"-"+idx).value;
-  var pr=document.getElementById("sg-p-"+tab+"-"+idx).value;
-  D[tab].sections[idx].items.push({id:Date.now(),text:txt,done:false,deadline:dt,priority:pr});
-  document.getElementById("sg-t-"+tab+"-"+idx).value="";saveD();renderSections(tab);
-}
 function toggleSecGoal(tab,idx,gi){D[tab].sections[idx].items[gi].done=!D[tab].sections[idx].items[gi].done;saveD();renderSections(tab);}
-function deleteSecGoal(tab,idx,gi){D[tab].sections[idx].items.splice(gi,1);saveD();renderSections(tab);}
-function editSecGoalText(tab,idx,gi,txt){D[tab].sections[idx].items[gi].text=txt.trim();saveD();}
-
-// kanban section
 function buildKanbanHTML(tab,sec,idx){
   var cols=sec.cols||{todo:[],inprogress:[],done:[]};
   var KC={todo:"#d97706",inprogress:"#2563eb",done:"#059669"};
@@ -1827,45 +2726,23 @@ function buildKanbanHTML(tab,sec,idx){
   }).join("")+'</div>';
 }
 function dropKCard(tab,idx,col){if(!kDragInfo||kDragInfo.tab!==tab||kDragInfo.si!==idx)return;var from=kDragInfo.col,id=kDragInfo.id;if(from===col)return;var sec=D[tab].sections[idx];var card=sec.cols[from].find(function(c){return c.id===id});if(!card)return;sec.cols[from]=sec.cols[from].filter(function(c){return c.id!==id});sec.cols[col].push(card);kDragInfo=null;saveD();renderSections(tab);}
-function addKCard(tab,idx,col){var el=document.getElementById("ki-"+tab+"-"+idx+"-"+col);if(!el||!el.value.trim())return;D[tab].sections[idx].cols[col].push({id:Date.now(),text:el.value.trim()});el.value="";saveD();renderSections(tab);}
-function delKCard(tab,idx,col,id){D[tab].sections[idx].cols[col]=D[tab].sections[idx].cols[col].filter(function(c){return c.id!==id});saveD();renderSections(tab);}
-function editKCard(tab,idx,col,id,txt){D[tab].sections[idx].cols[col]=D[tab].sections[idx].cols[col].map(function(c){return c.id===id?Object.assign({},c,{text:txt.trim()}):c});saveD();}
-
-// workout section
 function buildWorkoutHTML(tab,sec,idx){
   var h=(sec.days||[]).map(function(day,di){
     return '<div class="wday"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px"><div style="font-weight:600;font-size:12px;color:var(--red);font-family:var(--font-mono)" contenteditable="true" onblur="editWdayName(\''+tab+'\','+idx+','+di+',this.textContent)">'+esc(day.name)+'</div><div style="display:flex;gap:5px"><button class="btn btn-sm btn-ghost" onclick="addEx(\''+tab+'\','+idx+','+di+')" style="font-size:10px;padding:3px 8px">+</button><button class="gdel" onclick="delWday(\''+tab+'\','+idx+','+di+')" style="opacity:1">×</button></div></div>'+day.exercises.map(function(ex,ei){return '<div class="ex-item"><span style="color:var(--dim)">·</span><span style="flex:1" contenteditable="true" onblur="editEx(\''+tab+'\','+idx+','+di+','+ei+',this.textContent)">'+esc(ex)+'</span><button class="ex-del" onclick="delEx(\''+tab+'\','+idx+','+di+','+ei+')">×</button></div>'}).join("")+'</div>';
   }).join("")||'<div style="color:var(--dim);font-size:12px">No days yet.</div>';
   return h+'<button class="btn btn-sm btn-ghost" onclick="addWday(\''+tab+'\','+idx+')" style="margin-top:8px">+ Day</button>';
 }
-function addWday(tab,idx){var n=prompt("Day name:");if(!n)return;D[tab].sections[idx].days.push({id:Date.now(),name:n.trim(),exercises:[]});saveD();renderSections(tab);}
-function delWday(tab,idx,di){D[tab].sections[idx].days.splice(di,1);saveD();renderSections(tab);}
-function editWdayName(tab,idx,di,txt){D[tab].sections[idx].days[di].name=txt.trim();saveD();}
-function addEx(tab,idx,di){var ex=prompt("Exercise:");if(!ex)return;D[tab].sections[idx].days[di].exercises.push(ex.trim());saveD();renderSections(tab);}
-function delEx(tab,idx,di,ei){D[tab].sections[idx].days[di].exercises.splice(ei,1);saveD();renderSections(tab);}
-function editEx(tab,idx,di,ei,txt){D[tab].sections[idx].days[di].exercises[ei]=txt.trim();saveD();}
-
-// tracks section
 function buildTracksHTML(tab,sec,idx){
   var h=(sec.tracks||[]).map(function(t,ti){
     return '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px"><span style="font-weight:600;font-size:14px" contenteditable="true" onblur="editTrackName(\''+tab+'\','+idx+','+ti+',this.textContent)">'+esc(t.name)+'</span><div style="display:flex;align-items:center;gap:8px"><span style="font-size:12px;color:var(--purple);font-weight:700;font-family:var(--font-mono)">'+t.progress+'%</span><button class="gdel" onclick="delTrack(\''+tab+'\','+idx+','+ti+')" style="opacity:1">×</button></div></div><div style="font-size:11px;color:var(--dim);margin-bottom:7px" contenteditable="true" onblur="editTrackGoal(\''+tab+'\','+idx+','+ti+',this.textContent)">'+esc(t.goal)+'</div><div class="pbar" style="height:4px;margin-bottom:10px"><div class="pbar-fill" style="width:'+t.progress+'%;background:var(--purple)"></div></div>'+t.tasks.map(function(task,tki){return '<div class="track-task"><input type="checkbox" class="gcheck" style="accent-color:var(--purple)" '+(task.done?"checked":"")+' onchange="toggleTrackTask(\''+tab+'\','+idx+','+ti+','+tki+')"><span style="flex:1;font-size:12px;color:'+(task.done?"var(--dim)":"var(--text2)")+';text-decoration:'+(task.done?"line-through":"none")+'" contenteditable="true" onblur="editTrackTask(\''+tab+'\','+idx+','+ti+','+tki+',this.textContent)">'+esc(task.text)+'</span><button class="ex-del" onclick="delTrackTask(\''+tab+'\','+idx+','+ti+','+tki+')" style="opacity:1">×</button></div>'}).join("")+'<button class="btn btn-sm btn-ghost" onclick="addTrackTask(\''+tab+'\','+idx+','+ti+')" style="margin-top:7px;font-size:10px">+ Task</button></div>';
   }).join("")||'<div style="color:var(--dim);font-size:12px">No tracks yet.</div>';
   return h+'<button class="btn btn-sm btn-ghost" onclick="addTrack(\''+tab+'\','+idx+')" style="margin-top:8px">+ Track</button>';
 }
-function addTrack(tab,idx){var n=prompt("Track name:");if(!n)return;var g=prompt("Goal:","")||"";D[tab].sections[idx].tracks.push({id:Date.now(),name:n.trim(),progress:0,goal:g,tasks:[]});saveD();renderSections(tab);}
-function delTrack(tab,idx,ti){D[tab].sections[idx].tracks.splice(ti,1);saveD();renderSections(tab);}
-function editTrackName(tab,idx,ti,txt){D[tab].sections[idx].tracks[ti].name=txt.trim();saveD();}
-function editTrackGoal(tab,idx,ti,txt){D[tab].sections[idx].tracks[ti].goal=txt.trim();saveD();}
-function addTrackTask(tab,idx,ti){var txt=prompt("Task:");if(!txt)return;D[tab].sections[idx].tracks[ti].tasks.push({id:Date.now(),text:txt.trim(),done:false});saveD();renderSections(tab);}
-function delTrackTask(tab,idx,ti,tki){D[tab].sections[idx].tracks[ti].tasks.splice(tki,1);saveD();renderSections(tab);}
 function toggleTrackTask(tab,idx,ti,tki){
   var t=D[tab].sections[idx].tracks[ti];t.tasks[tki].done=!t.tasks[tki].done;
   t.progress=t.tasks.length?Math.round(t.tasks.filter(function(x){return x.done}).length/t.tasks.length*100):0;
   saveD();renderSections(tab);
 }
-function editTrackTask(tab,idx,ti,tki,txt){D[tab].sections[idx].tracks[ti].tasks[tki].text=txt.trim();saveD();}
-
-// notes section
 function buildSecNotesHTML(tab,sec,idx){
   return '<textarea class="notes-ta" style="width:100%;min-height:100px" placeholder="Notes..." oninput="saveSecNote(\''+tab+'\','+idx+',this.value)">'+esc(sec.text||"")+'</textarea>';
 }
@@ -1878,12 +2755,7 @@ function buildChecklistHTML(tab,sec,idx){
   }).join("")||'<div style="color:var(--dim);font-size:12px">Empty checklist.</div>';
   return h+'<div class="add-row"><input class="inp" id="chk-i-'+tab+'-'+idx+'" placeholder="New item..." style="flex:1"><button class="btn" onclick="addChk(\''+tab+'\','+idx+')">Add</button></div>';
 }
-function addChk(tab,idx){var el=document.getElementById("chk-i-"+tab+"-"+idx);if(!el||!el.value.trim())return;D[tab].sections[idx].items.push({id:Date.now(),text:el.value.trim(),done:false});el.value="";saveD();renderSections(tab);}
 function toggleChk(tab,idx,ii){D[tab].sections[idx].items[ii].done=!D[tab].sections[idx].items[ii].done;saveD();renderSections(tab);}
-function delChk(tab,idx,ii){D[tab].sections[idx].items.splice(ii,1);saveD();renderSections(tab);}
-function editChk(tab,idx,ii,txt){D[tab].sections[idx].items[ii].text=txt.trim();saveD();}
-
-// custom table section
 function buildTableHTML(tab,sec,idx){
   var cols=sec.cols||["Col 1","Col 2"];
   var rows=sec.rows||[];
@@ -1894,18 +2766,10 @@ function buildTableHTML(tab,sec,idx){
   }).join("")||'<tr><td colspan="'+(cols.length+1)+'" style="color:var(--dim);text-align:center;padding:12px">No rows yet</td></tr>';
   return hdr+body+'</tbody></table></div><div class="add-row"><button class="btn btn-sm btn-ghost" onclick="addTableRow(\''+tab+'\','+idx+')">+ Row</button><button class="btn btn-sm btn-ghost" onclick="addTableCol(\''+tab+'\','+idx+')">+ Column</button></div>';
 }
-function addTableRow(tab,idx){var sec=D[tab].sections[idx];sec.rows=sec.rows||[];sec.rows.push(new Array(sec.cols.length).fill(""));saveD();renderSections(tab);}
-function addTableCol(tab,idx){var n=prompt("Column name:","New Column");if(!n)return;D[tab].sections[idx].cols.push(n.trim());D[tab].sections[idx].rows=(D[tab].sections[idx].rows||[]).map(function(r){r.push("");return r;});saveD();renderSections(tab);}
-function delTableRow(tab,idx,ri){D[tab].sections[idx].rows.splice(ri,1);saveD();renderSections(tab);}
-function editTableCol(tab,idx,ci,txt){D[tab].sections[idx].cols[ci]=txt.trim();saveD();}
-function editTableCell(tab,idx,ri,ci,txt){if(!D[tab].sections[idx].rows[ri])return;D[tab].sections[idx].rows[ri][ci]=txt.trim();saveD();}
-
-// ── EDUCATION ─────────────────────────────────────────────────────────────
 function renderEducation(){
   renderSubjects();
   renderExamTT();
   renderClassTT();
-  renderSections("education");
 }
 function renderSubjects(){
   var el=document.getElementById("subject-list");if(!el)return;
@@ -2427,6 +3291,7 @@ var CAL_KEYS = {
   edu:    'siddhant_cal_edu',
   per:    'siddhant_cal_per',
   car:    'siddhant_cal_car',
+  health: 'siddhant_cal_health',
   swatch: 'siddhant_cal_swatch',
   splay:  'siddhant_cal_splay',
 };
@@ -2435,6 +3300,7 @@ var CAL_SOURCE_META = {
   edu:    {label:'Education', icon:'🎓', color:'#2563eb'},
   per:    {label:'Personal',  icon:'🙋', color:'#059669'},
   car:    {label:'Career',    icon:'💼', color:'#d97706'},
+  health: {label:'Health',    icon:'🏥', color:'#e11d48'},
   swatch: {label:'Watch',     icon:'👁',  color:'#dc2626'},
   splay:  {label:'Play',      icon:'🏃', color:'#0891b2'},
 };
@@ -6362,6 +7228,14 @@ document.addEventListener('click', function(e){
 // Call shInit here — after all Sports Hub vars and functions are defined
 shInit();
 
+
+
+
+
+
+
+
+
 </script>
 
 
@@ -6440,6 +7314,8 @@ shInit();
     'siddhant_cal_edu',
     'siddhant_cal_per',
     'siddhant_cal_car',
+    'siddhant_cal_health',
+    'siddhant_kr_v1',
     'siddhant_cal_swatch',
     'siddhant_cal_splay',
     'siddhant_os_dark'
