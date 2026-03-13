@@ -800,6 +800,10 @@ body{font-family:var(--font-display);color:var(--text)}
 <div class="m-content" id="m-content">
 
   <div class="m-page active" id="mp-home">
+    <div class="m-card" style="padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px">
+      <div style="font-size:11px;color:var(--dim);line-height:1.4">Data missing or outdated?<br>Pull latest from cloud.</div>
+      <button id="pull-cloud-btn" onclick="pullFromCloud()" style="background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0">☁ Restore from Cloud</button>
+    </div>
     <div class="m-card">
       <div class="m-card-title">&#128204; Today's Focus</div>
       <div id="m-focus-list"><div style="color:var(--dim);font-size:12px">Loading&#8230;</div></div>
@@ -7511,8 +7515,7 @@ renderHome();
         syncStatus('synced', 'Loaded from cloud');
       } else {
         syncStatus('synced', 'Connected');
-        // Push local data to cloud (first device to connect wins)
-        pushAll().catch(function(){});
+        // Don't push on load — only pull. Prevents overwriting cloud with stale local data.
       }
       startPolling();
     }).catch(function(){
@@ -7537,6 +7540,32 @@ renderHome();
     }).catch(function(e){
       syncStatus('error', 'Push failed');
       if (btn) { btn.style.opacity = '1'; btn.style.pointerEvents = ''; }
+    });
+  };
+
+  // ── FORCE PULL FROM CLOUD ─────────────────────────────────
+  window.pullFromCloud = function() {
+    var btn = document.getElementById('pull-cloud-btn');
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Pulling…'; }
+    syncStatus('syncing', 'Pulling from cloud…');
+    getDoc('allKeys').then(function(doc){
+      var data = parseFirestoreDoc(doc);
+      if (!data) { syncStatus('error', 'No cloud data'); if(btn){btn.disabled=false;btn.textContent='☁ Restore from Cloud';} return; }
+      SYNC_KEYS.forEach(function(key){
+        if (data[key]) _origSetItem(key, data[key]);
+      });
+      if (typeof loadD === 'function') loadD();
+      if (typeof renderHome === 'function') try { renderHome(); } catch(e){}
+      if (typeof mNav === 'function') try { var t=document.querySelector('.m-nav-btn.active'); if(t&&t.dataset.page) mNav(t.dataset.page); } catch(e){}
+      if (typeof calRender === 'function') try { calRender(); } catch(e){}
+      if (typeof renderFinance === 'function') try { renderFinance(); } catch(e){}
+      if (typeof renderDaily === 'function') try { renderDaily(); } catch(e){}
+      _lastKnownUpdate = data['_lastUpdated'] || null;
+      syncStatus('synced', 'Restored from cloud ✓');
+      if (btn) { btn.disabled=false; btn.textContent='☁ Restore from Cloud'; }
+    }).catch(function(){
+      syncStatus('error', 'Pull failed');
+      if (btn) { btn.disabled=false; btn.textContent='☁ Restore from Cloud'; }
     });
   };
 
