@@ -524,8 +524,9 @@ body.dark .dm-toggle:hover{background:rgba(255,255,255,0.12);color:var(--accent)
 .fx-card.fx-done::before{background:var(--border)}
 .fx-card.fx-next{border-color:var(--accent);background:rgba(var(--c1,124,58,237),0.05)}
 .fx-card.fx-next::before{background:var(--accent)}
-.fx-card.fx-highlight{border-left-color:var(--fx-accent,var(--accent));border-left-width:3px}
-.fx-card.fx-highlight::after{content:'';display:none}
+.fx-card.fx-highlight{border-color:var(--fx-accent,var(--accent));background:color-mix(in srgb, var(--fx-accent,var(--accent)) 6%, var(--card))}
+.fx-card.fx-highlight::before{width:4px;background:var(--fx-accent,var(--accent))}
+.fx-card.fx-highlight .fx-teams::after{content:'★';font-size:9px;color:var(--fx-accent,var(--accent));margin-left:6px;opacity:0.8}
 @keyframes fxpulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.1)}50%{box-shadow:0 0 0 6px rgba(239,68,68,0.0)}}
 
 .fx-date{text-align:center}
@@ -614,17 +615,21 @@ body.dark .dm-toggle:hover{background:rgba(255,255,255,0.12);color:var(--accent)
 .sh-wf{background:var(--bg2);border:1px solid var(--border);color:var(--text2);padding:3px 10px;border-radius:20px;font-size:11px;cursor:pointer;transition:all .15s}
 .sh-wf.active,.sh-wf:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
 /* Watch calendar items */
-.sh-wc-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08)}
+.sh-wc-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
 .sh-wc-item:last-child{border-bottom:none}
-.sh-wc-date{min-width:44px;text-align:center;background:rgba(255,255,255,0.08);border-radius:8px;padding:4px 6px}
-.sh-wc-date-d{font-size:15px;font-weight:700;color:#e5e7eb;line-height:1}
-.sh-wc-date-m{font-size:9px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:.5px}
+.sh-wc-date{min-width:44px;text-align:center;background:var(--bg2);border-radius:8px;padding:4px 6px;border:1px solid var(--border)}
+.sh-wc-date-d{font-size:15px;font-weight:700;color:var(--text);line-height:1}
+.sh-wc-date-m{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px}
 .sh-wc-body{flex:1;min-width:0}
-.sh-wc-match{font-size:12px;font-weight:700;color:#e5e7eb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sh-wc-meta{font-size:10px;color:rgba(255,255,255,0.45);margin-top:2px}
+.sh-wc-match{font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sh-wc-meta{font-size:10px;color:var(--dim);margin-top:2px}
 .sh-wc-sport{font-size:10px;padding:2px 8px;border-radius:10px;background:var(--bg2);color:var(--text2);white-space:nowrap;border:1px solid var(--border)}
-.sh-wc-live{color:#22c55e;font-weight:700}
-.sh-wc-soon{color:#f59e0b}
+.sh-wc-live{color:var(--green)!important;font-weight:700}
+.sh-wc-soon{color:var(--orange)!important}
+body.dark .sh-wc-date-d{color:#e5e7eb}
+body.dark .sh-wc-date-m{color:rgba(255,255,255,0.45)}
+body.dark .sh-wc-match{color:#e5e7eb}
+body.dark .sh-wc-meta{color:rgba(255,255,255,0.45)}
 
 /* Standings table */
 .sh-table{width:100%;border-collapse:collapse;font-size:12px}
@@ -658,59 +663,62 @@ body.dark .fx-badge.upcoming{background:rgba(255,255,255,0.06);border-color:rgba
 }
 
 /* Week grid: dark navy cards */
-#sh-play-cal-grid div{color:rgba(255,255,255,0.6)!important}
+#sh-play-cal-grid div{color:var(--text)}
+body.dark #sh-play-cal-grid div{color:rgba(255,255,255,0.7)!important}
 
-/* Play session form inputs in dark context */
+/* Play session form inputs */
 #shp-mysports input,#shp-mysports select{
+  background:var(--bg2);
+  border-color:var(--border);
+  color:var(--text);
+}
+body.dark #shp-mysports input,body.dark #shp-mysports select{
   background:rgba(255,255,255,0.07)!important;
   border-color:rgba(255,255,255,0.12)!important;
   color:#fff!important;
 }
 
 /* Section heading */
-#shp-mysports h4{color:rgba(126,184,247,0.9);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px}
+body.dark #shp-mysports h4{color:rgba(126,184,247,0.9);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px}
 
 /* Week play calendar inside shp-mysports */
 #sh-play-cal-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px}
 #sh-play-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
 
 /* My watch list horizontal scroll cards — dark themed */
-#sh-my-watch-list > div > div{
-  background:var(--card)!important;
-  border-color:rgba(0,200,255,0.2)!important;
-  color:#f1f5f9!important;
-}
-#sh-my-watch-list > div > div *{color:#f1f5f9!important}
-#sh-my-watch-list > div > div [style*="color:var(--dim)"]{color:rgba(255,255,255,0.45)!important}
-#sh-my-watch-list button{color:rgba(255,255,255,0.4)!important}
-#sh-my-watch-list .fx-badge.done,#sh-my-watch-list .fx-badge.upcoming,#sh-my-watch-list .fx-badge.tbc{
+#sh-my-watch-list > div > div{background:var(--card);border:1px solid var(--border);border-radius:12px}
+body.dark #sh-my-watch-list > div > div{border-color:rgba(0,200,255,0.2)!important}
+body.dark #sh-my-watch-list > div > div *{color:#f1f5f9!important}
+body.dark #sh-my-watch-list > div > div [style*="color:var(--dim)"]{color:rgba(255,255,255,0.45)!important}
+body.dark #sh-my-watch-list button{color:rgba(255,255,255,0.4)!important}
+body.dark #sh-my-watch-list .fx-badge.done,body.dark #sh-my-watch-list .fx-badge.upcoming,body.dark #sh-my-watch-list .fx-badge.tbc{
   background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);
 }
-#sh-my-watch-list .fx-badge.live{background:rgba(220,38,38,0.2);color:#f87171;}
+body.dark #sh-my-watch-list .fx-badge.live{background:rgba(220,38,38,0.2);color:#f87171;}
 
 /* Watch section heading */
-#shp-mysports .card-hdr .card-title{color:rgba(126,184,247,0.9)}
+body.dark #shp-mysports .card-hdr .card-title{color:rgba(126,184,247,0.9)}
 
 /* Add to watch btn */
-#shp-mysports .btn{background:#00c8ff;color:#0d1117;border:none}
+body.dark #shp-mysports .btn{background:#00c8ff;color:#0d1117;border:none}
 /* Comprehensive text visibility overrides for dark my-sports panel */
 /* My Sports uses page color-scheme */
-#shp-mysports .sh-wc-item{border-bottom-color:rgba(255,255,255,0.08)}
-#shp-mysports .sh-wc-date-d,#shp-mysports .sh-wc-match{color:#f1f5f9!important}
-#shp-mysports .sh-wc-date-m,#shp-mysports .sh-wc-meta,#shp-mysports .sh-wc-sport:not(.sh-wc-live):not(.sh-wc-soon){color:rgba(255,255,255,0.5)!important}
-#shp-mysports .sh-wc-live{color:#4ade80!important;font-weight:700}
-#shp-mysports .sh-wc-soon{color:#60a5fa!important}
+body.dark #shp-mysports .sh-wc-item{border-bottom-color:rgba(255,255,255,0.08)}
+body.dark #shp-mysports .sh-wc-date-d,body.dark #shp-mysports .sh-wc-match{color:#f1f5f9!important}
+body.dark #shp-mysports .sh-wc-date-m,body.dark #shp-mysports .sh-wc-meta,body.dark #shp-mysports .sh-wc-sport:not(.sh-wc-live):not(.sh-wc-soon){color:rgba(255,255,255,0.5)!important}
+body.dark #shp-mysports .sh-wc-live{color:#4ade80!important;font-weight:700}
+body.dark #shp-mysports .sh-wc-soon{color:#60a5fa!important}
 #shp-mysports .fx-badge{font-size:9px}
-#shp-mysports .ms-section-title{color:#e2e8f0}
+body.dark #shp-mysports .ms-section-title{color:#e2e8f0}
 #shp-mysports .ms-section{background:rgba(255,255,255,0.03);border-radius:12px;padding:12px;margin-bottom:8px}
 
-#shp-mysports .btn:hover{background:#33d4ff}
-#shp-mysports .btn-ghost{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6)}
+body.dark #shp-mysports .btn:hover{background:#33d4ff}
+body.dark #shp-mysports .btn-ghost{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6)}
 
 /* My Sports week-day play boxes (big week view) */
 .sh-week-day-card{
-  background:rgba(255,255,255,0.04);
-  border:1px solid rgba(255,255,255,0.07);
+  background:var(--bg2);
+  border:1px solid var(--border);
   border-radius:14px;
   padding:14px 10px;
   min-height:100px;
@@ -719,11 +727,14 @@ body.dark .fx-badge.upcoming{background:rgba(255,255,255,0.06);border-color:rgba
   align-items:center;
   gap:6px;
 }
-.sh-week-day-card.today{border-color:#00c8ff;background:rgba(0,200,255,0.06)}
-.sh-week-day-lbl{font-size:9px;font-weight:700;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.5px}
-.sh-week-day-num{font-size:22px;font-weight:800;color:rgba(255,255,255,0.7)}
-.sh-week-day-card.today .sh-week-day-num{color:#00c8ff}
-.sh-week-day-sess{width:32px;height:32px;background:rgba(0,200,255,0.12);border:1px solid rgba(0,200,255,0.25);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;margin-top:2px}
+.sh-week-day-card.today{border-color:var(--accent);background:rgba(124,58,237,0.06)}
+.sh-week-day-lbl{font-size:9px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:0.5px}
+.sh-week-day-num{font-size:22px;font-weight:800;color:var(--text)}
+.sh-week-day-card.today .sh-week-day-num{color:var(--accent)}
+.sh-week-day-sess{width:32px;height:32px;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;margin-top:2px}
+body.dark .sh-week-day-card.today{border-color:#00c8ff;background:rgba(0,200,255,0.06)}
+body.dark .sh-week-day-card.today .sh-week-day-num{color:#00c8ff}
+body.dark .sh-week-day-sess{background:rgba(0,200,255,0.12);border-color:rgba(0,200,255,0.25)}
 
 
 /* Mobile kanban column fix */
@@ -773,12 +784,16 @@ body{font-family:var(--font-display);color:var(--text)}
 
 <div class="m-topbar">
   <div>
-    <div class="m-topbar-title" id="m-page-title">&#127968; Home</div>
+    <div class="m-topbar-title" id="m-page-title">Home</div>
     <div class="m-topbar-sub" id="m-page-sub"></div>
   </div>
-  <div style="display:flex;align-items:center;gap:10px">
-    <div id="m-clock" style="font-size:12px;font-weight:700;font-family:var(--font-mono);color:var(--dim)"></div>
-    <button onclick="toggleDark()" style="background:none;border:none;cursor:pointer;font-size:20px;padding:0" id="dark-btn">&#127769;</button>
+  <div style="display:flex;align-items:center;gap:8px">
+    <div id="m-clock" style="font-size:11px;font-weight:700;font-family:var(--font-mono);color:var(--dim)"></div>
+    <button onclick="window.syncNow&&syncNow()" id="sync-now-btn" title="Sync now" style="background:none;border:1px solid var(--border);border-radius:8px;cursor:pointer;padding:5px 8px;display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--dim)">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      Sync
+    </button>
+    <button onclick="toggleDark()" style="background:none;border:none;cursor:pointer;font-size:18px;padding:4px;line-height:1" id="dark-btn">&#9790;</button>
   </div>
 </div>
 
@@ -844,6 +859,19 @@ body{font-family:var(--font-display);color:var(--text)}
     <div id="m-cal-list"></div>
   </div>
 
+  <div class="m-page" id="mp-daily">
+    <div class="m-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div class="m-card-title" style="margin:0">&#9889; Daily Habits</div>
+        <div id="md-habit-prog" style="font-size:11px;color:var(--accent);font-weight:700;font-family:var(--font-mono)"></div>
+      </div>
+      <div id="md-habits-list"></div>
+      <div style="margin-top:10px;display:flex;gap:8px">
+        <input class="inp" id="md-habit-inp" placeholder="New habit&#8230;" style="flex:1;font-size:13px">
+        <button class="btn" onclick="mdAddHabit()" style="padding:6px 14px;font-size:13px">+</button>
+      </div>
+    </div>
+  </div>
   <div class="m-page" id="mp-finance">
     <div id="finance-content"></div>
   </div>
@@ -875,11 +903,12 @@ body{font-family:var(--font-display);color:var(--text)}
 </div>
 
 <div class="m-tabs">
-  <button class="m-tab active" onclick="mNav('home')" id="mtab-home"><span class="m-tab-icon">&#127968;</span>Home</button>
-  <button class="m-tab" onclick="mNav('calendar')" id="mtab-calendar"><span class="m-tab-icon">&#128197;</span>Calendar</button>
-  <button class="m-tab" onclick="mNav('finance')" id="mtab-finance"><span class="m-tab-icon">&#128176;</span>Finance</button>
-  <button class="m-tab" onclick="mNav('sports')" id="mtab-sports"><span class="m-tab-icon">&#127967;</span>Sports</button>
-  <button class="m-tab" onclick="mNav('sections')" id="mtab-sections"><span class="m-tab-icon">&#128218;</span>Sections</button>
+  <button class="m-tab active" onclick="mNav('home')" id="mtab-home"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 2px"><path d="M3 9.5L12 3l9 6.5V21H15v-6H9v6H3V9.5z"/></svg>Home</button>
+  <button class="m-tab" onclick="mNav('calendar')" id="mtab-calendar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 2px"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="4" x2="8" y2="2"/><line x1="16" y1="4" x2="16" y2="2"/><line x1="7" y1="15" x2="9" y2="15"/><line x1="12" y1="15" x2="14" y2="15"/></svg>Cal</button>
+  <button class="m-tab" onclick="mNav('daily')" id="mtab-daily"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 2px"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="8,12 11,15 16,9"/></svg>Daily</button>
+  <button class="m-tab" onclick="mNav('finance')" id="mtab-finance"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 2px"><rect x="3" y="14" width="4" height="7"/><rect x="10" y="9" width="4" height="12"/><rect x="17" y="4" width="4" height="17"/><line x1="1" y1="21" x2="23" y2="21"/></svg>Finance</button>
+  <button class="m-tab" onclick="mNav('sports')" id="mtab-sports"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 2px"><path d="M6 2h12l-2 8a4 4 0 0 1-8 0L6 2z"/><path d="M6 2H4a2 2 0 0 0 0 4h2"/><path d="M18 2h2a2 2 0 0 1 0 4h-2"/><line x1="12" y1="10" x2="12" y2="16"/><path d="M8 21h8"/><line x1="12" y1="16" x2="12" y2="21"/></svg>Sports</button>
+  <button class="m-tab" onclick="mNav('sections')" id="mtab-sections"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 2px"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg>More</button>
 </div>
 
 <!-- CALENDAR EDIT MODAL -->
@@ -1266,7 +1295,7 @@ function renderDaily(){
     return '<div style="background:var(--bg2);border:1px solid '+(isT?"var(--accent)":"var(--border)")+';border-radius:8px;padding:10px 12px;min-width:70px;text-align:center">'+'<div style="font-size:10px;color:var(--dim);font-family:var(--font-mono);margin-bottom:4px">'+d+'</div>'+(isT?'<div style="font-size:13px;font-weight:700;color:var(--accent);font-family:var(--font-mono)">'+done+'/'+items.length+'</div>':'<div style="font-size:13px;color:var(--dim)">—</div>')+'</div>';
   }).join("")+'</div>';
 }
-function toggleDaily(id){D.daily.checked[id]=!D.daily.checked[id];saveD();renderDaily();renderHome();}
+function toggleDaily(id){D.daily.checked[id]=!D.daily.checked[id];saveD();if(typeof mRenderHabits==='function')mRenderHabits();if(typeof mRenderDaily==='function')mRenderDaily();if(typeof renderHome==='function')renderHome();}
 function deleteDailyItem(id){D.daily.items=D.daily.items.filter(function(i){return i.id!==id});delete D.daily.checked[id];saveD();renderDaily();}
 function addDailyItem(){
   showModal("New Daily Habit","Habit name...",function(txt){
@@ -2643,7 +2672,7 @@ function updateClock(){
 setInterval(updateClock,1000);
 
 // NAVIGATION
-var M_TITLES={home:'Home',calendar:'Calendar',finance:'Finance',sections:'Sections',sports:'Sports'};
+var M_TITLES={home:'Home',calendar:'Calendar',daily:'Daily',finance:'Finance',sections:'Sections',sports:'Sports'};
 function mNav(tab){
   _mTab=tab;
   document.querySelectorAll('.m-page').forEach(function(p){p.classList.remove('active');});
@@ -2654,6 +2683,7 @@ function mNav(tab){
   var sub=document.getElementById('m-page-sub');if(sub)sub.textContent='';
   if(tab==='home')renderHome();
   else if(tab==='calendar')mRenderCal();
+  else if(tab==='daily')mRenderDaily();
   else if(tab==='finance')renderFinance();
   else if(tab==='sections')mRenderSec(_mSecTab);
   else if(tab==='sports')mRenderSports();
@@ -5491,7 +5521,7 @@ function shRenderFootball(filter){
       var isNext=!nextFound&&status==='upcoming';
       if(isNext) nextFound=true;
       var key=date+home+away+comp;
-      var fxClass='fx-card'+(status==='live'?' fx-live':isNext?' fx-next':'');
+      var fxClass='fx-card'+(status==='live'?' fx-live':isNext?' fx-next':isHighlight?' fx-highlight':'');
       var dt=shFmtDate(date);
       var compCls='fx-comp comp-'+(COMP_CLASS[comp]||'');
       var badge=status==='live'?'<span class="fx-badge live">● LIVE</span>':
@@ -5569,9 +5599,10 @@ function shRenderCricket(filter){
       var status=shStatus(date,time,dur);
       var isRR=t1==='RR'||t2==='RR';
       var isIndia=t1==='India'||t2==='India';
+      var isHighlight=isRR||isIndia;
       var isNext=!nextFound&&(status==='upcoming'||status==='tbc');
       if(isNext) nextFound=true;
-      var fxClass='fx-card'+(status==='live'?' fx-live':isNext?' fx-next':'');
+      var fxClass='fx-card'+(status==='live'?' fx-live':isNext?' fx-next':isHighlight?' fx-highlight':'');
       var dt=shFmtDate(date);
       var fmtCls=fmt==='IPL'?'comp-ipl':'comp-t20wc';
       var badge=status==='live'?'<span class="fx-badge live">&#9679; LIVE</span>':
@@ -6378,7 +6409,7 @@ function shRenderFootball(filter){
       var isNext=!nextFound&&status==='upcoming';
       if(isNext) nextFound=true;
       var key=date+home+away+comp;
-      var fxClass='fx-card'+(status==='live'?' fx-live':isNext?' fx-next':'');
+      var fxClass='fx-card'+(status==='live'?' fx-live':isNext?' fx-next':isHighlight?' fx-highlight':'');
       var dt=shFmtDate(date);
       var compCls='fx-comp comp-'+(COMP_CLASS[comp]||'');
       var badge=status==='live'?'<span class="fx-badge live">● LIVE</span>':
@@ -6619,29 +6650,35 @@ function shRenderMyWatchList(){
   var el=document.getElementById('sh-my-watch-list');
   if(!el)return;
   var list=shLoadMyWatch();
-  if(!list.length){ el.innerHTML='<div class="sh-loading">No matches saved yet — click Browse & Add.</div>'; return; }
+  if(!list.length){ el.innerHTML='<div style="padding:16px 0;color:var(--dim);font-size:13px;text-align:center">No matches saved yet — star a fixture to add it.</div>'; return; }
   list.sort(function(a,b){return a.date.localeCompare(b.date);});
-  // Horizontal scroll card layout
-  el.innerHTML='<div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch">'+
-  list.map(function(item,i){
+  var html='';
+  list.forEach(function(item,i){
     var dt=shFmtDate(item.date);
+    var mon=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][new Date(item.date+'T12:00:00Z').getUTCMonth()];
     var status=shStatus(item.date,item.time||'TBC',2.5);
-    var badgeHtml=status==='live'?'<span class="fx-badge live" style="font-size:9px">● LIVE</span>':
-              status==='done'?'<span class="fx-badge done" style="font-size:9px">Done</span>':
-              item.time&&item.time!=='TBC'?'<span class="fx-badge upcoming" style="font-size:9px">'+shCountdown(item.date,item.time)+'</span>':
-              '<span class="fx-badge tbc" style="font-size:9px">TBC</span>';
-    var sportEmoji=item.sport||'🏆';
-    return '<div style="flex:0 0 auto;width:180px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:6px;position:relative">'+
-      '<button onclick="shRemoveMyWatch('+i+')" style="position:absolute;top:6px;right:8px;background:none;border:none;cursor:pointer;color:var(--dim);font-size:14px;padding:0;line-height:1">×</button>'+
-      '<div style="font-size:10px;font-weight:700;color:var(--dim);font-family:var(--font-mono)">'+dt.day+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][new Date(item.date+'T12:00:00Z').getUTCMonth()]+'</div>'+
-      '<div style="font-size:13px;font-weight:700;color:var(--text);line-height:1.3;padding-right:16px">'+(item.match||(item.home+' vs '+item.away))+'</div>'+
-      '<div style="font-size:10px;color:var(--dim)">'+(item.meta||(item.comp+(item.md?' · '+item.md:'')))+'</div>'+
-      badgeHtml+
+    var isPast=status==='done';
+    var badgeHtml=status==='live'?'<span class="fx-badge live">● LIVE</span>':
+              isPast?'<span class="fx-badge done">Done</span>':
+              item.time&&item.time!=='TBC'?'<span class="fx-badge upcoming">'+shCountdown(item.date,item.time)+'</span>':
+              '<span class="fx-badge tbc">TBC</span>';
+    var matchName=item.match||(item.home+' vs '+item.away);
+    var meta=item.meta||(item.comp+(item.md?' · '+item.md:''));
+    html+='<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);opacity:'+(isPast?'0.5':'1')+'">'+
+      '<div style="flex-shrink:0;text-align:center;min-width:36px">'+
+        '<div style="font-size:16px;font-weight:800;font-family:var(--font-mono);color:var(--text);line-height:1">'+dt.day+'</div>'+
+        '<div style="font-size:10px;color:var(--dim);font-weight:700">'+mon+'</div>'+
+      '</div>'+
+      '<div style="flex:1;min-width:0">'+
+        '<div style="font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(matchName)+'</div>'+
+        '<div style="font-size:11px;color:var(--dim);margin-top:2px">'+esc(meta)+(item.time&&item.time!=='TBC'?' · '+item.time:' · TBC')+'</div>'+
+        '<div style="margin-top:4px">'+badgeHtml+'</div>'+
+      '</div>'+
+      '<button onclick="shRemoveMyWatch('+i+');mRenderMySubTab();" style="background:none;border:none;cursor:pointer;color:var(--dim);font-size:18px;padding:4px;flex-shrink:0">&times;</button>'+
     '</div>';
-  }).join('')+
-  '</div>';
+  });
+  el.innerHTML=html;
 }
-
 function shRemoveMyWatch(i){
   var list=shLoadMyWatch();
   var removed=list[i];
@@ -6795,10 +6832,10 @@ function shRenderPlayList(){
   ];
   el.innerHTML='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">'+
   sports.map(function(s){
-    return '<div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:14px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;position:relative">'+
+    return '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;position:relative">'+
       '<div style="font-size:30px">'+s.icon+'</div>'+
-      '<div style="font-size:13px;font-weight:700;color:#fff">'+s.name+'</div>'+
-      '<div style="font-size:11px;color:rgba(255,255,255,0.4)">'+s.sub+'</div>'+
+      '<div style="font-size:13px;font-weight:700;color:var(--text)">'+s.name+'</div>'+
+      '<div style="font-size:11px;color:var(--dim)">'+s.sub+'</div>'+
     '</div>';
   }).join('')+
   '</div>';
@@ -7127,22 +7164,79 @@ function mRenderMySubTab(){
     el.innerHTML = '<div id="sh-my-watch-list"></div>';
     shRenderMyWatchList();
   } else {
-    // I Play — render sport sessions log
+    // I Play — render sport sessions log with add form
     var sessions = (_shState.sessions||[]).slice().reverse();
-    if(!sessions.length){
-      el.innerHTML = '<div class="m-card" style="color:var(--dim);font-size:13px">No sessions logged yet.<br>Log sessions on desktop My Sports → I Play.</div>';
-      return;
+    var addForm='<div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:12px">'+
+      '<div style="font-size:12px;font-weight:800;color:var(--dim);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Log Session</div>'+
+      '<div style="display:flex;flex-direction:column;gap:8px">'+
+      '<select class="sel" id="mp-sport-sel" style="font-size:13px"><option value="Squash">Squash</option><option value="Tennis">Tennis</option><option value="Football">Football</option><option value="Gym">Gym</option><option value="Running">Running</option><option value="Other">Other</option></select>'+
+      '<div style="display:flex;gap:8px">'+
+        '<input class="inp" id="mp-dur" type="number" placeholder="Mins" style="width:80px;font-size:13px">'+
+        '<input class="inp" id="mp-sdate" type="date" value="'+isoToday()+'" style="flex:1;font-size:13px">'+
+      '</div>'+
+      '<input class="inp" id="mp-note" placeholder="Note (optional)" style="font-size:13px">'+
+      '<button class="btn" onclick="mpLogSession()" style="width:100%;font-size:13px">+ Log</button>'+
+      '</div></div>';
+    var html=addForm;
+    if(sessions.length){
+      sessions.slice(0,15).forEach(function(s){
+        html+='<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)">'+
+          '<div style="flex:1;min-width:0">'+
+            '<div style="font-size:13px;font-weight:700;color:var(--text)">'+esc(s.sport||'')+'</div>'+
+            '<div style="font-size:11px;color:var(--dim);margin-top:2px">'+(s.date||'')+(s.duration?' · '+s.duration+' min':'')+(s.note?' · '+esc(s.note):'')+'</div>'+
+          '</div>'+
+        '</div>';
+      });
+    } else {
+      html+='<div style="padding:12px 0;color:var(--dim);font-size:13px;text-align:center">No sessions yet. Log your first one!</div>';
     }
-    var html = '';
-    sessions.slice(0,20).forEach(function(s){
-      html += '<div class="m-card" style="padding:10px 14px;margin-bottom:8px">'+
-        '<div style="font-size:13px;font-weight:700">'+esc(s.sport||'')+'</div>'+
-        '<div style="font-size:11px;color:var(--dim);margin-top:2px">'+
-          (s.date||'')+(s.duration?' · '+s.duration+' min':'')+(s.note?' · '+esc(s.note):'')+'</div>'+
-      '</div>';
-    });
-    el.innerHTML = html;
+    el.innerHTML=html;
   }
+}
+
+function mRenderDaily(){
+  var el=document.getElementById('md-habits-list');
+  var prog=document.getElementById('md-habit-prog');
+  if(!el)return;
+  var items=D.daily?D.daily.items||[]:[];
+  var checked=D.daily?D.daily.checked||{}:[];
+  var done=items.filter(function(i){return !!checked[i.id];}).length;
+  if(prog)prog.textContent=done+'/'+items.length;
+  if(!items.length){el.innerHTML='<div style="color:var(--dim);font-size:12px;padding:8px 0">Add your first habit below</div>';return;}
+  var html='';
+  items.forEach(function(it){
+    var isdone=!!checked[it.id];
+    html+='<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">'+
+      '<div style="width:26px;height:26px;border-radius:50%;border:2px solid '+(isdone?'var(--accent)':'var(--border)')+';background:'+(isdone?'var(--accent)':'transparent')+';display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:14px;color:#fff" onclick="toggleDaily('+it.id+')">'+(isdone?'&#10003;':'')+'</div>'+
+      '<span style="font-size:18px;flex-shrink:0">'+(it.icon||'&#9889;')+'</span>'+
+      '<div style="flex:1;min-width:0">'+
+        '<div style="font-size:13px;font-weight:700;'+(isdone?'text-decoration:line-through;color:var(--dim)':'')+'">'+esc(it.name)+'</div>'+
+        (it.sub?'<div style="font-size:11px;color:var(--dim)">'+esc(it.sub)+'</div>':'')+
+      '</div>'+
+      ((it.streak||0)>0?'<span style="font-size:11px;font-weight:800;color:var(--accent);font-family:var(--font-mono)">&#128293;'+it.streak+'</span>':'')+
+      '<button onclick="deleteDailyItem('+it.id+')" style="background:none;border:none;cursor:pointer;color:var(--dim);font-size:16px;padding:0 2px;flex-shrink:0">&times;</button>'+
+    '</div>';
+  });
+  el.innerHTML=html;
+}
+function mdAddHabit(){
+  var inp=document.getElementById('md-habit-inp');
+  var name=(inp&&inp.value.trim())||'';if(!name)return;
+  if(!D.daily.items)D.daily.items=[];
+  var newId=Math.max(0,...(D.daily.items||[]).map(function(x){return x.id||0;}))+1;
+  D.daily.items.push({id:newId,name:name,sub:'',icon:'&#9889;',streak:0});
+  saveD();if(inp)inp.value='';mRenderDaily();
+}
+
+function mpLogSession(){
+  var sport=(document.getElementById('mp-sport-sel')||{}).value||'Squash';
+  var dur=parseInt((document.getElementById('mp-dur')||{}).value||'0')||0;
+  var date=(document.getElementById('mp-sdate')||{}).value||isoToday();
+  var note=((document.getElementById('mp-note')||{}).value||'').trim();
+  if(!_shState.sessions)_shState.sessions=[];
+  _shState.sessions.push({sport:sport,duration:dur||'',date:date,note:note,ts:Date.now()});
+  shSave();
+  mRenderMySubTab();
 }
 
 // INIT
@@ -7155,6 +7249,8 @@ var _mcd=document.getElementById('mc-date');if(_mcd)_mcd.value=isoToday();
 renderHome();
 
 </script>
+<script>
+
 
 /* ═══════════════════════════════════════════════════════════════
    FIREBASE REAL-TIME SYNC
@@ -7180,6 +7276,8 @@ renderHome();
     'siddhant_cal_car',
     'siddhant_cal_swatch',
     'siddhant_cal_splay',
+    'siddhant_sports_v3',
+    'siddhant_mywatch_v1',
     'siddhant_os_dark'
   ];
 
@@ -7279,7 +7377,7 @@ renderHome();
           // Only update if cloud version differs
           var local = localStorage.getItem(key);
           if (local !== data[key]) {
-            localStorage.setItem(key, data[key]);
+            _origSetItem(key, data[key]);
             updated = true;
           }
         }
@@ -7296,7 +7394,7 @@ renderHome();
       if (v) data[key] = v;
     });
     data['_lastUpdated'] = new Date().toISOString();
-    data['_device'] = navigator.userAgent.indexOf('Mobile') > -1 ? 'mobile' : 'desktop';
+    data['_device'] = 'sid_mobile';
     return setDoc('allKeys', data);
   }
 
@@ -7331,25 +7429,26 @@ renderHome();
         if (remoteUpdate && remoteUpdate !== _lastKnownUpdate) {
           _lastKnownUpdate = remoteUpdate;
           var remoteDevice = data['_device'];
-          var thisDevice = navigator.userAgent.indexOf('Mobile') > -1 ? 'mobile' : 'desktop';
+          var thisDevice = 'sid_mobile';
           // Only apply if the update came from a DIFFERENT device
           if (remoteDevice !== thisDevice) {
             syncStatus('syncing', 'Updating…');
             SYNC_KEYS.forEach(function(key){
-              if (data[key]) localStorage.setItem(key, data[key]);
+              if (data[key]) _origSetItem(key, data[key]);
             });
             // Re-render current page
+            loadD();
             if (typeof renderHome === 'function') try { renderHome(); } catch(e){}
+            if (typeof mRenderCal === 'function') try { mRenderCal(); } catch(e){}
             if (typeof calRender === 'function') try { calRender(); } catch(e){}
             if (typeof renderFinance === 'function') try {
-              var fp = document.getElementById('page-finance');
-              if (fp && fp.classList.contains('active')) { loadD(); renderFinance(); }
+              var fp = document.getElementById('mp-finance');
+              if (fp && fp.classList.contains('active')) renderFinance();
             } catch(e){}
-            // Mobile
-            if (typeof renderPage === 'function') try {
-              loadD();
-              var activeTab = document.querySelector('.tab-item.active');
-              if (activeTab) renderPage(activeTab.dataset.tab || 'home');
+            // Mobile — re-render active tab
+            if (typeof mNav === 'function') try {
+              var mTab = document.querySelector('.m-nav-btn.active');
+              if (mTab && mTab.dataset.page) mNav(mTab.dataset.page);
             } catch(e){}
             syncStatus('synced', 'Updated from other device');
           }
@@ -7406,6 +7505,9 @@ renderHome();
       if (updated) {
         // Cloud had newer data — reload D from localStorage
         if (typeof loadD === 'function') { loadD(); }
+        if (typeof renderHome === 'function') try { renderHome(); } catch(e){}
+        if (typeof mRenderCal === 'function') try { mRenderCal(); } catch(e){}
+        if (typeof renderFinance === 'function') try { var _mfp=document.getElementById('mp-finance'); if(_mfp&&_mfp.classList.contains('active')) renderFinance(); } catch(e){}
         syncStatus('synced', 'Loaded from cloud');
       } else {
         syncStatus('synced', 'Connected');
@@ -7445,6 +7547,7 @@ renderHome();
     setTimeout(init, 100);
   }
 })();
+
 
 </script>
 </body>

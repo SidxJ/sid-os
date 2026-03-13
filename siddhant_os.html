@@ -521,8 +521,9 @@ body.dark .dm-toggle:hover{background:rgba(255,255,255,0.12);color:var(--accent)
 .fx-card.fx-done::before{background:var(--border)}
 .fx-card.fx-next{border-color:var(--accent);background:rgba(var(--c1,124,58,237),0.05)}
 .fx-card.fx-next::before{background:var(--accent)}
-.fx-card.fx-highlight{border-left-color:var(--fx-accent,var(--accent));border-left-width:3px}
-.fx-card.fx-highlight::after{content:'';display:none}
+.fx-card.fx-highlight{border-color:var(--fx-accent,var(--accent));background:color-mix(in srgb, var(--fx-accent,var(--accent)) 6%, var(--card))}
+.fx-card.fx-highlight::before{width:4px;background:var(--fx-accent,var(--accent))}
+.fx-card.fx-highlight .fx-teams::after{content:'★';font-size:9px;color:var(--fx-accent,var(--accent));margin-left:6px;opacity:0.8}
 @keyframes fxpulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.1)}50%{box-shadow:0 0 0 6px rgba(239,68,68,0.0)}}
 
 .fx-date{text-align:center}
@@ -611,17 +612,21 @@ body.dark .dm-toggle:hover{background:rgba(255,255,255,0.12);color:var(--accent)
 .sh-wf{background:var(--bg2);border:1px solid var(--border);color:var(--text2);padding:3px 10px;border-radius:20px;font-size:11px;cursor:pointer;transition:all .15s}
 .sh-wf.active,.sh-wf:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
 /* Watch calendar items */
-.sh-wc-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08)}
+.sh-wc-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
 .sh-wc-item:last-child{border-bottom:none}
-.sh-wc-date{min-width:44px;text-align:center;background:rgba(255,255,255,0.08);border-radius:8px;padding:4px 6px}
-.sh-wc-date-d{font-size:15px;font-weight:700;color:#e5e7eb;line-height:1}
-.sh-wc-date-m{font-size:9px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:.5px}
+.sh-wc-date{min-width:44px;text-align:center;background:var(--bg2);border-radius:8px;padding:4px 6px;border:1px solid var(--border)}
+.sh-wc-date-d{font-size:15px;font-weight:700;color:var(--text);line-height:1}
+.sh-wc-date-m{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px}
 .sh-wc-body{flex:1;min-width:0}
-.sh-wc-match{font-size:12px;font-weight:700;color:#e5e7eb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sh-wc-meta{font-size:10px;color:rgba(255,255,255,0.45);margin-top:2px}
+.sh-wc-match{font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sh-wc-meta{font-size:10px;color:var(--dim);margin-top:2px}
 .sh-wc-sport{font-size:10px;padding:2px 8px;border-radius:10px;background:var(--bg2);color:var(--text2);white-space:nowrap;border:1px solid var(--border)}
-.sh-wc-live{color:#22c55e;font-weight:700}
-.sh-wc-soon{color:#f59e0b}
+.sh-wc-live{color:var(--green)!important;font-weight:700}
+.sh-wc-soon{color:var(--orange)!important}
+body.dark .sh-wc-date-d{color:#e5e7eb}
+body.dark .sh-wc-date-m{color:rgba(255,255,255,0.45)}
+body.dark .sh-wc-match{color:#e5e7eb}
+body.dark .sh-wc-meta{color:rgba(255,255,255,0.45)}
 
 /* Standings table */
 .sh-table{width:100%;border-collapse:collapse;font-size:12px}
@@ -655,10 +660,16 @@ body.dark .fx-badge.upcoming{background:rgba(255,255,255,0.06);border-color:rgba
 }
 
 /* Week grid: dark navy cards */
-#sh-play-cal-grid div{color:rgba(255,255,255,0.6)!important}
+#sh-play-cal-grid div{color:var(--text)}
+body.dark #sh-play-cal-grid div{color:rgba(255,255,255,0.7)!important}
 
-/* Play session form inputs in dark context */
+/* Play session form inputs */
 #shp-mysports input,#shp-mysports select{
+  background:var(--bg2);
+  border-color:var(--border);
+  color:var(--text);
+}
+body.dark #shp-mysports input,body.dark #shp-mysports select{
   background:rgba(255,255,255,0.07)!important;
   border-color:rgba(255,255,255,0.12)!important;
   color:#fff!important;
@@ -690,7 +701,7 @@ body.dark #shp-mysports .btn{background:#00c8ff;color:#0d1117;border:none}
 /* Comprehensive text visibility overrides for dark my-sports panel */
 /* My Sports uses page color-scheme */
 #shp-mysports .sh-wc-item{border-bottom-color:rgba(255,255,255,0.08)}
-body.dark #shp-mysports .sh-wc-date-d,body.dark #shp-mysports .sh-wc-match{color:#f1f5f9!important}
+/* removed duplicate */
 body.dark #shp-mysports .sh-wc-date-m,body.dark #shp-mysports .sh-wc-meta,#shp-mysports .sh-wc-sport:not(.sh-wc-live):not(.sh-wc-soon){color:rgba(255,255,255,0.5)!important}
 body.dark #shp-mysports .sh-wc-live{color:#4ade80!important;font-weight:700}
 body.dark #shp-mysports .sh-wc-soon{color:#60a5fa!important}
@@ -703,8 +714,8 @@ body.dark #shp-mysports .btn-ghost{background:rgba(255,255,255,0.07);border-colo
 
 /* My Sports week-day play boxes (big week view) */
 .sh-week-day-card{
-  background:rgba(255,255,255,0.04);
-  border:1px solid rgba(255,255,255,0.07);
+  background:var(--bg2);
+  border:1px solid var(--border);
   border-radius:14px;
   padding:14px 10px;
   min-height:100px;
@@ -713,11 +724,14 @@ body.dark #shp-mysports .btn-ghost{background:rgba(255,255,255,0.07);border-colo
   align-items:center;
   gap:6px;
 }
-.sh-week-day-card.today{border-color:#00c8ff;background:rgba(0,200,255,0.06)}
-.sh-week-day-lbl{font-size:9px;font-weight:700;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.5px}
-.sh-week-day-num{font-size:22px;font-weight:800;color:rgba(255,255,255,0.7)}
-.sh-week-day-card.today .sh-week-day-num{color:#00c8ff}
-.sh-week-day-sess{width:32px;height:32px;background:rgba(0,200,255,0.12);border:1px solid rgba(0,200,255,0.25);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;margin-top:2px}
+.sh-week-day-card.today{border-color:var(--accent);background:rgba(124,58,237,0.06)}
+.sh-week-day-lbl{font-size:9px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:0.5px}
+.sh-week-day-num{font-size:22px;font-weight:800;color:var(--text)}
+.sh-week-day-card.today .sh-week-day-num{color:var(--accent)}
+.sh-week-day-sess{width:32px;height:32px;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;margin-top:2px}
+body.dark .sh-week-day-card.today{border-color:#00c8ff;background:rgba(0,200,255,0.06)}
+body.dark .sh-week-day-card.today .sh-week-day-num{color:#00c8ff}
+body.dark .sh-week-day-sess{background:rgba(0,200,255,0.12);border-color:rgba(0,200,255,0.25)}
 
 </style>
 </head>
@@ -1305,18 +1319,18 @@ body.dark #shp-mysports .btn-ghost{background:rgba(255,255,255,0.07);border-colo
         <div class="card-hdr" style="margin-bottom:14px">
           <div>
             <span class="card-title" style="color:var(--text)">PLAYING THIS WEEK</span>
-            <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:4px" id="sh-week-range-lbl"></div>
+            <div style="font-size:11px;color:var(--dim);margin-top:4px" id="sh-week-range-lbl"></div>
           </div>
-          <button class="btn" style="background:#00c8ff;color:#0d1117;border:none;white-space:nowrap" onclick="shShowAddSessForm()">+ Add Session</button>
+          <button class="btn" style="white-space:nowrap" onclick="shShowAddSessForm()">+ Add Session</button>
         </div>
         <div id="sh-week-strip" style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px"></div>
       </div>
       <!-- Add session form (hidden) -->
-      <div class="card" id="sh-add-sess-card" style="display:none;background:var(--bg2);border-color:rgba(255,255,255,0.08)">
-        <div class="card-title" style="color:rgba(126,184,247,0.9);margin-bottom:12px">Schedule a Session</div>
+      <div class="card" id="sh-add-sess-card" style="display:none;background:var(--bg2);border-color:var(--border)">
+        <div class="card-title" style="margin-bottom:12px">Schedule a Session</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px">
           <div>
-            <label class="inp-lbl" style="color:rgba(255,255,255,0.4)">Sport</label>
+            <label class="inp-lbl">Sport</label>
             <select id="sh-sess-sport" class="inp" style="width:100%">
               <option value="">Select…</option>
               <option value="🎾 Squash">🎾 Squash</option>
@@ -1327,19 +1341,19 @@ body.dark #shp-mysports .btn-ghost{background:rgba(255,255,255,0.07);border-colo
               <option value="Other">Other</option>
             </select>
           </div>
-          <div><label class="inp-lbl" style="color:rgba(255,255,255,0.4)">Date</label><input id="sh-sess-date" class="inp" type="date" style="width:100%"></div>
-          <div><label class="inp-lbl" style="color:rgba(255,255,255,0.4)">Time</label><input id="sh-sess-time" class="inp" type="time" style="width:100%"></div>
+          <div><label class="inp-lbl">Date</label><input id="sh-sess-date" class="inp" type="date" style="width:100%"></div>
+          <div><label class="inp-lbl">Time</label><input id="sh-sess-time" class="inp" type="time" style="width:100%"></div>
         </div>
         <div style="display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:end">
-          <div><label class="inp-lbl" style="color:rgba(255,255,255,0.4)">Location</label><input id="sh-sess-loc" class="inp" style="width:100%" placeholder="e.g. FMS squash court"></div>
+          <div><label class="inp-lbl">Location</label><input id="sh-sess-loc" class="inp" style="width:100%" placeholder="e.g. FMS squash court"></div>
           <div>
-            <label class="inp-lbl" style="color:rgba(255,255,255,0.4)">Duration</label>
+            <label class="inp-lbl">Duration</label>
             <select id="sh-sess-dur" class="inp">
               <option value="30">30 min</option><option value="45">45 min</option>
               <option value="60" selected>1 hour</option><option value="90">1.5 hrs</option><option value="120">2 hrs</option>
             </select>
           </div>
-          <button class="btn" onclick="shAddSession();document.getElementById('sh-add-sess-card').style.display='none';shRenderWeekStrip();" style="height:38px;background:#00c8ff;color:#0d1117;border:none;white-space:nowrap">+ Add</button>
+          <button class="btn" onclick="shAddSession();document.getElementById('sh-add-sess-card').style.display='none';shRenderWeekStrip();" style="height:38px;white-space:nowrap">+ Add</button>
         </div>
       </div>
       <!-- My Sports grid -->
@@ -4804,7 +4818,7 @@ function shRenderFootball(filter){
       var isNext=!nextFound&&status==='upcoming';
       if(isNext) nextFound=true;
       var key=date+home+away+comp;
-      var fxClass='fx-card'+(status==='live'?' fx-live':isNext?' fx-next':'');
+      var fxClass='fx-card'+(status==='live'?' fx-live':isNext?' fx-next':isHighlight?' fx-highlight':'');
       var dt=shFmtDate(date);
       var compCls='fx-comp comp-'+(COMP_CLASS[comp]||'');
       var badge=status==='live'?'<span class="fx-badge live">● LIVE</span>':
@@ -4882,9 +4896,10 @@ function shRenderCricket(filter){
       var status=shStatus(date,time,dur);
       var isRR=t1==='RR'||t2==='RR';
       var isIndia=t1==='India'||t2==='India';
+      var isHighlight=isRR||isIndia;
       var isNext=!nextFound&&(status==='upcoming'||status==='tbc');
       if(isNext) nextFound=true;
-      var fxClass='fx-card'+(status==='live'?' fx-live':isNext?' fx-next':'');
+      var fxClass='fx-card'+(status==='live'?' fx-live':isNext?' fx-next':isHighlight?' fx-highlight':'');
       var dt=shFmtDate(date);
       var fmtCls=fmt==='IPL'?'comp-ipl':'comp-t20wc';
       var badge=status==='live'?'<span class="fx-badge live">&#9679; LIVE</span>':
@@ -5691,7 +5706,7 @@ function shRenderFootball(filter){
       var isNext=!nextFound&&status==='upcoming';
       if(isNext) nextFound=true;
       var key=date+home+away+comp;
-      var fxClass='fx-card'+(status==='live'?' fx-live':isNext?' fx-next':'');
+      var fxClass='fx-card'+(status==='live'?' fx-live':isNext?' fx-next':isHighlight?' fx-highlight':'');
       var dt=shFmtDate(date);
       var compCls='fx-comp comp-'+(COMP_CLASS[comp]||'');
       var badge=status==='live'?'<span class="fx-badge live">● LIVE</span>':
@@ -6108,10 +6123,10 @@ function shRenderPlayList(){
   ];
   el.innerHTML='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">'+
   sports.map(function(s){
-    return '<div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:14px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;position:relative">'+
+    return '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;position:relative">'+
       '<div style="font-size:30px">'+s.icon+'</div>'+
-      '<div style="font-size:13px;font-weight:700;color:#fff">'+s.name+'</div>'+
-      '<div style="font-size:11px;color:rgba(255,255,255,0.4)">'+s.sub+'</div>'+
+      '<div style="font-size:13px;font-weight:700;color:var(--text)">'+s.name+'</div>'+
+      '<div style="font-size:11px;color:var(--dim)">'+s.sub+'</div>'+
     '</div>';
   }).join('')+
   '</div>';
@@ -6540,7 +6555,7 @@ shInit();
           // Only update if cloud version differs
           var local = localStorage.getItem(key);
           if (local !== data[key]) {
-            localStorage.setItem(key, data[key]);
+            _origSetItem(key, data[key]);
             updated = true;
           }
         }
@@ -6557,7 +6572,7 @@ shInit();
       if (v) data[key] = v;
     });
     data['_lastUpdated'] = new Date().toISOString();
-    data['_device'] = navigator.userAgent.indexOf('Mobile') > -1 ? 'mobile' : 'desktop';
+    data['_device'] = 'sid_desktop';
     return setDoc('allKeys', data);
   }
 
@@ -6592,25 +6607,30 @@ shInit();
         if (remoteUpdate && remoteUpdate !== _lastKnownUpdate) {
           _lastKnownUpdate = remoteUpdate;
           var remoteDevice = data['_device'];
-          var thisDevice = navigator.userAgent.indexOf('Mobile') > -1 ? 'mobile' : 'desktop';
+          var thisDevice = 'sid_desktop';
           // Only apply if the update came from a DIFFERENT device
           if (remoteDevice !== thisDevice) {
             syncStatus('syncing', 'Updating…');
             SYNC_KEYS.forEach(function(key){
-              if (data[key]) localStorage.setItem(key, data[key]);
+              if (data[key]) _origSetItem(key, data[key]);
             });
             // Re-render current page
+            loadD();
             if (typeof renderHome === 'function') try { renderHome(); } catch(e){}
             if (typeof calRender === 'function') try { calRender(); } catch(e){}
+            if (typeof mRenderCal === 'function') try { mRenderCal(); } catch(e){}
             if (typeof renderFinance === 'function') try {
               var fp = document.getElementById('page-finance');
-              if (fp && fp.classList.contains('active')) { loadD(); renderFinance(); }
+              if (fp && fp.classList.contains('active')) renderFinance();
             } catch(e){}
-            // Mobile
-            if (typeof renderPage === 'function') try {
-              loadD();
-              var activeTab = document.querySelector('.tab-item.active');
-              if (activeTab) renderPage(activeTab.dataset.tab || 'home');
+            if (typeof renderDaily === 'function') try {
+              var dp = document.getElementById('page-daily');
+              if (dp && dp.classList.contains('active')) renderDaily();
+            } catch(e){}
+            // Mobile — re-render active tab
+            if (typeof mNav === 'function') try {
+              var mTab = document.querySelector('.m-nav-btn.active');
+              if (mTab && mTab.dataset.page) mNav(mTab.dataset.page);
             } catch(e){}
             syncStatus('synced', 'Updated from other device');
           }
@@ -6667,6 +6687,9 @@ shInit();
       if (updated) {
         // Cloud had newer data — reload D from localStorage
         if (typeof loadD === 'function') { loadD(); }
+        if (typeof renderHome === 'function') try { renderHome(); } catch(e){}
+        if (typeof renderFinance === 'function') try { var _fp=document.getElementById('page-finance')||document.getElementById('mp-finance'); if(_fp&&_fp.classList.contains('active')) renderFinance(); } catch(e){}
+        if (typeof renderDaily === 'function') try { var _dp=document.getElementById('page-daily'); if(_dp&&_dp.classList.contains('active')) renderDaily(); } catch(e){}
         syncStatus('synced', 'Loaded from cloud');
       } else {
         syncStatus('synced', 'Connected');
