@@ -6432,23 +6432,8 @@ shInit();
 </div>
 
 <script>
-
-/* ═══════════════════════════════════════════════════════════════
-   FIREBASE REAL-TIME SYNC
-   Syncs all sid.os data across devices via Firestore
-   Falls back to localStorage if offline
-═══════════════════════════════════════════════════════════════ */
 (function(){
-  var FB_CONFIG = {
-    apiKey: "AIzaSyCvprUlhuwljSUYYHQsiT_9RKgaNlwwi_8",
-    authDomain: "sid-os-be870.firebaseapp.com",
-    projectId: "sid-os-be870",
-    storageBucket: "sid-os-be870.firebasestorage.app",
-    messagingSenderId: "47612922004",
-    appId: "1:47612922004:web:ea30f1ac6a11bc251b4c81"
-  };
-
-  // All localStorage keys to sync
+  var API = 'https://firestore.googleapis.com/v1/projects/sid-os-be870/databases/(default)/documents/sidOS/allKeys?key=AIzaSyCvprUlhuwljSUYYHQsiT_9RKgaNlwwi_8';
   var SYNC_KEYS = [
     'siddhant_os_v4',
     'siddhant_os_cal_v1',
@@ -6459,14 +6444,13 @@ shInit();
     'siddhant_cal_splay',
     'siddhant_os_dark'
   ];
-
-  var db = null;
-  var _lastPushTime = 0;
+  var THIS_DEVICE = 'sid_desktop';
+  var _online = navigator.onLine;
+  var _pushing = false;
   var _pushTimer = null;
-  var _initialized = false;
-  var _online = false;
+  var _lastCloudTime = null;
 
-  // ── SYNC STATUS UI ─────────────────────────────────────────
+  // ── UI ─────────────────────────────────────────────────────
   function injectSyncUI() {
     var style = document.createElement('style');
     style.textContent = [
@@ -6495,252 +6479,125 @@ shInit();
     var pill = document.getElementById('sync-pill');
     if (!pill) return;
     pill.className = 'show ' + state;
-    if (state === 'syncing') {
-      pill.innerHTML = '<span id="sync-spinner">↻</span> ' + (msg || 'Syncing…');
-    } else if (state === 'synced') {
-      pill.innerHTML = '✓ ' + (msg || 'Synced');
-      setTimeout(function(){ pill.classList.remove('show'); }, 2000);
-    } else if (state === 'offline') {
-      pill.innerHTML = '⊘ Offline';
-    } else if (state === 'error') {
-      pill.innerHTML = '✕ ' + (msg || 'Sync error');
-      setTimeout(function(){ pill.classList.remove('show'); }, 4000);
-    }
+    pill.innerHTML = msg || state;
+    if (state === 'synced') setTimeout(function(){ pill.classList.remove('show'); }, 3000);
   }
 
-  // ── FIRESTORE HELPERS ──────────────────────────────────────
-  function getDoc(docId) {
-    return fetch(
-      'https://firestore.googleapis.com/v1/projects/' + FB_CONFIG.projectId +
-      '/databases/(default)/documents/sidOS/' + docId +
-      '?key=' + FB_CONFIG.apiKey
-    ).then(function(r){ return r.json(); });
+  // ── FIRESTORE ─────────────────────────────────────────────
+  function firestoreGet() {
+    return fetch(API).then(function(r){ return r.json(); });
   }
 
-  function setDoc(docId, data) {
-    // Build Firestore fields object
+  function firestoreSet(data) {
     var fields = {};
     Object.keys(data).forEach(function(k){
-      fields[k] = { stringValue: typeof data[k] === 'string' ? data[k] : JSON.stringify(data[k]) };
+      fields[k] = { stringValue: String(data[k]) };
     });
-    return fetch(
-      'https://firestore.googleapis.com/v1/projects/' + FB_CONFIG.projectId +
-      '/databases/(default)/documents/sidOS/' + docId +
-      '?key=' + FB_CONFIG.apiKey,
-      {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fields: fields })
-      }
-    ).then(function(r){ return r.json(); });
+    return fetch(API, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fields: fields })
+    }).then(function(r){ return r.json(); });
   }
 
-  function parseFirestoreDoc(doc) {
+  function parseDoc(doc) {
     if (!doc || !doc.fields) return null;
-    var result = {};
+    var out = {};
     Object.keys(doc.fields).forEach(function(k){
       var v = doc.fields[k];
-      if (v.stringValue !== undefined) result[k] = v.stringValue;
+      if (v.stringValue !== undefined) out[k] = v.stringValue;
     });
-    return result;
+    return out;
   }
 
-  // ── PULL FROM FIRESTORE → localStorage ────────────────────
-  function pullAll() {
-    return getDoc('allKeys').then(function(doc){
-      var data = parseFirestoreDoc(doc);
-      if (!data) return false; // no data yet in cloud
-      var updated = false;
-      SYNC_KEYS.forEach(function(key){
-        if (data[key] !== undefined && data[key] !== null) {
-          // Only update if cloud version differs
-          var local = localStorage.getItem(key);
-          if (local !== data[key]) {
-            _origSetItem(key, data[key]);
-            updated = true;
-          }
-        }
-      });
-      return updated;
-    }).catch(function(){ return false; });
-  }
-
-  // ── PUSH localStorage → Firestore ─────────────────────────
-  function pushAll() {
-    var data = {};
-    SYNC_KEYS.forEach(function(key){
-      var v = localStorage.getItem(key);
-      if (v) data[key] = v;
+  // ── PUSH: send localStorage → Firestore ───────────────────
+  function doPush() {
+    if (!_online || _pushing) return Promise.resolve();
+    _pushing = true;
+    syncStatus('syncing', '↑ Saving…');
+    var data = { _device: THIS_DEVICE, _lastUpdated: new Date().toISOString() };
+    SYNC_KEYS.forEach(function(k){
+      var v = localStorage.getItem(k);
+      if (v) data[k] = v;
     });
-    data['_lastUpdated'] = new Date().toISOString();
-    data['_device'] = 'sid_desktop';
-    return setDoc('allKeys', data);
+    return firestoreSet(data).then(function(){
+      _pushing = false;
+      syncStatus('synced', '✓ Saved');
+    }).catch(function(){
+      _pushing = false;
+      syncStatus('error', '✗ Save failed');
+    });
   }
 
-  // ── DEBOUNCED PUSH (prevents hammering on rapid saves) ────
+  // Debounced push — called on every save
   function schedulePush() {
     if (_pushTimer) clearTimeout(_pushTimer);
-    _pushTimer = setTimeout(function(){
-      if (!_online) return;
-      syncStatus('syncing', 'Saving…');
-      pushAll().then(function(){
-        syncStatus('synced', 'Saved');
-        _lastPushTime = Date.now();
-      }).catch(function(){
-        syncStatus('error', 'Save failed');
-      });
-    }, 800); // 800ms debounce
+    _pushTimer = setTimeout(doPush, 1200);
   }
 
-  // ── POLL FOR REMOTE CHANGES ───────────────────────────────
-  // Since we're using the REST API (no SDK), we poll every 15s
-  // to pick up changes from other devices
-  var _lastKnownUpdate = null;
-  function startPolling() {
-    setInterval(function(){
-      if (!_online) return;
-      // Don't pull if we just pushed (would overwrite our own write)
-      if (Date.now() - _lastPushTime < 5000) return;
-      getDoc('allKeys').then(function(doc){
-        var data = parseFirestoreDoc(doc);
-        if (!data) return;
-        var remoteUpdate = data['_lastUpdated'];
-        if (remoteUpdate && remoteUpdate !== _lastKnownUpdate) {
-          _lastKnownUpdate = remoteUpdate;
-          var remoteDevice = data['_device'];
-          var thisDevice = 'sid_desktop';
-          // Only apply if the update came from a DIFFERENT device
-          if (remoteDevice !== thisDevice) {
-            syncStatus('syncing', 'Updating…');
-            SYNC_KEYS.forEach(function(key){
-              if (data[key]) _origSetItem(key, data[key]);
-            });
-            // Re-render current page
-            loadD();
-            if (typeof renderHome === 'function') try { renderHome(); } catch(e){}
-            if (typeof calRender === 'function') try { calRender(); } catch(e){}
-            if (typeof mRenderCal === 'function') try { mRenderCal(); } catch(e){}
-            if (typeof renderFinance === 'function') try {
-              var fp = document.getElementById('page-finance');
-              if (fp && fp.classList.contains('active')) renderFinance();
-            } catch(e){}
-            if (typeof renderDaily === 'function') try {
-              var dp = document.getElementById('page-daily');
-              if (dp && dp.classList.contains('active')) renderDaily();
-            } catch(e){}
-            // Mobile — re-render active tab
-            if (typeof mNav === 'function') try {
-              var mTab = document.querySelector('.m-nav-btn.active');
-              if (mTab && mTab.dataset.page) mNav(mTab.dataset.page);
-            } catch(e){}
-            syncStatus('synced', 'Updated from other device');
-          }
+  // ── PULL: Firestore → localStorage → re-render ────────────
+  function doPull() {
+    if (!_online) return;
+    return firestoreGet().then(function(doc){
+      var data = parseDoc(doc);
+      if (!data) return;
+      var remoteTime = data['_lastUpdated'];
+      var remoteDevice = data['_device'];
+      // Only apply if cloud has data from the OTHER device
+      if (remoteDevice === THIS_DEVICE) return;
+      // Only apply if it's newer than what we last saw
+      if (remoteTime && remoteTime === _lastCloudTime) return;
+      _lastCloudTime = remoteTime;
+      // Write to localStorage
+      var changed = false;
+      SYNC_KEYS.forEach(function(k){
+        if (data[k]) {
+          localStorage.setItem(k, data[k]);
+          changed = true;
         }
-      }).catch(function(){});
-    }, 15000); // poll every 15 seconds
+      });
+      if (!changed) return;
+      syncStatus('syncing', '↓ Updating…');
+      // Reload data and re-render
+      if (typeof loadD === 'function') loadD();
+      reRenderAll();
+      syncStatus('synced', '✓ Updated from ' + (remoteDevice || 'other device'));
+    }).catch(function(){});
+  }
+
+  function reRenderAll() {
+    try { if (typeof renderHome === 'function') renderHome(); } catch(e){}
+    try { if (typeof calRender === 'function') calRender(); } catch(e){}
+    try { if (typeof renderFinance === 'function') renderFinance(); } catch(e){}
+    try { if (typeof renderDaily === 'function') renderDaily(); } catch(e){}
+    try {
+      if (typeof mNav === 'function') {
+        var t = document.querySelector('.m-nav-btn.active');
+        if (t && t.dataset.page) mNav(t.dataset.page);
+      }
+    } catch(e){}
   }
 
   // ── INTERCEPT SAVES ───────────────────────────────────────
-  // Override localStorage.setItem to auto-push on every save
-  var _origSetItem = localStorage.setItem.bind(localStorage);
+  var _orig = localStorage.setItem.bind(localStorage);
   localStorage.setItem = function(key, value) {
-    _origSetItem(key, value);
-    // Only push for our known keys
-    var isSidKey = SYNC_KEYS.indexOf(key) > -1;
-    if (isSidKey && _online) {
-      schedulePush();
-    }
+    _orig(key, value);
+    if (SYNC_KEYS.indexOf(key) > -1 && _online) schedulePush();
   };
 
-  // ── INIT ──────────────────────────────────────────────────
-  function init() {
-    injectSyncUI();
-
-    // Check connectivity
-    if (!navigator.onLine) {
-      _online = false;
-      syncStatus('offline');
-      window.addEventListener('online', function(){
-        _online = true;
-        syncStatus('syncing', 'Reconnecting…');
-        pullAll().then(function(updated){
-          if (updated) {
-            if (typeof loadD === 'function') loadD();
-            if (typeof renderHome === 'function') try { renderHome(); } catch(e){}
-          }
-          syncStatus('synced', 'Back online');
-          startPolling();
-        });
-      });
-      window.addEventListener('offline', function(){
-        _online = false;
-        syncStatus('offline');
-      });
-      return;
-    }
-
-    _online = true;
-    syncStatus('syncing', 'Connecting…');
-
-    // Pull cloud data first, then init app
-    pullAll().then(function(updated){
-      _lastKnownUpdate = new Date().toISOString();
-      if (updated) {
-        // Cloud had newer data — reload D from localStorage
-        if (typeof loadD === 'function') { loadD(); }
-        if (typeof renderHome === 'function') try { renderHome(); } catch(e){}
-        if (typeof renderFinance === 'function') try { var _fp=document.getElementById('page-finance')||document.getElementById('mp-finance'); if(_fp&&_fp.classList.contains('active')) renderFinance(); } catch(e){}
-        if (typeof renderDaily === 'function') try { var _dp=document.getElementById('page-daily'); if(_dp&&_dp.classList.contains('active')) renderDaily(); } catch(e){}
-        syncStatus('synced', 'Loaded from cloud');
-      } else {
-        syncStatus('synced', 'Connected');
-        // Don't push on load — only pull. Prevents overwriting cloud with stale local data.
-      }
-      startPolling();
-    }).catch(function(){
-      syncStatus('error', 'No connection');
-      _online = false;
-    });
-
-    window.addEventListener('online', function(){ _online = true; syncStatus('synced', 'Back online'); });
-    window.addEventListener('offline', function(){ _online = false; syncStatus('offline'); });
-  }
-
-
-  // ── SYNC NOW (exposed globally) ───────────────────────────
-  window.syncNow = function() {
-    var btn = document.getElementById('sync-now-btn');
-    if (btn) { btn.style.opacity = '0.4'; btn.style.pointerEvents = 'none'; }
-    syncStatus('syncing', 'Pushing all data…');
-    pushAll().then(function(){
-      _lastPushTime = Date.now();
-      syncStatus('synced', 'All data saved ✓');
-      if (btn) { btn.style.opacity = '1'; btn.style.pointerEvents = ''; }
-    }).catch(function(e){
-      syncStatus('error', 'Push failed');
-      if (btn) { btn.style.opacity = '1'; btn.style.pointerEvents = ''; }
-    });
-  };
-
-  // ── FORCE PULL FROM CLOUD ─────────────────────────────────
+  // ── FORCE PULL (global, callable from button/console) ─────
   window.pullFromCloud = function() {
     var btn = document.getElementById('pull-cloud-btn');
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Pulling…'; }
-    syncStatus('syncing', 'Pulling from cloud…');
-    getDoc('allKeys').then(function(doc){
-      var data = parseFirestoreDoc(doc);
+    syncStatus('syncing', '↓ Pulling from cloud…');
+    firestoreGet().then(function(doc){
+      var data = parseDoc(doc);
       if (!data) { syncStatus('error', 'No cloud data'); if(btn){btn.disabled=false;btn.textContent='☁ Restore from Cloud';} return; }
-      SYNC_KEYS.forEach(function(key){
-        if (data[key]) _origSetItem(key, data[key]);
-      });
+      SYNC_KEYS.forEach(function(k){ if (data[k]) _orig(k, data[k]); });
       if (typeof loadD === 'function') loadD();
-      if (typeof renderHome === 'function') try { renderHome(); } catch(e){}
-      if (typeof mNav === 'function') try { var t=document.querySelector('.m-nav-btn.active'); if(t&&t.dataset.page) mNav(t.dataset.page); } catch(e){}
-      if (typeof calRender === 'function') try { calRender(); } catch(e){}
-      if (typeof renderFinance === 'function') try { renderFinance(); } catch(e){}
-      if (typeof renderDaily === 'function') try { renderDaily(); } catch(e){}
-      _lastKnownUpdate = data['_lastUpdated'] || null;
-      syncStatus('synced', 'Restored from cloud ✓');
+      reRenderAll();
+      _lastCloudTime = data['_lastUpdated'] || null;
+      syncStatus('synced', '✓ Restored from cloud');
       if (btn) { btn.disabled=false; btn.textContent='☁ Restore from Cloud'; }
     }).catch(function(){
       syncStatus('error', 'Pull failed');
@@ -6748,7 +6605,47 @@ shInit();
     });
   };
 
-  // Run after DOM is ready
+  // ── SYNC NOW (push then pull) ─────────────────────────────
+  window.syncNow = function() {
+    var btn = document.getElementById('sync-now-btn');
+    if (btn) { btn.style.opacity='0.4'; btn.style.pointerEvents='none'; }
+    syncStatus('syncing', '↑ Pushing…');
+    doPush().then(function(){
+      if (btn) { btn.style.opacity='1'; btn.style.pointerEvents=''; }
+    });
+  };
+
+  // ── INIT ─────────────────────────────────────────────────
+  function init() {
+    injectSyncUI();
+    window.addEventListener('online',  function(){ _online=true;  syncStatus('synced','Back online'); doPull(); });
+    window.addEventListener('offline', function(){ _online=false; syncStatus('offline','Offline'); });
+    if (!_online) { syncStatus('offline','Offline'); return; }
+    syncStatus('syncing', 'Connecting…');
+    // On load: pull first, then push our data
+    firestoreGet().then(function(doc){
+      var data = parseDoc(doc);
+      if (data) {
+        // Always write cloud data to localStorage on first load
+        SYNC_KEYS.forEach(function(k){ if (data[k]) _orig(k, data[k]); });
+        if (typeof loadD === 'function') loadD();
+        reRenderAll();
+        _lastCloudTime = data['_lastUpdated'] || null;
+        syncStatus('synced', '✓ Loaded from cloud');
+      } else {
+        syncStatus('synced', 'Connected');
+      }
+      // Push our local data to cloud (ensures desktop data is always in Firebase)
+      setTimeout(doPush, 2000);
+      // Poll every 10s
+      setInterval(doPull, 10000);
+    }).catch(function(){
+      syncStatus('error', 'Connection failed');
+      _online = false;
+      setInterval(doPull, 10000);
+    });
+  }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
