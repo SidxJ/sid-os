@@ -321,6 +321,12 @@ body.dark .dm-toggle:hover{background:rgba(255,255,255,0.12);color:var(--accent)
 .daily-streak{font-size:10px;color:var(--orange);font-family:var(--font-mono);font-weight:600}
 .daily-del{position:absolute;top:5px;right:5px;background:none;border:none;color:var(--dim);cursor:pointer;font-size:12px;opacity:0;transition:opacity 0.15s;padding:0}
 .daily-item:hover .daily-del{opacity:1}
+/* Mood check-in */
+.energy-btn{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:15px;font-weight:700;cursor:pointer;color:var(--text);min-width:52px;text-align:center;transition:all .15s;font-family:var(--font-mono);line-height:1.4}
+.energy-btn:hover,.energy-btn.active{background:var(--purple);border-color:var(--purple);color:#fff}
+.energy-btn.active span{color:rgba(255,255,255,0.7)!important}
+.mood-emoji-btn{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:8px 10px;font-size:20px;cursor:pointer;transition:all .15s;line-height:1}
+.mood-emoji-btn:hover,.mood-emoji-btn.active{background:var(--purplelt);border-color:var(--purple);transform:scale(1.15)}
 
 /* NOTES */
 .notes-panel{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-top:10px}
@@ -345,6 +351,8 @@ body.dark .dm-toggle:hover{background:rgba(255,255,255,0.12);color:var(--accent)
 .exp-del{background:none;border:none;color:var(--dim);cursor:pointer;font-size:14px;padding:0;margin-left:auto;opacity:0;transition:opacity 0.15s}
 .exp-row:hover .exp-del{opacity:1}
 .exp-del:hover{color:var(--red)}
+.fin-bill-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg2);border-radius:8px;margin-bottom:6px;border:1px solid var(--border);transition:all 0.15s}
+.fin-bill-row:hover{border-color:var(--border2);background:var(--card)}
 .cat-row{margin-bottom:8px;background:var(--bg2);border-radius:10px;padding:11px 14px;border:1px solid var(--border)}
 
 /* CHART CANVAS */
@@ -1001,6 +1009,7 @@ body.dark .sh-week-day-sess{background:rgba(0,200,255,0.12);border-color:rgba(0,
     <span onclick="calSrcFilter('per',this)" class="cal-src-pill" data-src="per" style="cursor:pointer;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;font-family:var(--font-mono);border:1px solid #059669;color:#059669;background:#05966911">🙋 Personal</span>
     <span onclick="calSrcFilter('car',this)" class="cal-src-pill" data-src="car" style="cursor:pointer;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;font-family:var(--font-mono);border:1px solid #d97706;color:#d97706;background:#d9770611">💼 Career</span>
     <span onclick="calSrcFilter('health',this)" class="cal-src-pill" data-src="health" style="cursor:pointer;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;font-family:var(--font-mono);border:1px solid #e11d48;color:#e11d48;background:#e11d4811">🏥 Health</span>
+    <span onclick="calSrcFilter('fin',this)" class="cal-src-pill" data-src="fin" style="cursor:pointer;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;font-family:var(--font-mono);border:1px solid #0e7490;color:#0e7490;background:#0e749011">💳 Finance</span>
     <span onclick="calSrcFilter('swatch',this)" class="cal-src-pill" data-src="swatch" style="cursor:pointer;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;font-family:var(--font-mono);border:1px solid #dc2626;color:#dc2626;background:#dc262611">👁 Watch</span>
     <span onclick="calSrcFilter('splay',this)" class="cal-src-pill" data-src="splay" style="cursor:pointer;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;font-family:var(--font-mono);border:1px solid #0891b2;color:#0891b2;background:#0891b211">🏃 Play</span>
   </div>
@@ -1023,6 +1032,52 @@ body.dark .sh-week-day-sess{background:rgba(0,200,255,0.12);border-color:rgba(0,
 <!-- DAILY TRACKER -->
 <div id="page-daily" class="page">
   <div class="page-hdr"><div><div class="page-title">Daily Tracker</div><div class="page-sub">Resets every midnight. Streaks build on consecutive days.</div></div><button class="btn" onclick="addDailyItem()">+ Add Habit</button></div>
+
+  <!-- Morning Check-In -->
+  <div class="card" id="mood-checkin-card" style="border-top:3px solid var(--purple)">
+    <div class="card-hdr" style="margin-bottom:14px">
+      <span class="card-title">Morning Check-In</span>
+      <span id="mood-done-badge" style="display:none;font-size:10px;background:var(--purplelt);color:var(--purple);border-radius:8px;padding:3px 10px;font-weight:700;font-family:var(--font-mono)">✓ Logged</span>
+    </div>
+    <div id="mood-input-area">
+      <div style="margin-bottom:14px">
+        <div style="font-size:11px;color:var(--dim);font-family:var(--font-mono);margin-bottom:8px;text-transform:uppercase;letter-spacing:.8px">Energy Level</div>
+        <div style="display:flex;gap:8px" id="energy-btns">
+          <button class="energy-btn" data-e="1" onclick="moodSelectEnergy(1,this)">1<br><span style="font-size:9px;color:var(--dim)">drained</span></button>
+          <button class="energy-btn" data-e="2" onclick="moodSelectEnergy(2,this)">2<br><span style="font-size:9px;color:var(--dim)">low</span></button>
+          <button class="energy-btn" data-e="3" onclick="moodSelectEnergy(3,this)">3<br><span style="font-size:9px;color:var(--dim)">okay</span></button>
+          <button class="energy-btn" data-e="4" onclick="moodSelectEnergy(4,this)">4<br><span style="font-size:9px;color:var(--dim)">good</span></button>
+          <button class="energy-btn" data-e="5" onclick="moodSelectEnergy(5,this)">5<br><span style="font-size:9px;color:var(--dim)">🔥</span></button>
+        </div>
+      </div>
+      <div style="margin-bottom:14px">
+        <div style="font-size:11px;color:var(--dim);font-family:var(--font-mono);margin-bottom:8px;text-transform:uppercase;letter-spacing:.8px">Mood</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap" id="mood-btns">
+          <button class="mood-emoji-btn" data-m="😊" onclick="moodSelectMood('😊',this)">😊</button>
+          <button class="mood-emoji-btn" data-m="😐" onclick="moodSelectMood('😐',this)">😐</button>
+          <button class="mood-emoji-btn" data-m="😔" onclick="moodSelectMood('😔',this)">😔</button>
+          <button class="mood-emoji-btn" data-m="😤" onclick="moodSelectMood('😤',this)">😤</button>
+          <button class="mood-emoji-btn" data-m="😴" onclick="moodSelectMood('😴',this)">😴</button>
+          <button class="mood-emoji-btn" data-m="🤩" onclick="moodSelectMood('🤩',this)">🤩</button>
+          <button class="mood-emoji-btn" data-m="😰" onclick="moodSelectMood('😰',this)">😰</button>
+          <button class="mood-emoji-btn" data-m="🧘" onclick="moodSelectMood('🧘',this)">🧘</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <input class="inp" id="mood-word-inp" placeholder="One word (optional)… e.g. focused, restless" style="flex:1;font-size:12px">
+        <button class="btn" onclick="moodLogToday()" style="white-space:nowrap">Log Check-In</button>
+      </div>
+    </div>
+    <div id="mood-logged-view" style="display:none">
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+        <div style="text-align:center"><div style="font-size:28px" id="ml-emoji">😊</div><div style="font-size:10px;color:var(--dim);margin-top:2px">mood</div></div>
+        <div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--purple);font-family:var(--font-display)" id="ml-energy">-</div><div style="font-size:10px;color:var(--dim);margin-top:2px">energy</div></div>
+        <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--text2);font-style:italic" id="ml-word"></div></div>
+        <button onclick="moodReset()" style="font-size:10px;color:var(--dim);background:none;border:none;cursor:pointer;font-family:var(--font-mono)">edit</button>
+      </div>
+    </div>
+  </div>
+
   <div class="card card-accent">
     <div class="card-hdr"><span class="card-title">Today's Habits</span><span id="daily-pct-badge" class="badge" style="background:var(--greenlt);color:var(--green)">0%</span></div>
     <div class="pbar" style="height:7px;margin-bottom:16px"><div class="pbar-fill" id="daily-pbar" style="width:0%;background:linear-gradient(90deg,var(--green),var(--teal))"></div></div>
@@ -1628,7 +1683,7 @@ var DEF={
     {id:3,name:"<4 hrs Screen Time",sub:"phone usage",icon:"📵",streak:0},
     {id:4,name:"8 hrs Sleep",sub:"recovery",icon:"😴",streak:0},
     {id:5,name:"No Junk Food",sub:"diet goal",icon:"🥗",streak:0}
-  ],checked:{},lastDate:""},
+  ],checked:{},lastDate:"",moodLog:{}},
   personal:{sections:[
     {id:1,type:"goals",title:"Goals & Deadlines",items:[
       {id:1,text:"Build a consistent daily routine",done:false,deadline:"2026-04-01",priority:"high"},
@@ -1702,6 +1757,7 @@ function loadD(){
   try{var s=localStorage.getItem(SK);D=s?JSON.parse(s):JSON.parse(JSON.stringify(DEF))}
   catch(e){D=JSON.parse(JSON.stringify(DEF))}
   if(!D.daily)D.daily=JSON.parse(JSON.stringify(DEF.daily));
+  if(!D.daily.moodLog)D.daily.moodLog={};
   if(!D.notes)D.notes={};
   if(!D.fields)D.fields={};
   if(!D.finance.months){var old=D.finance;D.finance={activeMonth:"Mar 2026",months:{"Mar 2026":{budget:old.monthlyBudget||15000,categories:old.categories||[],expenses:old.expenses||[]}}};}
@@ -2648,6 +2704,7 @@ function renderDaily(){
     var isT=i===ti;
     return '<div style="background:var(--bg2);border:1px solid '+(isT?"var(--accent)":"var(--border)")+';border-radius:8px;padding:10px 12px;min-width:70px;text-align:center">'+'<div style="font-size:10px;color:var(--dim);font-family:var(--font-mono);margin-bottom:4px">'+d+'</div>'+(isT?'<div style="font-size:13px;font-weight:700;color:var(--accent);font-family:var(--font-mono)">'+done+'/'+items.length+'</div>':'<div style="font-size:13px;color:var(--dim)">—</div>')+'</div>';
   }).join("")+'</div>';
+  renderMoodCheckin();
 }
 function toggleDaily(id){D.daily.checked[id]=!D.daily.checked[id];saveD();renderDaily();renderHome();}
 function deleteDailyItem(id){D.daily.items=D.daily.items.filter(function(i){return i.id!==id});delete D.daily.checked[id];saveD();renderDaily();}
@@ -2658,6 +2715,65 @@ function addDailyItem(){
     var icon=prompt("Emoji:","⭐")||"⭐";
     D.daily.items.push({id:Date.now(),name:txt.trim(),sub:sub,icon:icon,streak:0});saveD();renderDaily();renderHome();
   });
+}
+
+// ── MOOD CHECK-IN ─────────────────────────────────────────────────────────
+var _moodEnergy = 0, _moodMood = '';
+
+function moodSelectEnergy(val, btn) {
+  _moodEnergy = val;
+  document.querySelectorAll('.energy-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+function moodSelectMood(emoji, btn) {
+  _moodMood = emoji;
+  document.querySelectorAll('.mood-emoji-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+function moodLogToday() {
+  if (!_moodEnergy) { alert('Pick an energy level (1-5).'); return; }
+  if (!_moodMood)   { alert('Pick a mood emoji.');           return; }
+  var word = (document.getElementById('mood-word-inp').value || '').trim();
+  var key  = isoToday();
+  D.daily.moodLog[key] = { energy: _moodEnergy, mood: _moodMood, word: word, ts: Date.now() };
+  saveD();
+  renderMoodCheckin();
+}
+
+function moodReset() {
+  var key = isoToday();
+  delete D.daily.moodLog[key];
+  saveD();
+  _moodEnergy = 0; _moodMood = '';
+  renderMoodCheckin();
+}
+
+function renderMoodCheckin() {
+  var key    = isoToday();
+  var logged = D.daily.moodLog && D.daily.moodLog[key];
+  var inputEl  = document.getElementById('mood-input-area');
+  var loggedEl = document.getElementById('mood-logged-view');
+  var badge    = document.getElementById('mood-done-badge');
+  if (!inputEl) return;
+  if (logged) {
+    inputEl.style.display  = 'none';
+    loggedEl.style.display = 'block';
+    badge.style.display    = 'inline-block';
+    document.getElementById('ml-emoji').textContent  = logged.mood;
+    document.getElementById('ml-energy').textContent = logged.energy + '/5';
+    document.getElementById('ml-word').textContent   = logged.word ? '"' + logged.word + '"' : '';
+  } else {
+    inputEl.style.display  = 'block';
+    loggedEl.style.display = 'none';
+    badge.style.display    = 'none';
+    // restore selections if any
+    _moodEnergy = 0; _moodMood = '';
+    document.querySelectorAll('.energy-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.querySelectorAll('.mood-emoji-btn').forEach(function(b){ b.classList.remove('active'); });
+    if (document.getElementById('mood-word-inp')) document.getElementById('mood-word-inp').value = '';
+  }
 }
 
 // ── SECTIONS SYSTEM ──────────────────────────────────────────────────────
@@ -2703,6 +2819,166 @@ function calDelHealthEvent(id){
   setTimeout(function(){var el=document.getElementById('mc-health-wrap');if(el){el.innerHTML=calMiniCardHTML('health');calMiniRender('health');}},50);
 }
 
+// ── FINANCE BILLS ───────────────────────────────────────────────────────────
+var FIN_BILL_TYPES = [
+  {key:'bill',   label:'Bill Due',     icon:'🧾', color:'#dc2626'},
+  {key:'sip',    label:'SIP / EMI',    icon:'📈', color:'#0e7490'},
+  {key:'owed',   label:'Money Owed',   icon:'🤝', color:'#d97706'},
+  {key:'sub',    label:'Subscription', icon:'🔁', color:'#7c3aed'},
+  {key:'other',  label:'Other',        icon:'💳', color:'#6b7280'},
+];
+var FIN_RECUR = [
+  {key:'once',    label:'One-time'},
+  {key:'monthly', label:'Monthly'},
+  {key:'yearly',  label:'Yearly'},
+];
+
+function finBillMeta(type) {
+  return FIN_BILL_TYPES.find(function(t){return t.key===type;}) || FIN_BILL_TYPES[4];
+}
+
+function renderFinBillsHTML() {
+  var items = calLoadSource('fin');
+  var today = isoToday();
+  var soon = new Date(); soon.setDate(soon.getDate()+7);
+  var soonStr = soon.toISOString().slice(0,10);
+  var sorted = items.slice().sort(function(a,b){return (a.date||'').localeCompare(b.date||'');});
+  var overdue  = sorted.filter(function(e){return e.date && e.date < today && !e.paid;});
+  var upcoming = sorted.filter(function(e){return e.date && e.date >= today && e.date <= soonStr && !e.paid;});
+  var future   = sorted.filter(function(e){return e.date && e.date > soonStr && !e.paid;});
+  var paid     = sorted.filter(function(e){return !!e.paid;});
+
+  function billRow(e) {
+    var m = finBillMeta(e.type);
+    var isOver = e.date && e.date < today;
+    var dStr = e.date ? e.date.slice(5).replace('-','/') : '';
+    var dateLabel = e.date ? (isOver ? '<span style="color:#dc2626;font-weight:700">'+dStr+' ⚠</span>' : dStr) : '—';
+    var recurMeta = FIN_RECUR.find(function(r){return r.key===e.recur;}) || FIN_RECUR[0];
+    return '<div class="fin-bill-row">'
+      + '<div style="width:3px;min-height:40px;background:'+m.color+';border-radius:3px;flex-shrink:0"></div>'
+      + '<span style="font-size:18px;flex-shrink:0">' + m.icon + '</span>'
+      + '<div style="flex:1;min-width:0">'
+      + '<div style="font-size:13px;font-weight:600;color:var(--text)'+(e.paid?';text-decoration:line-through;opacity:0.5':'')+'">' + esc(e.title) + '</div>'
+      + '<div style="font-size:10px;color:var(--dim);font-family:var(--font-mono);margin-top:1px">' + m.label + (e.recur && e.recur!=='once' ? ' · '+recurMeta.label : '') + (e.note ? ' · '+esc(e.note) : '') + '</div>'
+      + '</div>'
+      + '<div style="display:flex;align-items:center;gap:8px;flex-shrink:0">'
+      + (e.amount ? '<span style="font-size:13px;font-weight:800;font-family:var(--font-mono);color:var(--text)">₹'+fmt(e.amount)+'</span>' : '')
+      + '<span style="font-size:11px;font-family:var(--font-mono);color:var(--dim);min-width:32px;text-align:right">' + dateLabel + '</span>'
+      + (e.paid
+          ? '<button onclick="finBillUnpay('+e.id+')" class="btn btn-ghost btn-sm" style="font-size:10px;padding:2px 8px">unpay</button>'
+          : '<button onclick="finBillPay('+e.id+')" class="btn btn-sm" style="font-size:10px;padding:2px 8px;background:#05966915;color:#059669;border-color:#05966940">✓ pay</button>')
+      + '<button onclick="finBillDel('+e.id+')" style="font-size:14px;color:var(--dim);background:none;border:none;cursor:pointer;line-height:1;padding:0">×</button>'
+      + '</div></div>';
+  }
+
+  var typeOptions = FIN_BILL_TYPES.map(function(t){return '<option value="'+t.key+'">'+t.icon+' '+t.label+'</option>';}).join('');
+  var recurOptions = FIN_RECUR.map(function(r){return '<option value="'+r.key+'">'+r.label+'</option>';}).join('');
+
+  var html = '<div class="card" style="border-top:3px solid #0e7490">';
+  html += '<div class="card-hdr" style="margin-bottom:14px">';
+  html += '<span class="card-title">💳 Bills &amp; Commitments</span>';
+  html += '<span style="font-size:10px;color:#0e7490;font-family:var(--font-mono);margin-left:8px">' + (items.length - paid.length) + ' pending</span>';
+  html += '</div>';
+
+  if (overdue.length) {
+    html += '<div style="font-size:10px;font-weight:700;font-family:var(--font-mono);color:#dc2626;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">⚠ Overdue</div>';
+    html += overdue.map(billRow).join('');
+    html += '<div style="height:10px"></div>';
+  }
+  if (upcoming.length) {
+    html += '<div style="font-size:10px;font-weight:700;font-family:var(--font-mono);color:#d97706;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">This Week</div>';
+    html += upcoming.map(billRow).join('');
+    html += '<div style="height:10px"></div>';
+  }
+  if (future.length) {
+    html += '<div style="font-size:10px;font-weight:700;font-family:var(--font-mono);color:var(--dim);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Upcoming</div>';
+    html += future.map(billRow).join('');
+    html += '<div style="height:10px"></div>';
+  }
+  if (!overdue.length && !upcoming.length && !future.length) {
+    html += '<div style="color:var(--dim);font-size:13px;margin-bottom:12px">All clear — no pending bills.</div>';
+  }
+  if (paid.length) {
+    html += '<details style="margin-top:4px"><summary style="font-size:10px;color:var(--dim);font-family:var(--font-mono);cursor:pointer;text-transform:uppercase;letter-spacing:.8px">✓ Paid (' + paid.length + ')</summary>';
+    html += '<div style="margin-top:8px">' + paid.map(billRow).join('') + '</div></details>';
+    html += '<div style="height:10px"></div>';
+  }
+
+  html += '<div style="border-top:1px solid var(--border);padding-top:12px;margin-top:2px">';
+  html += '<div style="font-size:10px;color:var(--dim);font-family:var(--font-mono);margin-bottom:8px;text-transform:uppercase;letter-spacing:.8px">+ Add Bill / Commitment</div>';
+  html += '<div class="add-row" style="flex-wrap:wrap;gap:8px">'
+    + '<select class="sel" id="fb-type" style="min-width:130px">' + typeOptions + '</select>'
+    + '<input class="inp" id="fb-title" placeholder="Label (e.g. Jio Recharge, HDFC SIP)" style="flex:2;min-width:160px">'
+    + '<input class="inp" id="fb-amount" type="number" placeholder="₹ Amount" style="width:110px">'
+    + '<input class="inp" id="fb-date" type="date" style="width:140px">'
+    + '<select class="sel" id="fb-recur" style="min-width:105px">' + recurOptions + '</select>'
+    + '<input class="inp" id="fb-note" placeholder="Note (optional)" style="flex:1;min-width:120px">'
+    + '<button class="btn" onclick="finBillAdd()">Add</button>'
+    + '</div></div>';
+
+  html += '</div>';
+  return html;
+}
+
+function finBillAdd() {
+  var type   = (document.getElementById('fb-type')||{}).value || 'bill';
+  var title  = ((document.getElementById('fb-title')||{}).value||'').trim();
+  var amount = parseFloat((document.getElementById('fb-amount')||{}).value)||0;
+  var date   = (document.getElementById('fb-date')||{}).value || isoToday();
+  var recur  = (document.getElementById('fb-recur')||{}).value || 'once';
+  var note   = ((document.getElementById('fb-note')||{}).value||'').trim();
+  if (!title) { alert('Enter a label for this bill.'); return; }
+  var m = finBillMeta(type);
+  var newId = Date.now();
+  var finItems = calLoadSource('fin');
+  finItems.push({id:newId, title:title, type:type, amount:amount, date:date, recur:recur, note:note, paid:false});
+  calSaveSource('fin', finItems);
+  var masterItems = calLoadSource('master');
+  masterItems.push({id:newId, title:m.icon+' '+title, date:date, type:'reminder', note:note+(amount?' ₹'+amount:''), src:'fin'});
+  calSaveSource('master', masterItems);
+  renderFinance();
+}
+
+function finBillPay(id) {
+  var finItems = calLoadSource('fin');
+  finItems = finItems.map(function(e){ return e.id===id ? Object.assign({},e,{paid:true,paidDate:isoToday()}) : e; });
+  calSaveSource('fin', finItems);
+  var bill = finItems.find(function(e){return e.id===id;});
+  if (bill && bill.recur && bill.recur !== 'once' && bill.date) {
+    var next = new Date(bill.date);
+    if (bill.recur==='monthly') next.setMonth(next.getMonth()+1);
+    if (bill.recur==='yearly')  next.setFullYear(next.getFullYear()+1);
+    var nextStr = next.toISOString().slice(0,10);
+    var exists = finItems.some(function(e){return e.title===bill.title && e.date===nextStr && !e.paid;});
+    if (!exists) {
+      var m = finBillMeta(bill.type);
+      var newId = Date.now();
+      finItems.push({id:newId, title:bill.title, type:bill.type, amount:bill.amount, date:nextStr, recur:bill.recur, note:bill.note, paid:false});
+      calSaveSource('fin', finItems);
+      var masterItems = calLoadSource('master');
+      masterItems.push({id:newId, title:m.icon+' '+bill.title, date:nextStr, type:'reminder', note:bill.note+(bill.amount?' ₹'+bill.amount:''), src:'fin'});
+      calSaveSource('master', masterItems);
+    }
+  }
+  renderFinance();
+}
+
+function finBillUnpay(id) {
+  var finItems = calLoadSource('fin');
+  finItems = finItems.map(function(e){ return e.id===id ? Object.assign({},e,{paid:false,paidDate:null}) : e; });
+  calSaveSource('fin', finItems);
+  renderFinance();
+}
+
+function finBillDel(id) {
+  var finItems = calLoadSource('fin');
+  finItems = finItems.filter(function(e){return e.id!==id;});
+  calSaveSource('fin', finItems);
+  var masterItems = calLoadSource('master');
+  masterItems = masterItems.filter(function(e){return e.id!==id;});
+  calSaveSource('master', masterItems);
+  renderFinance();
+}
 
 function reorderSec(tab,from,to){var s=D[tab].sections;s.splice(to,0,s.splice(from,1)[0]);saveD();renderSections(tab);}
 function renderSections(tab){} // stub — sections feature removed
@@ -3292,6 +3568,7 @@ var CAL_KEYS = {
   per:    'siddhant_cal_per',
   car:    'siddhant_cal_car',
   health: 'siddhant_cal_health',
+  fin:    'siddhant_cal_fin',
   swatch: 'siddhant_cal_swatch',
   splay:  'siddhant_cal_splay',
 };
@@ -3301,6 +3578,7 @@ var CAL_SOURCE_META = {
   per:    {label:'Personal',  icon:'🙋', color:'#059669'},
   car:    {label:'Career',    icon:'💼', color:'#d97706'},
   health: {label:'Health',    icon:'🏥', color:'#e11d48'},
+  fin:    {label:'Finance',   icon:'💳', color:'#0e7490'},
   swatch: {label:'Watch',     icon:'👁',  color:'#dc2626'},
   splay:  {label:'Play',      icon:'🏃', color:'#0891b2'},
 };
@@ -3592,6 +3870,9 @@ function renderFinance(){
     html+='<div class="card"><div style="padding:14px;color:var(--dim);font-size:13px">No expenses logged yet</div></div>';
   }
 
+
+  // ── Bills Tracker ─────────────────────────────────────────────
+  html += renderFinBillsHTML();
 
   // Write finance section to DOM
   document.getElementById('finance-content').innerHTML=html;
@@ -7315,6 +7596,7 @@ shInit();
     'siddhant_cal_per',
     'siddhant_cal_car',
     'siddhant_cal_health',
+    'siddhant_cal_fin',
     'siddhant_kr_v1',
     'siddhant_cal_swatch',
     'siddhant_cal_splay',
